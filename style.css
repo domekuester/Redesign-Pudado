@@ -292,7 +292,7 @@ p  { margin: 0 0 1rem; }
 
 /* ----------------------- Cards / Grids ---------------------- */
 .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.cards-grid.four { grid-template-columns: repeat(3, 1fr); }
+.cards-grid.four { grid-template-columns: repeat(4, 1fr); }
 .cards-grid.three { grid-template-columns: repeat(3, 1fr); }
 
 .card {
@@ -319,10 +319,10 @@ p  { margin: 0 0 1rem; }
 
 /* ---- Anwendungsfall-Kacheln ---- */
 .usecase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
-.usecase-card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 30px 26px; box-shadow: var(--card-shadow); transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease; }
-.usecase-card:hover { transform: translateY(-6px); border-color: var(--sky-line); box-shadow: var(--shadow-md); }
-.uc-icon { width: 44px; height: 44px; border-radius: 13px; background: var(--sky); display: grid; place-items: center; margin-bottom: 18px; }
-.uc-icon svg { width: 21px; height: 21px; stroke: var(--blue); fill: none; }
+.usecase-card { background: linear-gradient(165deg, #fff, var(--sky-soft)); border: 1px solid var(--sky-line); border-radius: var(--radius); padding: 30px 26px; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease; }
+.usecase-card:hover { transform: translateY(-6px); border-color: var(--blue-soft); box-shadow: var(--shadow-md); }
+.uc-icon { width: 48px; height: 48px; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(35,95,208,.08); display: grid; place-items: center; margin-bottom: 20px; }
+.uc-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
 .usecase-card .sc-cat { font-family: var(--font-head); font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
 .usecase-card h3 { font-size: 1.08rem; line-height: 1.28; color: var(--ink); margin: 0 0 12px; }
 .usecase-card p { margin: 0; color: var(--gray); font-size: .95rem; line-height: 1.6; }
@@ -339,14 +339,23 @@ p  { margin: 0 0 1rem; }
 .section-dark h2, .section-dark h3 { color: var(--ink); }
 .section-dark .section-text { color: var(--gray); }
 .card.glass {
+  position: relative;
   background: rgba(255,255,255,.72);
   border: 1px solid rgba(255,255,255,.9);
   box-shadow: var(--card-shadow); backdrop-filter: blur(12px);
+  padding-top: 54px;
 }
 .card.glass:hover { transform: translateY(-6px); background: rgba(255,255,255,.9); box-shadow: var(--shadow-md); }
 .card.glass p { color: var(--gray); }
-.card.glass .icon-tile { background: var(--sky); }
+/* Icon-Kachel ragt leicht über die Kartenkante hinaus statt flach im
+   Textfluss zu sitzen – etwas Überlappung/Tiefe statt reinem Stapeln.
+   Mobil dezenter Versatz, ab Tablet großzügiger. */
+.card.glass .icon-tile { position: absolute; top: -12px; left: 26px; margin-bottom: 0; background: var(--sky); box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(35,95,208,.06); }
 .card.glass .icon-tile svg { stroke: var(--blue); }
+@media (min-width: 761px) {
+  .card.glass { padding-top: 60px; }
+  .card.glass .icon-tile { top: -18px; left: 30px; }
+}
 
 /* ----------------------- Nachhaltigkeit --------------------- */
 .section-sage { background: linear-gradient(180deg,#ffffff,var(--mist)); }
@@ -691,9 +700,17 @@ p  { margin: 0 0 1rem; }
 .lg-tall, .lg-wide { grid-row: auto; grid-column: auto; }
 
 /* ----------------------- Pudado Wissen ---------------------- */
-.wissen-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
-.wissen-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 22px; box-shadow: var(--shadow-xs); color: var(--ink); transition: transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s, border-color .3s; }
-.wissen-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--sky-line); text-decoration: none; }
+.wissen-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px 22px; }
+/* Bewusst kartenlos: nur eine Trennlinie oben statt Rahmen+Schatten+Weiß
+   wie bei den übrigen Grids – wirkt wie eine redaktionelle Themenliste,
+   nicht wie ein weiteres Set Produktkacheln. */
+.wissen-card {
+  display: flex; flex-direction: column; background: transparent;
+  border: none; border-top: 1px solid var(--border); border-radius: 0;
+  padding: 22px 2px 4px; color: var(--ink);
+  transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease;
+}
+.wissen-card:hover { transform: translateY(-4px); border-color: var(--blue-soft); text-decoration: none; }
 .wissen-card h3 { font-size: 1.04rem; margin-bottom: .45em; }
 .wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; flex: 1; line-height: 1.6; }
 
@@ -811,7 +828,7 @@ select:focus-visible, summary:focus-visible, .situation-card:focus-visible, .blo
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
 .blog-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s; color: var(--ink); }
 .blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); text-decoration: none; }
-.blog-card figure { position: relative; margin: 0; aspect-ratio: 16/10; background: linear-gradient(150deg, #3468c8, var(--blue) 55%, #163a86); }
+.blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: linear-gradient(150deg, #3468c8, var(--blue) 55%, #163a86); }
 .blog-card figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .blog-card-body { padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1; }
 .blog-card-body h3 { margin-bottom: .4em; }
