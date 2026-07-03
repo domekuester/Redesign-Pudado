@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
    ------------------------------------------------------------- */
 const LANG_KEY = 'pudado_lang';
 window.PUDADO_LANG = 'de';
+// Ursprünglicher <title> aus index.html (SEO-optimiert). Wird für die
+// Standardsprache (de) beibehalten statt durch die kürzere Marketing-
+// Variante aus translations.js überschrieben; nur bei echtem Wechsel
+// auf en/fr wird ein übersetzter Titel gesetzt.
+const DEFAULT_TITLE = document.title;
 
 function t(key) {
   const dict = (window.PUDADO_I18N || {});
@@ -39,7 +44,11 @@ function applyLanguage(lang) {
   window.PUDADO_LANG = lang;
 
   document.documentElement.lang = lang;
-  if (dict[lang]['meta.title']) document.title = dict[lang]['meta.title'];
+  if (lang === 'de') {
+    document.title = DEFAULT_TITLE;
+  } else if (dict[lang]['meta.title']) {
+    document.title = dict[lang]['meta.title'];
+  }
 
   // Textinhalte
   document.querySelectorAll('[data-i18n]').forEach(el => {
