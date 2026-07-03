@@ -8,20 +8,20 @@
    ============================================================= */
 
 /* ================== FONTS (lokal, DSGVO-konform) ==================
-   KEIN externer Google-Fonts-Request. Standard ist der Apple-/System-
-   Font-Stack unten (rendert auf Apple-Geräten nativ San Francisco).
-   Für das exakte Marken-Schriftbild (Sora/Inter) die .woff2-Dateien
-   nach assets/fonts/ legen und diesen Block aktivieren (Kommentar
-   entfernen) – die Familien sind in den Tokens bereits vorangestellt:
-
-@font-face { font-family:"Sora"; src:url("assets/fonts/Sora-SemiBold.woff2") format("woff2"); font-weight:600; font-display:swap; }
-@font-face { font-family:"Sora"; src:url("assets/fonts/Sora-Bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
-@font-face { font-family:"Sora"; src:url("assets/fonts/Sora-ExtraBold.woff2") format("woff2"); font-weight:800; font-display:swap; }
-@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-Regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
-@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-Medium.woff2") format("woff2"); font-weight:500; font-display:swap; }
-@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-SemiBold.woff2") format("woff2"); font-weight:600; font-display:swap; }
-@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-Bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
-*/
+   KEIN externer Font-Request zur Laufzeit. Alle Dateien liegen lokal
+   unter assets/fonts/ und werden ausschließlich von pudado.de selbst
+   ausgeliefert (kein Google/Fontshare-Request im Browser der
+   Besucher:innen). Cabinet Grotesk (Headlines) + Inter (Fließtext).
+   Cabinet Grotesk gibt es nur in Medium(500)/Bold(700) – dazwischen
+   liegende font-weight-Werte im CSS sind entsprechend auf 500/700
+   abgebildet. font-display:swap verhindert unsichtbaren Text beim
+   Laden (FOIT) und nutzt sofort den System-Fallback als Zwischenstand. */
+@font-face { font-family:"Cabinet Grotesk"; src:url("assets/fonts/CabinetGrotesk-Medium.woff2") format("woff2"); font-weight:500; font-display:swap; }
+@font-face { font-family:"Cabinet Grotesk"; src:url("assets/fonts/CabinetGrotesk-Bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
+@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-400.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight:500; font-display:swap; }
+@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
+@font-face { font-family:"Inter"; src:url("assets/fonts/Inter-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
 
 /* ----------------------- Design Tokens ---------------------- */
 :root {
@@ -42,7 +42,7 @@
 
   --ink:         #1B2A4A;   /* Überschriften */
   --gray:        #566173;   /* Fließtext */
-  --gray-light:  #8b94a3;
+  --gray-light:  #64707F;   /* dunkler als zuvor (#8b94a3) für WCAG-AA-Kontrast (≈5:1) auf Weiß bei Legal-Hints */
 
   --white:       #ffffff;
   --border:      #E7ECF4;   /* neutrale, kühle Linien */
@@ -65,14 +65,18 @@
   --container:   1200px;
   --space:       clamp(76px, 10vw, 160px);
 
-  /* Sora/Inter zuerst (falls lokal vorhanden) – sonst Apple-/System-Stack */
-  --font-head: "Sora", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Cabinet Grotesk/Inter zuerst (lokal selbst gehostet, s.o.) – sonst Apple-/System-Stack */
+  --font-head: "Cabinet Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* zurückkompatible Aliase (falls noch irgendwo referenziert) */
   --ice:         #EAF2FE;
   --cream:       #F6F9FE;
   --cream-2:     #EFF4FC;
+
+  /* Nur als semantische Status-Farbe genutzt (Installations-Check-Ampel:
+     grün = passt gut) – bewusst KEIN zweiter Marken-Akzent. Die Marke
+     selbst bleibt konsequent einfarbig Blau. */
   --sage:        #4E7C63;
 }
 
@@ -119,7 +123,6 @@ p  { margin: 0 0 1rem; }
   letter-spacing: .18em; text-transform: uppercase; color: var(--blue);
   margin: 0 0 1.1rem;
 }
-.section-label.sage { color: var(--sage); }
 .on-dark .section-label, .section-brand .section-label { color: var(--blue); }
 
 /* ----------------------- Buttons ---------------------------- */
@@ -275,8 +278,6 @@ p  { margin: 0 0 1rem; }
   box-shadow: inset 0 0 0 1px rgba(35,95,208,.06);
 }
 .icon-tile svg { width: 27px; height: 27px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
-.icon-tile.sage { background: #e5efe9; }
-.icon-tile.sage svg { stroke: var(--sage); }
 .icon-tile.lav { background: var(--sky); }
 .icon-tile.lav svg { stroke: var(--blue); }
 

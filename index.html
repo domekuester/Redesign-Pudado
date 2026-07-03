@@ -33,10 +33,12 @@
 
   <!-- ================== FONTS (DSGVO-konform, ohne externe Requests) ==================
        Es werden KEINE Google Fonts vom CDN geladen (keine IP-Übertragung an Google).
-       Standard: hochwertiger System-Font-Stack (siehe style.css).
-       Für das exakte Marken-Schriftbild (Sora/Inter) die Schriftdateien lokal ablegen:
-       1) .woff2-Dateien nach assets/fonts/ kopieren
-       2) den @font-face-Block in style.css aktivieren (dort auskommentiert vorbereitet). -->
+       Cabinet Grotesk (Headlines) + Inter (Fließtext) liegen selbst gehostet unter
+       assets/fonts/ (siehe @font-face in style.css). Preload nur für die beiden im
+       ersten Bildschirm sichtbaren Schnitte, damit der Text ohne Verzögerung im
+       Marken-Font erscheint. -->
+  <link rel="preload" href="assets/fonts/CabinetGrotesk-Bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
@@ -555,15 +557,15 @@
     <section class="section section-sage" id="nachhaltigkeit">
       <div class="container">
         <div class="section-head center narrow">
-          <p class="section-label sage" data-i18n="nach.label">Nachhaltigkeit</p>
+          <p class="section-label" data-i18n="nach.label">Nachhaltigkeit</p>
           <h2><span data-i18n="nach.h2a">Kleine Veränderung. Weniger Papier.</span> <span class="accent" data-i18n="nach.h2b">Mehr Bewusstsein.</span></h2>
           <p class="section-text center" data-i18n="nach.text">Nachhaltigkeit beginnt oft nicht mit großen Versprechen, sondern mit kleinen Gewohnheiten. EcoBum kann helfen, den Verbrauch von Toilettenpapier im Alltag zu reduzieren — einfach, angenehm und ohne komplizierte Umstellung.</p>
         </div>
         <div class="cards-grid four">
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20C6 20 4 16 4 12c0-3 2-6 4-7 0 3 2 4 4 5s4 2 4 5-2 5-5 5z"/><path d="M8 18c2-2 4-3 6-6"/></svg></span><h3 data-i18n="n1t">Weniger Toilettenpapier</h3><p data-i18n="n1d">Wer Wasser zur Reinigung nutzt, braucht häufig weniger Papier. Die tatsächliche Einsparung hängt von der persönlichen Nutzung ab.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span><h3 data-i18n="n2t">Wasser statt trockenem Wischen</h3><p data-i18n="n2d">Wasser wird weltweit für Reinigung genutzt, weil es naheliegend, sanft und gründlich ist. EcoBum bringt diese Idee ins Badezimmer.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20C6 20 4 16 4 12c0-3 2-6 4-7 0 3 2 4 4 5s4 2 4 5-2 5-5 5z"/><path d="M8 18c2-2 4-3 6-6"/></svg></span><h3 data-i18n="n1t">Weniger Toilettenpapier</h3><p data-i18n="n1d">Wer Wasser zur Reinigung nutzt, braucht häufig weniger Papier. Die tatsächliche Einsparung hängt von der persönlichen Nutzung ab.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span><h3 data-i18n="n2t">Wasser statt trockenem Wischen</h3><p data-i18n="n2d">Wasser wird weltweit für Reinigung genutzt, weil es naheliegend, sanft und gründlich ist. EcoBum bringt diese Idee ins Badezimmer.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
         </div>
         <figure class="leaf-band"><img src="assets/design-3.jpg" alt="Grünes Blatt mit Wassertropfen über ruhiger Wasseroberfläche" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
       </div>
