@@ -321,23 +321,23 @@
 
           <!-- Schritt 1 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">1</span> <span data-i18n="chk.step1">Badezimmer-Situation</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_eck">Ist ein Eckventil neben/hinter der Toilette sichtbar?</label>
-              <div class="chk-opts" data-q="eck">
+            <div class="chk-q"><label id="chk-lbl-eck" data-i18n="chk.q_eck">Ist ein Eckventil neben/hinter der Toilette sichtbar?</label>
+              <div class="chk-opts" data-q="eck" role="group" aria-labelledby="chk-lbl-eck">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_cistern">Ist der Spülkasten sichtbar oder in der Wand verbaut?</label>
-              <div class="chk-opts" data-q="cistern">
+            <div class="chk-q"><label id="chk-lbl-cistern" data-i18n="chk.q_cistern">Ist der Spülkasten sichtbar oder in der Wand verbaut?</label>
+              <div class="chk-opts" data-q="cistern" role="group" aria-labelledby="chk-lbl-cistern">
                 <button type="button" data-val="visible" data-i18n="chk.cistern_vis">Sichtbarer Spülkasten</button>
                 <button type="button" data-val="concealed" data-i18n="chk.cistern_con">Unterputz-Spülkasten</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_hose">Gibt es einen flexiblen Zulaufschlauch zwischen Eckventil und Spülkasten?</label>
-              <div class="chk-opts" data-q="hose">
+            <div class="chk-q"><label id="chk-lbl-hose" data-i18n="chk.q_hose">Gibt es einen flexiblen Zulaufschlauch zwischen Eckventil und Spülkasten?</label>
+              <div class="chk-opts" data-q="hose" role="group" aria-labelledby="chk-lbl-hose">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="rigid" data-i18n="chk.q2_rigid">Nein, starres Rohr</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_space">Ist neben der Toilette Platz für ein T-Stück und Schlauch?</label>
-              <div class="chk-opts" data-q="space">
+            <div class="chk-q"><label id="chk-lbl-space" data-i18n="chk.q_space">Ist neben der Toilette Platz für ein T-Stück und Schlauch?</label>
+              <div class="chk-opts" data-q="space" role="group" aria-labelledby="chk-lbl-space">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="little" data-i18n="chk.little">Wenig</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
@@ -346,18 +346,18 @@
 
           <!-- Schritt 2 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">2</span> <span data-i18n="chk.step2">Anschluss & Maße</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_size">Kennst du die Anschlussgröße?</label>
-              <div class="chk-opts" data-q="size">
+            <div class="chk-q"><label id="chk-lbl-size" data-i18n="chk.q_size">Kennst du die Anschlussgröße?</label>
+              <div class="chk-opts" data-q="size" role="group" aria-labelledby="chk-lbl-size">
                 <button type="button" data-val="38" data-i18n="chk.size_38">3/8 Zoll</button>
                 <button type="button" data-val="12" data-i18n="chk.size_12">1/2 Zoll</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_shutoff">Kannst du das Eckventil zudrehen?</label>
-              <div class="chk-opts" data-q="shutoff">
+            <div class="chk-q"><label id="chk-lbl-shutoff" data-i18n="chk.q_shutoff">Kannst du das Eckventil zudrehen?</label>
+              <div class="chk-opts" data-q="shutoff" role="group" aria-labelledby="chk-lbl-shutoff">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_dist">Wie weit ist der Anschluss ungefähr vom WC entfernt?</label>
-              <div class="chk-opts" data-q="dist">
+            <div class="chk-q"><label id="chk-lbl-dist" data-i18n="chk.q_dist">Wie weit ist der Anschluss ungefähr vom WC entfernt?</label>
+              <div class="chk-opts" data-q="dist" role="group" aria-labelledby="chk-lbl-dist">
                 <button type="button" data-val="near" data-i18n="chk.dist_near">unter 30 cm</button>
                 <button type="button" data-val="mid" data-i18n="chk.dist_mid">30–70 cm</button>
                 <button type="button" data-val="far" data-i18n="chk.dist_far">über 70 cm</button>
@@ -366,13 +366,13 @@
 
           <!-- Schritt 3 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">3</span> <span data-i18n="chk.step3">Montage</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_nodrill">Möchtest du ohne Bohren montieren?</label>
-              <div class="chk-opts" data-q="nodrill">
+            <div class="chk-q"><label id="chk-lbl-nodrill" data-i18n="chk.q_nodrill">Möchtest du ohne Bohren montieren?</label>
+              <div class="chk-opts" data-q="nodrill" role="group" aria-labelledby="chk-lbl-nodrill">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="egal" data-i18n="chk.q5_egal">Egal</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_glue">Ist Kleben an Fliesen für dich okay?</label>
-              <div class="chk-opts" data-q="glue">
+            <div class="chk-q"><label id="chk-lbl-glue" data-i18n="chk.q_glue">Ist Kleben an Fliesen für dich okay?</label>
+              <div class="chk-opts" data-q="glue" role="group" aria-labelledby="chk-lbl-glue">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
@@ -382,10 +382,10 @@
           <fieldset class="chk-step"><legend><span class="chk-step-n">4</span> <span data-i18n="chk.step4">Bilder (optional)</span></legend>
             <p class="chk-upload-hint" data-i18n="chk.upload_hint">Fotos helfen bei einer späteren Einschätzung. Welche Bilder hilfreich sind:</p>
             <div class="chk-uploads">
-              <div class="chk-upload"><label data-i18n="chk.up1">Überblick hinter/neben der Toilette</label><input type="file" class="chk-file" id="chkFile1" accept="image/*" multiple /><div class="chk-previews" id="chkPrev1"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up2">Nahaufnahme Eckventil</label><input type="file" class="chk-file" id="chkFile2" accept="image/*" multiple /><div class="chk-previews" id="chkPrev2"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up3">Verbindung zum Spülkasten</label><input type="file" class="chk-file" id="chkFile3" accept="image/*" multiple /><div class="chk-previews" id="chkPrev3"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up4">Platz an der Wand für die Halterung</label><input type="file" class="chk-file" id="chkFile4" accept="image/*" multiple /><div class="chk-previews" id="chkPrev4"></div></div>
+              <div class="chk-upload"><label for="chkFile1" data-i18n="chk.up1">Überblick hinter/neben der Toilette</label><input type="file" class="chk-file" id="chkFile1" accept="image/*" multiple /><div class="chk-previews" id="chkPrev1"></div></div>
+              <div class="chk-upload"><label for="chkFile2" data-i18n="chk.up2">Nahaufnahme Eckventil</label><input type="file" class="chk-file" id="chkFile2" accept="image/*" multiple /><div class="chk-previews" id="chkPrev2"></div></div>
+              <div class="chk-upload"><label for="chkFile3" data-i18n="chk.up3">Verbindung zum Spülkasten</label><input type="file" class="chk-file" id="chkFile3" accept="image/*" multiple /><div class="chk-previews" id="chkPrev3"></div></div>
+              <div class="chk-upload"><label for="chkFile4" data-i18n="chk.up4">Platz an der Wand für die Halterung</label><input type="file" class="chk-file" id="chkFile4" accept="image/*" multiple /><div class="chk-previews" id="chkPrev4"></div></div>
             </div>
             <p class="legal-hint" data-i18n="chk.upload_privacy">Deine Bilder bleiben in dieser Version lokal in deinem Browser und werden nicht hochgeladen. Für eine echte Prüfung muss später ein Kontakt- oder Support-Backend angeschlossen werden.</p>
             <!-- TODO BACKEND: Hier später Datei-Upload an Support-/Kontakt-Backend anbinden. -->
@@ -704,8 +704,8 @@
               <option value="other" data-i18n="kon.r_other">Sonstiges</option>
             </select>
           </div>
-          <div class="field"><label for="cName" data-i18n="kon.f_name">Name</label><input type="text" id="cName" name="name" required disabled /></div>
-          <div class="field"><label for="cEmail" data-i18n="kon.f_email">E-Mail</label><input type="email" id="cEmail" name="email" required disabled /></div>
+          <div class="field"><label for="cName" data-i18n="kon.f_name">Name</label><input type="text" id="cName" name="name" autocomplete="name" required disabled /></div>
+          <div class="field"><label for="cEmail" data-i18n="kon.f_email">E-Mail</label><input type="email" id="cEmail" name="email" autocomplete="email" required disabled /></div>
           <div class="field"><label for="cMessage" data-i18n="kon.f_msg">Nachricht</label><textarea id="cMessage" name="message" rows="4" required disabled></textarea></div>
           <!-- Honeypot (Spamschutz): für Menschen unsichtbar, von Bots oft ausgefüllt -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="cHp" name="website" tabindex="-1" autocomplete="off" /></label></div>
@@ -728,8 +728,8 @@
         <form class="form newsletter-form" id="newsletterForm" novalidate>
           <p class="form-notice on-dark" data-i18n="news.notice">Die Newsletter-Anmeldung wird gerade vorbereitet. Sobald sie live ist, kannst du dich offiziell anmelden.</p>
           <div class="newsletter-row">
-            <input type="text" id="nFirst" name="firstname" data-i18n-ph="news.ph_first" placeholder="Vorname (optional)" disabled />
-            <input type="email" id="nEmail" name="email" data-i18n-ph="news.ph_email" placeholder="E-Mail-Adresse" required disabled />
+            <input type="text" id="nFirst" name="firstname" data-i18n-ph="news.ph_first" placeholder="Vorname (optional)" aria-label="Vorname (optional)" autocomplete="given-name" disabled />
+            <input type="email" id="nEmail" name="email" data-i18n-ph="news.ph_email" placeholder="E-Mail-Adresse" aria-label="E-Mail-Adresse" autocomplete="email" required disabled />
           </div>
           <!-- Honeypot (Spamschutz) -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="nHp" name="website" tabindex="-1" autocomplete="off" /></label></div>

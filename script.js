@@ -55,10 +55,13 @@ function applyLanguage(lang) {
     const val = dict[lang][el.getAttribute('data-i18n')];
     if (val != null) el.textContent = val;
   });
-  // Platzhalter
+  // Platzhalter (dient hier zugleich als aria-label, da diese Felder kein sichtbares <label> haben)
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const val = dict[lang][el.getAttribute('data-i18n-ph')];
-    if (val != null) el.setAttribute('placeholder', val);
+    if (val != null) {
+      el.setAttribute('placeholder', val);
+      el.setAttribute('aria-label', val);
+    }
   });
 
   // aktive Sprach-Schaltfläche markieren
