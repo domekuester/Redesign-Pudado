@@ -341,9 +341,14 @@ function initChecker() {
   }
 
   function buildParts() {
-    // Bestätigte EcoBum-Home-Set-Bestandteile (Lieferumfang) — „im Set enthalten“
-    const parts = ['set.l1', 'set.l2', 'set.l3', 'set.l4', 'set.l5', 'set.l6'].map(k => ({ name: k, status: 'chk2.in_set' }));
-    if (a.hose === 'rigid' || a.hose === 'unsure' || !a.hose) parts.push({ name: 'chk2.parts_flex', status: 'chk2.maybe' });
+    // Bestätigte EcoBum-Home-Set-Bestandteile (Lieferumfang) — „im Set enthalten“.
+    // Der flexible Zulaufschlauch (set.l10) ist bereits regulärer Set-Bestandteil (kein
+    // separater "möglicherweise zusätzlich nötig"-Eintrag mehr, um keine Dopplung zu
+    // erzeugen). Ist die Anschlusssituation unklar/starr, wird nur sein Status auf
+    // "manuell prüfen" gesetzt statt eine zweite Zeile für dieselbe Komponente zu zeigen.
+    const hoseUnclear = a.hose === 'rigid' || a.hose === 'unsure' || !a.hose;
+    const parts = ['set.l1', 'set.l2', 'set.l4', 'set.l7', 'set.l8', 'set.l9', 'set.l10', 'set.l11', 'set.l6']
+      .map(k => ({ name: k, status: (k === 'set.l10' && hoseUnclear) ? 'chk2.manual' : 'chk2.in_set' }));
     return parts;
   }
 
