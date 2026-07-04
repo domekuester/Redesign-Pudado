@@ -660,15 +660,6 @@ p  { margin: 0 0 1rem; }
   body.print-pass .chk-print-head { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; }
 }
 
-/* ----------------------- Hero Trust-Badges ------------------ */
-.hero-badges { list-style: none; display: flex; flex-wrap: wrap; gap: 9px; padding: 0; margin: 28px 0 0; }
-.hero-badges li {
-  font-family: var(--font-head); font-weight: 600; font-size: .78rem; color: var(--blue);
-  background: rgba(255,255,255,.78); border: 1px solid var(--sky-line);
-  padding: 8px 14px; border-radius: var(--radius-pill); white-space: nowrap; box-shadow: var(--shadow-xs);
-}
-.hero-badges li.accent { background: var(--blue); color: #fff; border-color: var(--blue); }
-
 /* ----------------------- Rechner-Intro ---------------------- */
 .calc-explain { color: var(--gray); font-size: 1.02rem; max-width: 660px; margin: 14px auto 0; }
 
@@ -828,7 +819,6 @@ select:focus-visible, summary:focus-visible, .blog-card:focus-visible {
   .hamburger { display: flex; }
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
-  .hero-visual { order: -1; }
   .compare { grid-template-columns: 1fr; gap: 16px; justify-items: center; }
   .compare-card { width: 100%; }
   .compare-media { width: 56px; order: 0; }
