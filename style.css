@@ -401,6 +401,9 @@ p  { margin: 0 0 1rem; }
 .set-list { list-style: none; padding: 0; margin: 0 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; }
 .set-list li { position: relative; padding-left: 30px; color: var(--navy); font-weight: 500; }
 .set-list li::before { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 17px; border: 2.5px solid var(--blue); border-radius: 0 50% 50% 50%; rotate: 45deg; }
+.set-list-single { grid-template-columns: 1fr; }
+.set-group-label { font-family: var(--font-head); font-weight: 600; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-soft); margin: 22px 0 12px; }
+.set-group-label:first-of-type { margin-top: 4px; }
 
 /* ----------------------- Feature list ----------------------- */
 .feature-list { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 13px; }
