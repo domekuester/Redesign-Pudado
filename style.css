@@ -532,7 +532,7 @@ p  { margin: 0 0 1rem; }
 /* ----------------------- Installations-Check ---------------- */
 .checker { padding: 38px; }
 .chk-q { margin-bottom: 26px; }
-.chk-q > label { display: block; font-family: var(--font-head); font-weight: 600; color: var(--navy); margin-bottom: 13px; }
+.chk-q > span { display: block; font-family: var(--font-head); font-weight: 600; color: var(--navy); margin-bottom: 13px; }
 .chk-opts { display: flex; flex-wrap: wrap; gap: 10px; }
 .chk-opts button {
   font-family: var(--font-body); font-weight: 600; font-size: .92rem; color: var(--navy);
@@ -680,10 +680,6 @@ p  { margin: 0 0 1rem; }
 .form-message.on-dark.is-error { background: #fbe9e7; color: #a23b30; }
 
 /* ----------------------- Fokus / Barrierefreiheit ----------- */
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible,
-select:focus-visible, summary:focus-visible, .blog-card:focus-visible {
-  outline: 3px solid var(--blue-soft); outline-offset: 2px; border-radius: 6px;
-}
 .lang-switch button:focus-visible { outline-offset: 0; }
 
 .read-more { font-family: var(--font-head); font-weight: 600; font-size: .9rem; color: var(--blue); }
@@ -753,7 +749,7 @@ select:focus-visible, summary:focus-visible, .blog-card:focus-visible {
 .calc2-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 24px; align-items: start; max-width: 1040px; margin: 0 auto; }
 .calc2-inputs, .calc2-results { border-radius: var(--radius); padding: 28px; }
 .calc2-field { margin-bottom: 20px; }
-.calc2-field > label { display: block; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+.calc2-field > label, .calc2-field > #lblPersons { display: block; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
 .calc2-help { margin: 7px 0 0; font-size: .8rem; line-height: 1.5; color: var(--gray); }
 .calc2-inputs input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid var(--border-cool); border-radius: 12px; font: inherit; font-size: 1rem; color: var(--navy); background: #fff; }
 .calc2-inputs input[type="number"]:focus-visible, .step-btn:focus-visible, #usage:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -861,7 +857,7 @@ select:focus-visible, summary:focus-visible, .blog-card:focus-visible {
 #fuer-wen { background: linear-gradient(180deg, var(--mist), #ffffff); }
 a:focus-visible, button:focus-visible, .btn:focus-visible,
 input:focus-visible, select:focus-visible, textarea:focus-visible,
-summary:focus-visible, [tabindex]:focus-visible {
+summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
