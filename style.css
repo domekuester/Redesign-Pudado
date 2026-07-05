@@ -96,7 +96,7 @@ a:hover { color: var(--blue-ink); text-decoration: none; }
 h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); line-height: 1.06; margin: 0 0 .45em; letter-spacing: -.028em; text-wrap: balance; }
 h1 { font-size: clamp(2.7rem, 6.2vw, 5rem); font-weight: 700; letter-spacing: -.035em; }
 h2 { font-size: clamp(2rem, 4.4vw, 3.3rem); font-weight: 700; letter-spacing: -.03em; }
-h3 { font-size: 1.24rem; font-weight: 650; letter-spacing: -.015em; }
+h3 { font-size: 1.24rem; font-weight: 700; letter-spacing: -.015em; }
 h4 { font-size: 1.06rem; font-weight: 600; letter-spacing: -.01em; }
 p  { margin: 0 0 1rem; }
 .lead, .section-text { text-wrap: pretty; }
@@ -104,6 +104,9 @@ p  { margin: 0 0 1rem; }
 
 /* Zweifarbige Headline */
 .accent { color: var(--blue); }
+/* Prinzip-Headline: je ein vollständiger Satz pro Zeile (gilt für DE/EN/FR) –
+   verhindert den unschönen Umbruch mitten im ersten Satz. */
+#insight h2 span { display: block; }
 
 /* ----------------------- Layout helpers --------------------- */
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 26px; }
@@ -143,11 +146,12 @@ p  { margin: 0 0 1rem; }
   transition: transform .22s cubic-bezier(.16,.84,.44,1), box-shadow .25s ease, background .25s ease, color .2s ease, border-color .2s ease;
   text-decoration: none; line-height: 1; white-space: nowrap; letter-spacing: -.01em;
 }
-.btn:hover { text-decoration: none; transform: translateY(-2px); }
+/* Hover-Feedback bewusst minimal (1px statt 2px): spürbar, aber ohne Sprung. */
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
 .btn:active { transform: translateY(0) scale(.98); transition-duration: .12s; }
 .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 22px rgba(35,95,208,.28); }
 .btn-primary:hover { background: var(--blue-ink); color: #fff; box-shadow: 0 14px 34px rgba(35,95,208,.34); }
-.btn-ghost { background: rgba(255,255,255,.7); color: var(--blue); border-color: var(--sky-line); backdrop-filter: blur(6px); }
+.btn-ghost { background: #fff; color: var(--blue); border-color: var(--sky-line); }
 .btn-ghost:hover { background: #fff; color: var(--blue-ink); border-color: var(--blue-soft); box-shadow: var(--shadow-sm); }
 .btn-light { background: var(--blue); color: #fff; box-shadow: 0 8px 22px rgba(35,95,208,.28); }
 .btn-light:hover { background: var(--blue-ink); color: #fff; }
@@ -228,39 +232,34 @@ p  { margin: 0 0 1rem; }
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--font-head); font-weight: 600; font-size: .8rem;
   letter-spacing: .13em; text-transform: uppercase; color: var(--blue);
-  background: rgba(255,255,255,.75); border: 1px solid var(--sky-line);
+  background: #fff; border: 1px solid var(--sky-line);
   padding: 10px 17px; border-radius: var(--radius-pill); margin-bottom: 26px;
-  box-shadow: var(--shadow-xs); backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-xs);
 }
 .eyebrow svg { width: 14px; height: 17px; }
 .hero h1 { margin-bottom: .28em; }
 .lead { font-size: 1.3rem; color: var(--navy); max-width: 540px; line-height: 1.5; font-weight: 400; }
+/* Ruhige Meta-Zeile statt Pill: der mehrzeilige Umbruch machte die Pill-Form
+   unruhig; leiser Text wirkt hochwertiger und konkurriert nicht mit den CTAs. */
 .trust-line {
-  display: inline-block; font-size: .95rem; color: var(--blue); font-weight: 600;
-  background: var(--sky); padding: 11px 19px; border-radius: var(--radius-pill); margin-top: 8px;
-  letter-spacing: -.01em;
+  display: block; font-size: .95rem; color: var(--gray); font-weight: 500;
+  margin-top: 14px; max-width: 540px; letter-spacing: -.01em; line-height: 1.6;
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
 
-/* Produktkarte (Bild) – premium Glas */
+/* Produktkarte (Bild) – ruhige weiße Fläche statt Glas/Glow: das Foto ist das
+   Objekt, die Karte nur sein Rahmen. Transluzenz und Leucht-Effekte lenkten ab
+   und wirkten webby statt hochwertig. */
 .product-card {
   position: relative; width: 100%; max-width: 500px; margin: 0 auto;
-  background: linear-gradient(160deg, rgba(255,255,255,.9), rgba(238,244,254,.8));
-  border: 1px solid rgba(255,255,255,.9);
+  background: #fff; border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); padding: 22px; overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 .product-card img { position: relative; z-index: 1; width: 100%; height: auto; border-radius: var(--radius); display: block; }
-.product-card .glow {
-  position: absolute; z-index: 0; top: -20%; left: 50%; transform: translateX(-50%);
-  width: 120%; height: 70%;
-  background: radial-gradient(closest-side, rgba(92,138,230,.4), rgba(35,95,208,.1) 60%, transparent 76%);
-  filter: blur(12px); pointer-events: none;
-}
 .product-badges { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 20px; }
 .pill-badge {
   font-family: var(--font-head); font-weight: 600; font-size: .76rem; color: var(--blue);
-  background: rgba(255,255,255,.82); border: 1px solid var(--sky-line); padding: 8px 15px; border-radius: var(--radius-pill); white-space: nowrap; box-shadow: var(--shadow-xs);
+  background: #fff; border: 1px solid var(--sky-line); padding: 8px 15px; border-radius: var(--radius-pill); white-space: nowrap; box-shadow: var(--shadow-xs);
 }
 .pill-badge.accent { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 6px 16px rgba(35,95,208,.28); }
 
@@ -299,7 +298,7 @@ p  { margin: 0 0 1rem; }
   padding: 32px 30px; box-shadow: var(--card-shadow);
   transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease;
 }
-.card:hover { transform: translateY(-6px); border-color: var(--sky-line); box-shadow: var(--shadow-md); }
+.card:hover { transform: translateY(-3px); border-color: var(--sky-line); box-shadow: var(--shadow-md); }
 .card h3 { margin-bottom: .5em; }
 .card p { color: var(--gray); margin: 0; font-size: 1rem; line-height: 1.6; }
 
@@ -314,7 +313,7 @@ p  { margin: 0 0 1rem; }
 /* ---- Anwendungsfall-Kacheln ---- */
 .usecase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
 .usecase-card { background: linear-gradient(165deg, #fff, var(--sky-soft)); border: 1px solid var(--sky-line); border-radius: var(--radius); padding: 30px 26px; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease; }
-.usecase-card:hover { transform: translateY(-6px); border-color: var(--blue-soft); box-shadow: var(--shadow-md); }
+.usecase-card:hover { transform: translateY(-3px); border-color: var(--blue-soft); box-shadow: var(--shadow-md); }
 .uc-icon { width: 48px; height: 48px; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(35,95,208,.08); display: grid; place-items: center; margin-bottom: 20px; }
 .uc-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
 .usecase-card .sc-cat { font-family: var(--font-head); font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
@@ -332,14 +331,16 @@ p  { margin: 0 0 1rem; }
 }
 .section-dark h2, .section-dark h3 { color: var(--ink); }
 .section-dark .section-text { color: var(--gray); }
+/* Ehem. Glas-Karten: solide weiße Flächen lesen sich ruhiger und sparen das
+   Blur-Compositing; die überlappende Icon-Kachel bleibt als einziges Tiefen-Detail. */
 .card.glass {
   position: relative;
-  background: rgba(255,255,255,.72);
-  border: 1px solid rgba(255,255,255,.9);
-  box-shadow: var(--card-shadow); backdrop-filter: blur(12px);
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--card-shadow);
   padding-top: 54px;
 }
-.card.glass:hover { transform: translateY(-6px); background: rgba(255,255,255,.9); box-shadow: var(--shadow-md); }
+.card.glass:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .card.glass p { color: var(--gray); }
 /* Icon-Kachel ragt leicht über die Kartenkante hinaus statt flach im
    Textfluss zu sitzen – etwas Überlappung/Tiefe statt reinem Stapeln.
@@ -374,8 +375,10 @@ p  { margin: 0 0 1rem; }
 
 /* ----------------------- How it works ----------------------- */
 .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px,5vw,68px); align-items: center; }
+/* Weißer Grund statt Blau-Verlauf: das Produktbild hat einen weißen Fond;
+   auf dem Verlauf entstand ein sichtbarer "Bild-im-Bild"-Collage-Effekt. */
 .how-figure { position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 4 / 3.4; box-shadow: var(--shadow-lg);
-  background: linear-gradient(150deg, #eef4fd, #dbe7f7 60%, #cadaef); display: grid; place-items: center; }
+  background: #fff; border: 1px solid var(--border-soft); display: grid; place-items: center; }
 .how-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 28px; }
 .steps { display: grid; gap: 20px; }
 .step { display: flex; gap: 20px; align-items: flex-start; }
@@ -402,7 +405,9 @@ p  { margin: 0 0 1rem; }
 .set-list li { position: relative; padding-left: 30px; color: var(--navy); font-weight: 500; }
 .set-list li::before { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 17px; border: 2.5px solid var(--blue); border-radius: 0 50% 50% 50%; rotate: 45deg; }
 .set-list-single { grid-template-columns: 1fr; }
-.set-group-label { font-family: var(--font-head); font-weight: 600; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-soft); margin: 22px 0 12px; }
+/* --blue statt --blue-soft: das helle Blau erreichte auf Weiß nur ~3:1
+   (WCAG AA verlangt 4.5:1 für kleine Schrift). */
+.set-group-label { font-family: var(--font-head); font-weight: 600; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin: 22px 0 12px; }
 .set-group-label:first-of-type { margin-top: 4px; }
 
 /* ----------------------- Feature list ----------------------- */
@@ -419,7 +424,7 @@ p  { margin: 0 0 1rem; }
 }
 .section-brand h2, .section-brand h3 { color: var(--ink); }
 .section-brand .section-text { color: var(--gray); }
-.card.on-dark { background: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.9); box-shadow: var(--card-shadow); backdrop-filter: blur(12px); }
+.card.on-dark { background: #fff; border: 1px solid var(--border-soft); box-shadow: var(--card-shadow); }
 .card.on-dark p { color: var(--gray); }
 #warum .card { padding: 32px 30px; border-radius: var(--radius); }
 #warum .section-text { max-width: 740px; }
@@ -571,8 +576,10 @@ p  { margin: 0 0 1rem; }
   border-radius: var(--radius-pill); box-shadow: var(--shadow-lg); padding: 8px;
   transform: translateY(140%); transition: transform .35s cubic-bezier(.16,.84,.44,1);
 }
-.sticky-cta a { flex: 1; text-align: center; font-family: var(--font-head); font-weight: 600; font-size: .82rem; color: var(--blue); padding: 12px 6px; border-radius: var(--radius-pill); text-decoration: none; }
-.sticky-cta a.primary { background: var(--blue); color: #fff; }
+.sticky-cta a { flex: 1; text-align: center; font-family: var(--font-head); font-weight: 600; font-size: .82rem; color: var(--blue); padding: 12px 6px; border-radius: var(--radius-pill); text-decoration: none; white-space: nowrap; }
+/* Längstes Label ("Interesse anmelden") bekommt mehr Anteil, damit es einzeilig
+   bleibt und die Leiste nicht durch eine höhere Pille aus der Balance gerät. */
+.sticky-cta a.primary { background: var(--blue); color: #fff; flex: 1.6; }
 .sticky-cta.show { transform: translateY(0); }
 
 /* ----------------------- Checker (Schritte) ----------------- */
@@ -585,7 +592,7 @@ p  { margin: 0 0 1rem; }
 .chk-previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .chk-thumb { position: relative; margin: 0; width: 72px; height: 72px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
 .chk-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.chk-thumb-rm { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 14px; }
+.chk-thumb-rm { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; }
 .chk-upload-hint { color: var(--gray); font-size: .92rem; margin-bottom: 14px; }
 .chk-result-block { margin-top: 18px; }
 .chk-result-block h4 { font-size: 1rem; margin-bottom: .4em; }
@@ -643,7 +650,7 @@ p  { margin: 0 0 1rem; }
   padding: 22px 2px 4px; color: var(--ink);
   transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease;
 }
-.wissen-card:hover { transform: translateY(-4px); border-color: var(--blue-soft); text-decoration: none; }
+.wissen-card:hover { transform: translateY(-2px); border-color: var(--blue-soft); text-decoration: none; }
 .wissen-card h3 { font-size: 1.04rem; margin-bottom: .45em; }
 .wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; flex: 1; line-height: 1.6; }
 
@@ -732,7 +739,7 @@ p  { margin: 0 0 1rem; }
 
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
 .blog-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s; color: var(--ink); }
-.blog-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); text-decoration: none; }
+.blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); text-decoration: none; }
 .blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: linear-gradient(150deg, #3468c8, var(--blue) 55%, #163a86); }
 .blog-card figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .blog-card-body { padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1; }
@@ -767,7 +774,7 @@ p  { margin: 0 0 1rem; }
 .calc2-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .kpi { background: #fff; border: 1px solid var(--border-cool); border-radius: 16px; padding: 18px; }
 .kpi.accent { background: var(--blue); border-color: var(--blue); box-shadow: 0 10px 26px rgba(35,95,208,.24); }
-.kpi-num { display: block; font-family: var(--font-head); font-weight: 800; font-size: 1.36rem; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi-num { display: block; font-family: var(--font-head); font-weight: 700; font-size: 1.36rem; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .kpi.accent .kpi-num { color: #fff; }
 .kpi-lab { display: block; margin-top: 5px; font-size: .76rem; line-height: 1.35; color: var(--gray); }
 .kpi.accent .kpi-lab { color: rgba(255,255,255,.85); }
@@ -788,7 +795,7 @@ p  { margin: 0 0 1rem; }
 @media (max-width: 480px) { .calc2-kpis { grid-template-columns: 1fr; } }
 
 /* ===================== Scroll-Reveal (subtile Animationen) ===================== */
-.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); will-change: opacity, transform; }
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s cubic-bezier(.16,.84,.44,1), transform .55s cubic-bezier(.16,.84,.44,1); will-change: opacity, transform; }
 .reveal.in-view { opacity: 1; transform: none; }
 .reveal-1 { transition-delay: .06s; }
 .reveal-2 { transition-delay: .12s; }
@@ -802,13 +809,18 @@ p  { margin: 0 0 1rem; }
      (7 Links + Sprachumschalter + 2 CTA-Buttons, ~1130px Eigenbreite)
      passt auf Tablet-Breiten wie 768–834px (iPad) nicht mehr in eine Zeile
      und verursachte dort horizontales Scrollen auf JEDER Seite der Site. */
-  .main-nav { position: fixed; top: 76px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: rgba(255,255,255,.96); backdrop-filter: saturate(180%) blur(18px); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-md); max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 24px; }
+  /* Deckend statt transluzent: durchscheinender Seiteninhalt machte die
+     Liste unruhig; ein opakes Panel liest sich ruhiger und spart zudem das
+     Blur-Compositing (Scroll-Performance). */
+  .main-nav { position: fixed; top: 76px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: #fff; border-bottom: 1px solid var(--border); box-shadow: var(--shadow-md); max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 24px; }
   .main-nav.open { max-height: 620px; padding: 12px 24px 24px; }
   .nav-list { flex-direction: column; gap: 4px; width: 100%; }
   .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--border); }
   .nav-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
   .nav-actions .btn { width: 100%; }
   .lang-switch { align-self: center; }
+  /* Touch-Ziele im offenen Menü auf ≥44px Höhe bringen (Apple HIG / WCAG). */
+  .lang-switch button { padding: 14px 18px; font-size: .85rem; }
   .hamburger { display: flex; }
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
@@ -849,10 +861,12 @@ p  { margin: 0 0 1rem; }
 
 /* ===================== Polish-Pass: Rhythmus, Fokus, Motion ===================== */
 #fuer-wen { background: linear-gradient(180deg, var(--mist), #ffffff); }
+/* Kein border-radius-Override im Fokus: er verformte Pill-Buttons und runde
+   Bedienelemente bei Tastatur-Fokus; die Outline folgt dem eigenen Radius. */
 a:focus-visible, button:focus-visible, .btn:focus-visible,
 input:focus-visible, select:focus-visible, textarea:focus-visible,
 summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
-  outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px;
+  outline: 2px solid var(--blue); outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -883,8 +897,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .chk-print-title { font-family: var(--font-head); font-weight: 700; }
 .chk-print-date { color: var(--gray); font-size: .85rem; }
 
-/* ===== Audit: Fortschrittslinie, aktive Navigation, Formular-Hinweis ===== */
-.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--blue-soft), var(--blue)); z-index: 300; }
+/* ===== Audit: aktive Navigation, Formular-Hinweis ===== */
 .nav-list a.active { color: var(--blue); }
 .nav-list a.active::after { content: ""; display: block; height: 2px; background: var(--blue); border-radius: 2px; margin-top: 3px; }
 .form-notice { margin: 0 0 16px; padding: 13px 15px; border-radius: 12px; background: var(--sky); color: var(--blue-ink); font-size: .9rem; line-height: 1.5; border: 1px solid var(--sky-line); }
@@ -892,4 +905,3 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .form .field input:disabled, .form .field select:disabled, .form .field textarea:disabled,
 .newsletter-row input:disabled { opacity: .55; cursor: not-allowed; }
 .btn:disabled, .btn[disabled] { opacity: .55; cursor: not-allowed; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .scroll-progress { display: none; } }

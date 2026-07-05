@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initChecker, initImagePreview,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initProgress, initReveal]
+   initScrollSpy, initReveal]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
 
@@ -740,7 +740,7 @@ function openModal(modal, ckStats, ckMarketing, ckMedia) {
 function closeModal(modal) { if (modal) modal.hidden = true; }
 
 /* -------------------------------------------------------------
-   6. AKTIVE NAVIGATION (Scroll-Spy) + dezenter Seitenfortschritt
+   6. AKTIVE NAVIGATION (Scroll-Spy)
    Nur auf Seiten mit gleichseitigen Ankern (Startseite).
    ------------------------------------------------------------- */
 function initScrollSpy() {
@@ -829,22 +829,3 @@ function initReveal() {
   }, 1200);
 }
 
-function initProgress() {
-  const bar = document.createElement('div');
-  bar.className = 'scroll-progress';
-  bar.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(bar);
-  let ticking = false;
-  function update() {
-    const h = document.documentElement;
-    const max = h.scrollHeight - h.clientHeight;
-    const p = max > 0 ? (h.scrollTop / max) * 100 : 0;
-    bar.style.width = Math.min(100, Math.max(0, p)) + '%';
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
-  window.addEventListener('resize', update, { passive: true });
-  update();
-}
