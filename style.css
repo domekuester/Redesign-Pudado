@@ -557,9 +557,6 @@ p  { margin: 0 0 1rem; }
 .chk-tips:empty { display: none; }
 .checker .legal-hint { margin-top: 20px; }
 
-/* ----------------------- Hero Tagline ----------------------- */
-.hero-tagline { margin: 20px 0 0; color: var(--gray); font-size: .98rem; max-width: 500px; }
-
 /* ----------------------- Vertrauensband (→ hell) ------------ */
 .trust-band { background: var(--mist); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .trust-band-inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 32px; padding: 22px 24px; }
@@ -578,7 +575,6 @@ p  { margin: 0 0 1rem; }
 .sticky-cta.show { transform: translateY(0); }
 
 /* ----------------------- Checker (Schritte) ----------------- */
-.checker-cta { text-align: center; max-width: 660px; margin: 0 auto 24px; color: var(--gray); }
 .chk-step { border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 28px; margin: 0 0 18px; background: #fff; }
 .chk-step legend { font-family: var(--font-head); font-weight: 700; color: var(--navy); padding: 0 8px; display: inline-flex; align-items: center; gap: 10px; }
 .chk-step-n { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff; display: inline-grid; place-items: center; font-size: .82rem; }
@@ -662,9 +658,6 @@ p  { margin: 0 0 1rem; }
   body.print-pass #chkResult .chk-result-actions { display: none !important; }
   body.print-pass .chk-print-head { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; }
 }
-
-/* ----------------------- Rechner-Intro ---------------------- */
-.calc-explain { color: var(--gray); font-size: 1.02rem; max-width: 660px; margin: 14px auto 0; }
 
 /* ----------------------- Detail-Sektion --------------------- */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 960px; margin: 0 auto; }

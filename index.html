@@ -145,7 +145,6 @@
             <a href="#newsletter" class="btn btn-primary" data-i18n="hero.cta_launch">Launch-Update sichern</a>
             <a href="#checker" class="btn btn-ghost" data-i18n="ctaA.btn">Installations-Check starten</a>
           </div>
-          <p class="hero-tagline" data-i18n="hero.tagline">Für alle, die Hygiene neu denken: Wasser statt nur Papier – sanft, klar und modern.</p>
         </div>
         <div class="hero-visual">
           <div class="product-card product-card-photo">
@@ -270,7 +269,9 @@
           <p class="legal-hint" data-i18n="set.disclaimer">Die vorgesehenen Komponenten können sich je nach finaler Produktversion noch leicht ändern.</p>
         </div>
         <div class="set-visual">
-          <div class="product-card"><span class="glow" aria-hidden="true"></span><img src="assets/product-context.jpg" alt="EcoBum Wandhalterung mit Schlauch und T-Stück im modernen Badezimmer" width="1100" height="1374" loading="lazy" decoding="async" /></div>
+          <!-- Ruhiges Komponenten-Render statt Feature-Sheet: überladene Produktgrafiken
+               mit Call-outs sind laut Brand-PDO (Non-Goal "Marktplatz-Ästhetik") ausgeschlossen. -->
+          <div class="product-card"><span class="glow" aria-hidden="true"></span><img src="assets/ecobum-tvalve.jpg" alt="Pudado T-Stück in mattem Dunkelblau – Komponente des EcoBum Home Sets (Visualisierung)" width="900" height="900" loading="lazy" decoding="async" /></div>
         </div>
       </div>
     </section>
@@ -321,7 +322,6 @@
           <h2 data-i18n="chk.h2">Passt EcoBum in dein Badezimmer?</h2>
           <p class="section-text center" data-i18n="chk.intro">Beantworte ein paar kurze Fragen für eine erste, unverbindliche Einschätzung.</p>
         </div>
-        <p class="checker-cta" data-i18n="chk.lead">Nicht sicher, ob es passt? Lade Fotos deines Anschlusses hoch und nutze den Check als erste Orientierung.</p>
         <div class="checker card" id="checkerForm">
 
           <!-- Schritt 1 -->
@@ -488,7 +488,6 @@
           <p class="section-label" data-i18n="rech.label">Toilettenpapierverbrauch realistisch einschätzen</p>
           <h2><span data-i18n="rech.h2a">Wie viel</span> <span class="accent" data-i18n="rech.h2b">Toilettenpapier</span> <span data-i18n="rech.h2c">nutzt dein Haushalt wirklich?</span></h2>
           <p class="section-text center" data-i18n="rech.text">Der Rechner zeigt eine vorsichtige Schätzung, wie viel Toilettenpapier im Alltag genutzt wird und wie sich der Verbrauch durch Reinigung mit Wasser reduzieren könnte.</p>
-          <p class="calc-explain" data-i18n="rech.explain">Drei kurze Angaben genügen – der Rechner zeigt deinen geschätzten Verbrauch und eine mögliche Reduktion durch Reinigung mit Wasser. Alle Werte sind unverbindliche Modellschätzungen.</p>
         </div>
         <div class="calc2-wrap">
           <form class="calc2-inputs card" id="calcForm" novalidate>
@@ -572,7 +571,9 @@
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
         </div>
-        <figure class="leaf-band"><img src="assets/design-3.jpg" alt="Grünes Blatt mit Wassertropfen über ruhiger Wasseroberfläche" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+        <!-- Wasser-Motiv statt Blatt-Grün: Öko-Klischee-Bildsprache ist laut Brand-PDO
+             ausgeschlossen; das Wasserbild stützt die Kernbotschaft und bleibt im Blau-System. -->
+        <figure class="leaf-band"><img src="assets/design-1.jpg" alt="Wassertropfen an einer Glasscheibe in warmem Tageslicht" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
       </div>
     </section>
 
