@@ -438,6 +438,15 @@ p  { margin: 0 0 1rem; }
   border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg);
   background: linear-gradient(135deg, #e7effc, #cfddf3 60%, #b9cdea); }
 .media-band img { display: block; width: 100%; height: auto; }
+/* Pudado-Firmensignatur ("Warum Pudado?"): stummes Brand-Video. Feste
+   aspect-ratio reserviert die Höhe vor dem Laden (kein CLS); der
+   760px-Breakpoint muss zu den media-Attributen der <source>-Elemente
+   in index.html passen (Desktop 16:9, Mobile 9:16). */
+.media-band.brand-signature { max-width: 560px; aspect-ratio: 16 / 9; }
+.media-band.brand-signature video { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 760px) {
+  .media-band.brand-signature { max-width: 300px; aspect-ratio: 9 / 16; }
+}
 
 /* ----------------------- FAQ -------------------------------- */
 .faq-list { display: grid; gap: 14px; }

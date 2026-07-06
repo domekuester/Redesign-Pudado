@@ -150,8 +150,8 @@
           <div class="product-card product-card-photo">
             
             <!-- HERO-PRODUKTBILD (nicht lazy, priorisiert). Fallback nur falls Datei fehlt. -->
-            <img src="assets/ecobum-hero.jpg" alt="EcoBum montiert an der Toilette in einem hellen, modernen Badezimmer"
-                 width="1000" height="1249" fetchpriority="high" decoding="async"
+            <img src="assets/hero-bild-1-optimized.jpg" alt="EcoBum Home Set in modernem Badezimmer"
+                 width="1200" height="959" fetchpriority="high" decoding="async"
                  onerror="this.onerror=null;this.src='assets/ecobum-box.jpg';" />
             <div class="product-badges">
               <span class="pill-badge" data-i18n="badge.plug">Plug-and-Play</span>
@@ -271,7 +271,7 @@
         <div class="set-visual">
           <!-- Ruhiges Komponenten-Render statt Feature-Sheet: überladene Produktgrafiken
                mit Call-outs sind laut Brand-PDO (Non-Goal "Marktplatz-Ästhetik") ausgeschlossen. -->
-          <div class="product-card"><img src="assets/ecobum-tvalve.jpg" alt="Pudado T-Stück in mattem Dunkelblau – Komponente des EcoBum Home Sets (Visualisierung)" width="900" height="900" loading="lazy" decoding="async" /></div>
+          <div class="product-card"><img src="assets/ecobum-home-set-mit-halterung-optimized.jpg" alt="EcoBum Home Set mit Wandhalterung – Komponenten des Sets (Visualisierung)" width="990" height="1400" loading="lazy" decoding="async" /></div>
         </div>
       </div>
     </section>
@@ -628,6 +628,16 @@
           <h2 data-i18n="warum.h2">Wir denken das Badezimmer weiter.</h2>
           <p class="section-text center" data-i18n="warum.text">Pudado entwickelt durchdachte Sanitärlösungen für Menschen, die Hygiene, Komfort und einen bewussteren Umgang mit Ressourcen verbinden möchten. Unser Anspruch ist es, bestehende Badezimmer einfach und sinnvoll aufzuwerten – mit klarer Funktion, modernem Design und ehrlicher Kommunikation. EcoBum ist unser erster Schritt.</p>
         </div>
+        <!-- PUDADO-FIRMENSIGNATUR: rein dekoratives, stummes Brand-Video (daher
+             aria-hidden, keine Controls). Der 760px-Breakpoint der media-Attribute
+             muss zu .brand-signature in style.css passen; Browser ohne
+             media-Attribut-Support fallen überall auf die 16:9-Version zurück. -->
+        <figure class="media-band brand-signature" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="assets/videos/pudado-company-signature-v1.0.mp4" type="video/mp4" media="(min-width: 761px)" />
+            <source src="assets/videos/pudado-company-signature-vertical-v1.0.mp4" type="video/mp4" media="(max-width: 760px)" />
+          </video>
+        </figure>
         <div class="cards-grid three">
           <article class="card on-dark"><h3 data-i18n="warum.c1t">Sanitäre Upgrades für den Alltag</h3><p data-i18n="warum.c1d">Wir möchten Lösungen entwickeln, die sich sinnvoll in bestehende Badezimmer integrieren lassen und alltägliche Hygieneroutinen einfacher und angenehmer machen.</p></article>
           <article class="card on-dark"><h3 data-i18n="warum.c2t">Ressourcen bewusster nutzen</h3><p data-i18n="warum.c2d">Unsere Produkte sollen dabei helfen, Papier, Feuchttücher und andere Einwegprodukte bewusster zu verwenden. Nachhaltigkeit verstehen wir als Entwicklungsziel – transparent und ohne übertriebene Versprechen.</p></article>

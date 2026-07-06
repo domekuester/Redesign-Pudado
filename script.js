@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initChecker, initImagePreview,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal]
+   initScrollSpy, initReveal, initBrandVideo]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
 
@@ -827,5 +827,35 @@ function initReveal() {
       }
     });
   }, 1200);
+}
+
+/* -------------------------------------------------------------
+   12. BRAND-VIDEO (Pudado-Firmensignatur, dekorativ)
+   CSS kann Video-Autoplay nicht stoppen, daher hier:
+   Bei prefers-reduced-motion bleibt das erste Standbild stehen.
+   ------------------------------------------------------------- */
+function initBrandVideo() {
+  const video = document.querySelector('.brand-signature video');
+  if (!video) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+    return;
+  }
+  // Chromium startet stumme Autoplay-Videos außerhalb des Viewports nicht
+  // zuverlässig; Pausieren außerhalb des Sichtbereichs spart zudem Akku.
+  // play() kann vom Browser abgelehnt werden -> Promise-Fehler ignorieren.
+  if (!('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const p = video.play();
+        if (p && p.catch) p.catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.2 });
+  obs.observe(video);
 }
 
