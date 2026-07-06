@@ -29,14 +29,16 @@
   <meta name="twitter:description" content="Modernes Plug-and-Play-Handbidet für Reinigung mit Wasser. Kein Strom, einfache Installation, mehr Frische im Alltag." />
   <meta name="twitter:image" content="https://pudado.de/assets/pudado-og.jpg" />
 
-  <meta name="theme-color" content="#244A96" />
+  <meta name="theme-color" content="#ffffff" />
 
   <!-- ================== FONTS (DSGVO-konform, ohne externe Requests) ==================
        Es werden KEINE Google Fonts vom CDN geladen (keine IP-Übertragung an Google).
-       Standard: hochwertiger System-Font-Stack (siehe style.css).
-       Für das exakte Marken-Schriftbild (Sora/Inter) die Schriftdateien lokal ablegen:
-       1) .woff2-Dateien nach assets/fonts/ kopieren
-       2) den @font-face-Block in style.css aktivieren (dort auskommentiert vorbereitet). -->
+       Cabinet Grotesk (Headlines) + Inter (Fließtext) liegen selbst gehostet unter
+       assets/fonts/ (siehe @font-face in style.css). Preload nur für die beiden im
+       ersten Bildschirm sichtbaren Schnitte, damit der Text ohne Verzögerung im
+       Marken-Font erscheint. -->
+  <link rel="preload" href="assets/fonts/CabinetGrotesk-Bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
@@ -73,15 +75,19 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      { "@type": "Question", "name": "Was ist EcoBum Home und wie funktioniert es?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum Home ist ein geplantes Plug-and-Play-Handbidet-Set für die Reinigung mit Wasser. Es wird am Wasseranschluss der Toilette angebracht und reinigt mit einem dosierbaren Wasserstrahl – als Ergänzung zu trockenem Papier." } },
       { "@type": "Question", "name": "Passt EcoBum in jede Toilette?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab – unser Installations-Check gibt eine erste Einschätzung." } },
-      { "@type": "Question", "name": "Braucht EcoBum Strom?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom." } },
-      { "@type": "Question", "name": "Muss ich bohren?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, nicht zwingend. Die Wandhalterung kann auch geklebt werden. Für eine besonders feste Montage ist Schrauben möglich." } },
-      { "@type": "Question", "name": "Kann EcoBum ohne Bohren montiert werden?", "acceptedAnswer": { "@type": "Answer", "text": "Die Halterung kann je nach Untergrund geklebt oder geschraubt werden. Der Anschluss am Wasserzulauf sollte vor der Installation geprüft werden. Bei Unsicherheit empfehlen wir fachkundige Hilfe." } },
+      { "@type": "Question", "name": "Muss ich bohren?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, nicht zwingend. Die Wandhalterung kann geklebt oder für besonders festen Halt geschraubt werden – je nach Untergrund. Der Wasseranschluss sollte vor der Installation trotzdem geprüft werden; bei Unsicherheit hilft eine Fachperson." } },
       { "@type": "Question", "name": "Passt EcoBum bei Unterputz-Spülkästen?", "acceptedAnswer": { "@type": "Answer", "text": "Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden." } },
-      { "@type": "Question", "name": "Was ist, wenn ich ein starres Rohr statt flexiblem Schlauch habe?", "acceptedAnswer": { "@type": "Answer", "text": "Dann ist häufig ein flexibler Zulaufschlauch nötig, um das T-Stück anzuschließen. Das ist meist unkompliziert, sollte aber vor dem Kauf geprüft werden." } },
-      { "@type": "Question", "name": "Ist EcoBum für sensible Haut geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Wasser kann eine sanftere Ergänzung zu trockenem Papier sein und zu einem angenehmeren Hautgefühl beitragen. Bei medizinischen Beschwerden bitte ärztlichen Rat einholen." } },
-      { "@type": "Question", "name": "Ist EcoBum während der Menstruation praktisch?", "acceptedAnswer": { "@type": "Answer", "text": "Viele Menschen empfinden Reinigung mit Wasser als zusätzliche Frische und angenehme Ergänzung der täglichen Hygiene – einfach, diskret und ohne Strom." } },
-      { "@type": "Question", "name": "Ist EcoBum in Schwangerschaft oder Wochenbett sinnvoll?", "acceptedAnswer": { "@type": "Answer", "text": "In dieser Zeit kann der Intimbereich besonders empfindlich sein. Eine sanfte Reinigung mit Wasser kann angenehmer sein als ausschließlich trockenes Wischen. Bei Beschwerden bitte immer ärztlichen Rat einholen." } },
+      { "@type": "Question", "name": "Ist EcoBum für Mietwohnungen geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind." } },
+      { "@type": "Question", "name": "Was mache ich, wenn ich meinen Anschluss nicht kenne?", "acceptedAnswer": { "@type": "Answer", "text": "Nutze den Installations-Check für eine erste Einschätzung. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person." } },
+      { "@type": "Question", "name": "Was ist im geplanten Set enthalten?", "acceptedAnswer": { "@type": "Answer", "text": "Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern." } },
+      { "@type": "Question", "name": "Warum sind Absperrhahn und Rückflussverhinderer wichtig?", "acceptedAnswer": { "@type": "Answer", "text": "Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt." } },
+      { "@type": "Question", "name": "Braucht EcoBum Strom?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom." } },
+      { "@type": "Question", "name": "Ersetzt EcoBum Toilettenpapier komplett?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier — zum Beispiel nur noch zum Trocknen." } },
+      { "@type": "Question", "name": "Ist EcoBum bei sensibler Haut, Menstruation oder Schwangerschaft geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Wasser kann in diesen Phasen eine sanftere Ergänzung zu trockenem Papier sein und wird von vielen als angenehm empfunden. Bei medizinischen Beschwerden bitte immer ärztlichen Rat einholen." } },
+      { "@type": "Question", "name": "Gibt es Zertifizierungen?", "acceptedAnswer": { "@type": "Answer", "text": "Ziel der Produktentwicklung ist es, relevante Anforderungen und Prüfungen zu berücksichtigen. Aktuell liegen noch keine Zertifizierungen vor – sobald sich das ändert, aktualisieren wir diese Angabe." } },
+      { "@type": "Question", "name": "Gibt es Garantie oder Rückgabe?", "acceptedAnswer": { "@type": "Answer", "text": "Die genauen Garantie- und Rückgabebedingungen stehen noch nicht fest und werden vor dem Verkaufsstart bekanntgegeben." } },
       { "@type": "Question", "name": "Wann ist EcoBum verfügbar?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum befindet sich in Vorbereitung. Trage dich für das Launch-Update ein, dann informieren wir dich als Erstes über Verfügbarkeit und Start." } }
     ]
   }
@@ -94,7 +100,7 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a href="#top" class="logo" aria-label="Pudado Startseite">
-        <span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+        <span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
         <span class="logo-word">Pudado</span>
       </a>
 
@@ -118,7 +124,7 @@
             <button type="button" data-lang="en">EN</button>
             <button type="button" data-lang="fr">FR</button>
           </div>
-          <a href="#kontakt" class="btn btn-ghost nav-cta" data-i18n="cta.interesse">Interesse anmelden</a>
+          <a href="#kontakt" class="btn btn-link nav-cta" data-i18n="cta.interesse">Interesse anmelden</a>
           <a href="#produkt" class="btn btn-primary nav-cta" data-i18n="cta.entdecken">EcoBum entdecken</a>
         </div>
       </nav>
@@ -131,7 +137,7 @@
 <section class="hero" id="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> <span data-i18n="hero.eyebrow">EcoBum von Pudado</span></p>
+          <p class="eyebrow"><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="hero.eyebrow">EcoBum von Pudado</span></p>
           <h1><span data-i18n="hero.h1a">Wasser reinigt.</span> <span class="accent" data-i18n="hero.h1b">Papier reibt.</span></h1>
           <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser — frisch, sanft und einfach in deinem Badezimmer.</p>
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
@@ -139,20 +145,13 @@
             <a href="#newsletter" class="btn btn-primary" data-i18n="hero.cta_launch">Launch-Update sichern</a>
             <a href="#checker" class="btn btn-ghost" data-i18n="ctaA.btn">Installations-Check starten</a>
           </div>
-          <ul class="hero-badges" aria-label="Produkt-Highlights">
-            <li data-i18n="badge.nopower">Kein Strom</li>
-            <li data-i18n="badge.install">Einfache Installation</li>
-            <li data-i18n="badge.water">Wasserreinigung</li>
-            <li data-i18n="badge.lesspaper">Weniger Papier möglich</li>
-          </ul>
-          <p class="hero-tagline" data-i18n="hero.tagline">Für alle, die Hygiene neu denken: Wasser statt nur Papier – sanft, klar und modern.</p>
         </div>
         <div class="hero-visual">
           <div class="product-card product-card-photo">
-            <span class="glow" aria-hidden="true"></span>
+            
             <!-- HERO-PRODUKTBILD (nicht lazy, priorisiert). Fallback nur falls Datei fehlt. -->
-            <img src="assets/ecobum-hero.jpg" alt="EcoBum montiert an der Toilette in einem hellen, modernen Badezimmer"
-                 width="1000" height="1249" fetchpriority="high" decoding="async"
+            <img src="assets/hero-bild-1-optimized.jpg" alt="EcoBum Home Set in modernem Badezimmer"
+                 width="1200" height="959" fetchpriority="high" decoding="async"
                  onerror="this.onerror=null;this.src='assets/ecobum-box.jpg';" />
             <div class="product-badges">
               <span class="pill-badge" data-i18n="badge.plug">Plug-and-Play</span>
@@ -178,7 +177,7 @@
       <div class="container">
         <div class="section-head center narrow">
           <p class="section-label" data-i18n="logik.label">Das Prinzip</p>
-          <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span><span data-i18n="logik.h2c"></span></h2>
+          <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span></h2>
           <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine — klar, sanft und unkompliziert.</p>
         </div>
         <div class="compare">
@@ -241,7 +240,7 @@
         <div class="product-visual">
           <!-- PRODUKTBILD 2: helles Lifestyle-Foto als assets/ecobum-lifestyle.jpg ablegen.
                Fehlt die Datei, wird automatisch das Set-Render gezeigt. -->
-          <div class="product-card product-card-photo"><span class="glow" aria-hidden="true"></span><img src="assets/ecobum-lifestyle.jpg" alt="EcoBum im hellen, modernen Badezimmer mit Eichenmöbeln" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/ecobum-home-set.jpg';" /></div>
+          <div class="product-card product-card-photo"><img src="assets/ecobum-lifestyle.jpg" alt="EcoBum im hellen, modernen Badezimmer mit Eichenmöbeln" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/ecobum-home-set.jpg';" /></div>
         </div>
       </div>
     </section>
@@ -251,19 +250,28 @@
         <div class="set-copy">
           <p class="section-label" data-i18n="set.label">Lieferumfang</p>
           <h2><span data-i18n="set.h2a">Das EcoBum</span> <span class="accent" data-i18n="set.h2b">Home Set</span></h2>
-          <p class="section-text" data-i18n="set.text">Alles, was du für den Start brauchst — sauber zusammengestellt, einfach gedacht und für den täglichen Gebrauch entwickelt.</p>
-          <ul class="set-list">
+          <p class="section-text" data-i18n="set.text">Diese Komponenten sind für das EcoBum Home Set vorgesehen — sauber zusammengestellt, einfach gedacht und für den täglichen Gebrauch entwickelt.</p>
+          <p class="set-group-label" data-i18n="set.group1">Kernkomponenten</p>
+          <ul class="set-list set-list-single">
             <li data-i18n="set.l1">Handbidet-Sprayer</li>
             <li data-i18n="set.l2">Brauseschlauch</li>
-            <li data-i18n="set.l3">T-Stück mit Absperrhahn</li>
-            <li data-i18n="set.l4">Wandhalterung</li>
-            <li data-i18n="set.l5">Anschlusszubehör</li>
+            <li data-i18n="set.l4">Wandhalterung zum Kleben oder Schrauben</li>
+          </ul>
+          <p class="set-group-label" data-i18n="set.group2">Für Installation & Sicherheit vorgesehen</p>
+          <ul class="set-list">
+            <li data-i18n="set.l7">T-Stück (Anschlüsse 2×3/8″ + 1×1/2″)</li>
+            <li data-i18n="set.l8">Absperrhahn</li>
+            <li data-i18n="set.l9">Rückflussverhinderer – als Sicherheitsprinzip vorgesehen</li>
+            <li data-i18n="set.l10">Flexibler Zulaufschlauch</li>
+            <li data-i18n="set.l11">PTFE-Band</li>
             <li data-i18n="set.l6">Anleitung</li>
           </ul>
-          <p class="legal-hint" data-i18n="set.disclaimer">Der finale Lieferumfang kann je nach Produktversion leicht abweichen.</p>
+          <p class="legal-hint" data-i18n="set.disclaimer">Die vorgesehenen Komponenten können sich je nach finaler Produktversion noch leicht ändern.</p>
         </div>
         <div class="set-visual">
-          <div class="product-card"><span class="glow" aria-hidden="true"></span><img src="assets/product-context.jpg" alt="EcoBum Wandhalterung mit Schlauch und T-Stück im modernen Badezimmer" width="1100" height="1374" loading="lazy" decoding="async" /></div>
+          <!-- Ruhiges Komponenten-Render statt Feature-Sheet: überladene Produktgrafiken
+               mit Call-outs sind laut Brand-PDO (Non-Goal "Marktplatz-Ästhetik") ausgeschlossen. -->
+          <div class="product-card"><img src="assets/ecobum-home-set-mit-halterung-optimized.jpg" alt="EcoBum Home Set mit Wandhalterung – Komponenten des Sets (Visualisierung)" width="990" height="1400" loading="lazy" decoding="async" /></div>
         </div>
       </div>
     </section>
@@ -286,6 +294,27 @@
       </div>
     </section>
 
+    <section class="section section-alt" id="how">
+      <div class="container">
+        <div class="section-head center narrow">
+          <p class="section-label" data-i18n="how.label">So funktioniert die Installation</p>
+          <h2><span data-i18n="how.h2a">In vier</span> <span class="accent" data-i18n="how.h2b">Schritten.</span></h2>
+        </div>
+        <div class="how-grid">
+          <figure class="how-figure"><img src="assets/how-it-works.jpg" alt="EcoBum Handbidet im modernen Badezimmer" width="900" height="900" loading="lazy" decoding="async" onerror="this.remove()" /></figure>
+          <div>
+            <div class="steps">
+              <div class="step"><span class="step-num">01</span><div><h3 data-i18n="how.s1t">Wasser abstellen</h3><p data-i18n="how.s1d">Vor jeder Installation muss das Wasser am Eckventil abgestellt werden.</p></div></div>
+              <div class="step"><span class="step-num">02</span><div><h3 data-i18n="how.s2t">T-Stück einsetzen</h3><p data-i18n="how.s2d">Das T-Stück wird zwischen Eckventil und Zulaufschlauch gesetzt, wenn der vorhandene Anschluss kompatibel ist.</p></div></div>
+              <div class="step"><span class="step-num">03</span><div><h3 data-i18n="how.s3t">Schlauch und Sprayer verbinden</h3><p data-i18n="how.s3d">Der Brauseschlauch verbindet T-Stück und Handbidet-Sprayer.</p></div></div>
+              <div class="step"><span class="step-num">04</span><div><h3 data-i18n="how.s4t">Halterung anbringen</h3><p data-i18n="how.s4d">Die Halterung kann je nach Untergrund geklebt oder geschraubt werden.</p></div></div>
+            </div>
+            <p class="hint-box" data-i18n="how.hint">Hinweis: Die Installation kann je nach vorhandenem Wasseranschluss variieren. Bei Unsicherheit bitte fachkundige Hilfe in Anspruch nehmen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section section-ice" id="checker">
       <div class="container narrow">
         <div class="section-head center">
@@ -293,28 +322,27 @@
           <h2 data-i18n="chk.h2">Passt EcoBum in dein Badezimmer?</h2>
           <p class="section-text center" data-i18n="chk.intro">Beantworte ein paar kurze Fragen für eine erste, unverbindliche Einschätzung.</p>
         </div>
-        <p class="checker-cta" data-i18n="chk.lead">Nicht sicher, ob es passt? Lade Fotos deines Anschlusses hoch und nutze den Check als erste Orientierung.</p>
         <div class="checker card" id="checkerForm">
 
           <!-- Schritt 1 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">1</span> <span data-i18n="chk.step1">Badezimmer-Situation</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_eck">Ist ein Eckventil neben/hinter der Toilette sichtbar?</label>
-              <div class="chk-opts" data-q="eck">
+            <div class="chk-q"><span id="chk-lbl-eck" data-i18n="chk.q_eck">Ist ein Eckventil neben/hinter der Toilette sichtbar?</span>
+              <div class="chk-opts" data-q="eck" role="group" aria-labelledby="chk-lbl-eck">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_cistern">Ist der Spülkasten sichtbar oder in der Wand verbaut?</label>
-              <div class="chk-opts" data-q="cistern">
+            <div class="chk-q"><span id="chk-lbl-cistern" data-i18n="chk.q_cistern">Ist der Spülkasten sichtbar oder in der Wand verbaut?</span>
+              <div class="chk-opts" data-q="cistern" role="group" aria-labelledby="chk-lbl-cistern">
                 <button type="button" data-val="visible" data-i18n="chk.cistern_vis">Sichtbarer Spülkasten</button>
                 <button type="button" data-val="concealed" data-i18n="chk.cistern_con">Unterputz-Spülkasten</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_hose">Gibt es einen flexiblen Zulaufschlauch zwischen Eckventil und Spülkasten?</label>
-              <div class="chk-opts" data-q="hose">
+            <div class="chk-q"><span id="chk-lbl-hose" data-i18n="chk.q_hose">Gibt es einen flexiblen Zulaufschlauch zwischen Eckventil und Spülkasten?</span>
+              <div class="chk-opts" data-q="hose" role="group" aria-labelledby="chk-lbl-hose">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="rigid" data-i18n="chk.q2_rigid">Nein, starres Rohr</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_space">Ist neben der Toilette Platz für ein T-Stück und Schlauch?</label>
-              <div class="chk-opts" data-q="space">
+            <div class="chk-q"><span id="chk-lbl-space" data-i18n="chk.q_space">Ist neben der Toilette Platz für ein T-Stück und Schlauch?</span>
+              <div class="chk-opts" data-q="space" role="group" aria-labelledby="chk-lbl-space">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="little" data-i18n="chk.little">Wenig</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
@@ -323,18 +351,18 @@
 
           <!-- Schritt 2 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">2</span> <span data-i18n="chk.step2">Anschluss & Maße</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_size">Kennst du die Anschlussgröße?</label>
-              <div class="chk-opts" data-q="size">
+            <div class="chk-q"><span id="chk-lbl-size" data-i18n="chk.q_size">Kennst du die Anschlussgröße?</span>
+              <div class="chk-opts" data-q="size" role="group" aria-labelledby="chk-lbl-size">
                 <button type="button" data-val="38" data-i18n="chk.size_38">3/8 Zoll</button>
                 <button type="button" data-val="12" data-i18n="chk.size_12">1/2 Zoll</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_shutoff">Kannst du das Eckventil zudrehen?</label>
-              <div class="chk-opts" data-q="shutoff">
+            <div class="chk-q"><span id="chk-lbl-shutoff" data-i18n="chk.q_shutoff">Kannst du das Eckventil zudrehen?</span>
+              <div class="chk-opts" data-q="shutoff" role="group" aria-labelledby="chk-lbl-shutoff">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_dist">Wie weit ist der Anschluss ungefähr vom WC entfernt?</label>
-              <div class="chk-opts" data-q="dist">
+            <div class="chk-q"><span id="chk-lbl-dist" data-i18n="chk.q_dist">Wie weit ist der Anschluss ungefähr vom WC entfernt?</span>
+              <div class="chk-opts" data-q="dist" role="group" aria-labelledby="chk-lbl-dist">
                 <button type="button" data-val="near" data-i18n="chk.dist_near">unter 30 cm</button>
                 <button type="button" data-val="mid" data-i18n="chk.dist_mid">30–70 cm</button>
                 <button type="button" data-val="far" data-i18n="chk.dist_far">über 70 cm</button>
@@ -343,13 +371,13 @@
 
           <!-- Schritt 3 -->
           <fieldset class="chk-step"><legend><span class="chk-step-n">3</span> <span data-i18n="chk.step3">Montage</span></legend>
-            <div class="chk-q"><label data-i18n="chk.q_nodrill">Möchtest du ohne Bohren montieren?</label>
-              <div class="chk-opts" data-q="nodrill">
+            <div class="chk-q"><span id="chk-lbl-nodrill" data-i18n="chk.q_nodrill">Möchtest du ohne Bohren montieren?</span>
+              <div class="chk-opts" data-q="nodrill" role="group" aria-labelledby="chk-lbl-nodrill">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="egal" data-i18n="chk.q5_egal">Egal</button></div></div>
-            <div class="chk-q"><label data-i18n="chk.q_glue">Ist Kleben an Fliesen für dich okay?</label>
-              <div class="chk-opts" data-q="glue">
+            <div class="chk-q"><span id="chk-lbl-glue" data-i18n="chk.q_glue">Ist Kleben an Fliesen für dich okay?</span>
+              <div class="chk-opts" data-q="glue" role="group" aria-labelledby="chk-lbl-glue">
                 <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
                 <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
                 <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
@@ -359,10 +387,10 @@
           <fieldset class="chk-step"><legend><span class="chk-step-n">4</span> <span data-i18n="chk.step4">Bilder (optional)</span></legend>
             <p class="chk-upload-hint" data-i18n="chk.upload_hint">Fotos helfen bei einer späteren Einschätzung. Welche Bilder hilfreich sind:</p>
             <div class="chk-uploads">
-              <div class="chk-upload"><label data-i18n="chk.up1">Überblick hinter/neben der Toilette</label><input type="file" class="chk-file" id="chkFile1" accept="image/*" multiple /><div class="chk-previews" id="chkPrev1"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up2">Nahaufnahme Eckventil</label><input type="file" class="chk-file" id="chkFile2" accept="image/*" multiple /><div class="chk-previews" id="chkPrev2"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up3">Verbindung zum Spülkasten</label><input type="file" class="chk-file" id="chkFile3" accept="image/*" multiple /><div class="chk-previews" id="chkPrev3"></div></div>
-              <div class="chk-upload"><label data-i18n="chk.up4">Platz an der Wand für die Halterung</label><input type="file" class="chk-file" id="chkFile4" accept="image/*" multiple /><div class="chk-previews" id="chkPrev4"></div></div>
+              <div class="chk-upload"><label for="chkFile1" data-i18n="chk.up1">Überblick hinter/neben der Toilette</label><input type="file" class="chk-file" id="chkFile1" accept="image/*" multiple /><div class="chk-previews" id="chkPrev1"></div></div>
+              <div class="chk-upload"><label for="chkFile2" data-i18n="chk.up2">Nahaufnahme Eckventil</label><input type="file" class="chk-file" id="chkFile2" accept="image/*" multiple /><div class="chk-previews" id="chkPrev2"></div></div>
+              <div class="chk-upload"><label for="chkFile3" data-i18n="chk.up3">Verbindung zum Spülkasten</label><input type="file" class="chk-file" id="chkFile3" accept="image/*" multiple /><div class="chk-previews" id="chkPrev3"></div></div>
+              <div class="chk-upload"><label for="chkFile4" data-i18n="chk.up4">Platz an der Wand für die Halterung</label><input type="file" class="chk-file" id="chkFile4" accept="image/*" multiple /><div class="chk-previews" id="chkPrev4"></div></div>
             </div>
             <p class="legal-hint" data-i18n="chk.upload_privacy">Deine Bilder bleiben in dieser Version lokal in deinem Browser und werden nicht hochgeladen. Für eine echte Prüfung muss später ein Kontakt- oder Support-Backend angeschlossen werden.</p>
             <!-- TODO BACKEND: Hier später Datei-Upload an Support-/Kontakt-Backend anbinden. -->
@@ -373,7 +401,7 @@
           <!-- Schritt 5: Ergebnis -->
           <div class="chk-result" id="chkResult" hidden role="status" aria-live="polite">
             <div class="chk-print-head" aria-hidden="true">
-              <span class="chk-print-logo"><svg viewBox="0 0 24 30" width="22" height="28" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> <strong>Pudado</strong></span>
+              <span class="chk-print-logo"><svg viewBox="0 0 24 30" width="22" height="28" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <strong>Pudado</strong></span>
               <span class="chk-print-title" data-i18n="chk2.pass_title">Pudado Installations-Check</span>
               <span class="chk-print-date"><span data-i18n="chk2.pass_date">Geprüft am</span>: <span id="chkPassDate"></span></span>
             </div>
@@ -417,27 +445,6 @@
       </div>
     </section>
 
-    <section class="section section-alt" id="how">
-      <div class="container">
-        <div class="section-head center narrow">
-          <p class="section-label" data-i18n="how.label">So funktioniert die Installation</p>
-          <h2><span data-i18n="how.h2a">In vier</span> <span class="accent" data-i18n="how.h2b">Schritten.</span></h2>
-        </div>
-        <div class="how-grid">
-          <figure class="how-figure"><img src="assets/how-it-works.jpg" alt="EcoBum Handbidet im modernen Badezimmer" width="900" height="900" loading="lazy" decoding="async" onerror="this.remove()" /></figure>
-          <div>
-            <div class="steps">
-              <div class="step"><span class="step-num">01</span><div><h3 data-i18n="how.s1t">Wasser abstellen</h3><p data-i18n="how.s1d">Vor jeder Installation muss das Wasser am Eckventil abgestellt werden.</p></div></div>
-              <div class="step"><span class="step-num">02</span><div><h3 data-i18n="how.s2t">T-Stück einsetzen</h3><p data-i18n="how.s2d">Das T-Stück wird zwischen Eckventil und Zulaufschlauch gesetzt, wenn der vorhandene Anschluss kompatibel ist.</p></div></div>
-              <div class="step"><span class="step-num">03</span><div><h3 data-i18n="how.s3t">Schlauch und Sprayer verbinden</h3><p data-i18n="how.s3d">Der Brauseschlauch verbindet T-Stück und Handbidet-Sprayer.</p></div></div>
-              <div class="step"><span class="step-num">04</span><div><h3 data-i18n="how.s4t">Halterung anbringen</h3><p data-i18n="how.s4d">Die Halterung kann je nach Untergrund geklebt oder geschraubt werden.</p></div></div>
-            </div>
-            <p class="hint-box" data-i18n="how.hint">Hinweis: Die Installation kann je nach vorhandenem Wasseranschluss variieren. Bei Unsicherheit bitte fachkundige Hilfe in Anspruch nehmen.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="section section-alt" id="fuer-wen">
       <div class="container">
         <div class="section-head center narrow">
@@ -447,25 +454,25 @@
         </div>
         <div class="usecase-grid">
           <article class="usecase-card">
-            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 21c-4-3-7-6-7-10a4 4 0 017-2 4 4 0 017 2c0 4-3 7-7 10z"/></svg></span>
+            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 21c-4-3-7-6-7-10a4 4 0 017-2 4 4 0 017 2c0 4-3 7-7 10z"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c1_cat">Sensible Haut</p>
             <h3 data-i18n="mom.c1_t">Sanfter reinigen, weniger trocken reiben.</h3>
             <p data-i18n="mom.c1_d">Wasser kann trockenes Reiben reduzieren und die tägliche Reinigung sanft ergänzen.</p>
           </article>
           <article class="usecase-card">
-            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span>
+            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c2_cat">Menstruation, Schwangerschaft &amp; Wochenbett</p>
             <h3 data-i18n="mom.c2_t">Wasserreinigung in sensiblen Phasen.</h3>
             <p data-i18n="mom.c2_d">In sensiblen Lebensphasen kann eine vorsichtige Reinigung mit Wasser als angenehm empfunden werden. Bei Beschwerden bitte fachlichen Rat einholen.</p>
           </article>
           <article class="usecase-card">
-            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="3"/><path d="M7 21v-4a5 5 0 0110 0v4"/></svg></span>
+            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="6" r="3"/><path d="M7 21v-4a5 5 0 0110 0v4"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c3_cat">Senioren &amp; eingeschränkte Beweglichkeit</p>
             <h3 data-i18n="mom.c3_t">Einfacher erreichen, komfortabler reinigen.</h3>
             <p data-i18n="mom.c3_d">Ein gut erreichbares Handbidet kann die tägliche Reinigung erleichtern. Wichtig sind eine passende Installation und eine sichere Nutzung.</p>
           </article>
           <article class="usecase-card">
-            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="7" r="2.2"/><circle cx="16" cy="7" r="2.2"/><path d="M4 20v-3a4 4 0 014-4 4 4 0 014 4 4 4 0 014-4 4 4 0 014 4v3"/></svg></span>
+            <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="7" r="2.2"/><circle cx="16" cy="7" r="2.2"/><path d="M4 20v-3a4 4 0 014-4 4 4 0 014 4 4 4 0 014-4 4 4 0 014 4v3"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c4_cat">Familien &amp; Alltag</p>
             <h3 data-i18n="mom.c4_t">Eine moderne Ergänzung für den Alltag.</h3>
             <p data-i18n="mom.c4_d">Für Haushalte, die Reinigung mit Wasser und einen bewussteren Umgang mit Papier verbinden möchten.</p>
@@ -481,12 +488,11 @@
           <p class="section-label" data-i18n="rech.label">Toilettenpapierverbrauch realistisch einschätzen</p>
           <h2><span data-i18n="rech.h2a">Wie viel</span> <span class="accent" data-i18n="rech.h2b">Toilettenpapier</span> <span data-i18n="rech.h2c">nutzt dein Haushalt wirklich?</span></h2>
           <p class="section-text center" data-i18n="rech.text">Der Rechner zeigt eine vorsichtige Schätzung, wie viel Toilettenpapier im Alltag genutzt wird und wie sich der Verbrauch durch Reinigung mit Wasser reduzieren könnte.</p>
-          <p class="calc-explain" data-i18n="rech.explain">Drei kurze Angaben genügen – der Rechner zeigt deinen geschätzten Verbrauch und eine mögliche Reduktion durch Reinigung mit Wasser. Alle Werte sind unverbindliche Modellschätzungen.</p>
         </div>
         <div class="calc2-wrap">
           <form class="calc2-inputs card" id="calcForm" novalidate>
             <div class="calc2-field">
-              <label id="lblPersons" data-i18n="rc2.persons">Personen im Haushalt</label>
+              <span id="lblPersons" data-i18n="rc2.persons">Personen im Haushalt</span>
               <div class="stepper" role="group" aria-labelledby="lblPersons">
                 <button type="button" class="step-btn" id="persMinus" aria-label="Weniger Personen">−</button>
                 <input type="number" id="persons" value="2" min="1" max="10" step="1" inputmode="numeric" aria-labelledby="lblPersons" />
@@ -555,17 +561,19 @@
     <section class="section section-sage" id="nachhaltigkeit">
       <div class="container">
         <div class="section-head center narrow">
-          <p class="section-label sage" data-i18n="nach.label">Nachhaltigkeit</p>
+          <p class="section-label" data-i18n="nach.label">Nachhaltigkeit</p>
           <h2><span data-i18n="nach.h2a">Kleine Veränderung. Weniger Papier.</span> <span class="accent" data-i18n="nach.h2b">Mehr Bewusstsein.</span></h2>
           <p class="section-text center" data-i18n="nach.text">Nachhaltigkeit beginnt oft nicht mit großen Versprechen, sondern mit kleinen Gewohnheiten. EcoBum kann helfen, den Verbrauch von Toilettenpapier im Alltag zu reduzieren — einfach, angenehm und ohne komplizierte Umstellung.</p>
         </div>
         <div class="cards-grid four">
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20C6 20 4 16 4 12c0-3 2-6 4-7 0 3 2 4 4 5s4 2 4 5-2 5-5 5z"/><path d="M8 18c2-2 4-3 6-6"/></svg></span><h3 data-i18n="n1t">Weniger Toilettenpapier</h3><p data-i18n="n1d">Wer Wasser zur Reinigung nutzt, braucht häufig weniger Papier. Die tatsächliche Einsparung hängt von der persönlichen Nutzung ab.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span><h3 data-i18n="n2t">Wasser statt trockenem Wischen</h3><p data-i18n="n2d">Wasser wird weltweit für Reinigung genutzt, weil es naheliegend, sanft und gründlich ist. EcoBum bringt diese Idee ins Badezimmer.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
-          <article class="card"><span class="icon-tile sage" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20C6 20 4 16 4 12c0-3 2-6 4-7 0 3 2 4 4 5s4 2 4 5-2 5-5 5z"/><path d="M8 18c2-2 4-3 6-6"/></svg></span><h3 data-i18n="n1t">Weniger Toilettenpapier</h3><p data-i18n="n1d">Wer Wasser zur Reinigung nutzt, braucht häufig weniger Papier. Die tatsächliche Einsparung hängt von der persönlichen Nutzung ab.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span><h3 data-i18n="n2t">Wasser statt trockenem Wischen</h3><p data-i18n="n2d">Wasser wird weltweit für Reinigung genutzt, weil es naheliegend, sanft und gründlich ist. EcoBum bringt diese Idee ins Badezimmer.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
         </div>
-        <figure class="leaf-band"><img src="assets/design-3.jpg" alt="Grünes Blatt mit Wassertropfen über ruhiger Wasseroberfläche" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+        <!-- Wasser-Motiv statt Blatt-Grün: Öko-Klischee-Bildsprache ist laut Brand-PDO
+             ausgeschlossen; das Wasserbild stützt die Kernbotschaft und bleibt im Blau-System. -->
+        <figure class="leaf-band"><img src="assets/design-1.jpg" alt="Wassertropfen an einer Glasscheibe in warmem Tageslicht" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
       </div>
     </section>
 
@@ -585,14 +593,12 @@
         <p class="detail-cap" data-i18n="det.material_cap">Geplante Premium-Materialrichtung, abhängig von finaler Produktversion</p>
         <div class="detail-grid">
           <div class="detail-col">
-            <h3 data-i18n="det.kit_title">Im Set enthalten</h3>
+            <h3 data-i18n="det.kit_title">Ehrlich kommuniziert</h3>
             <ul class="feature-list">
-              <li data-i18n="det.k1">Handbidet-Sprayer</li>
-              <li data-i18n="det.k2">Brauseschlauch</li>
-              <li data-i18n="det.k3">T-Stück mit Absperrhahn</li>
-              <li data-i18n="det.k4">Wandhalterung zum Kleben oder Schrauben</li>
-              <li data-i18n="det.k5">Anschlusszubehör</li>
-              <li data-i18n="det.k6">Anleitung</li>
+              <li data-i18n="det.tr1">Komponenten transparent benannt – keine versteckten Angaben</li>
+              <li data-i18n="det.tr2">Zertifizierungen erst kommuniziert, wenn sie tatsächlich vorliegen</li>
+              <li data-i18n="det.tr3">Keine erfundenen Bewertungen oder Testsiegel</li>
+              <li data-i18n="det.tr4">Offener, ehrlicher Blick auf den aktuellen Entwicklungsstand</li>
             </ul>
           </div>
           <div class="detail-col">
@@ -600,7 +606,7 @@
             <ul class="feature-list">
               <li data-i18n="det.t1">Kein Strom notwendig</li>
               <li data-i18n="det.t2">Funktioniert durch Wasserdruck</li>
-              <li data-i18n="det.t3">Rückfluss-Schutz wird in der Produktentwicklung berücksichtigt</li>
+              <li data-i18n="det.t3">Rückflussverhinderer als zentrales Sicherheitsprinzip vorgesehen</li>
               <li data-i18n="det.t4">Minimalistisches, hochwertiges Design</li>
             </ul>
           </div>
@@ -617,11 +623,21 @@
     <section class="section section-brand" id="warum">
       <div class="container">
         <div class="section-head center narrow">
-          <span class="brand-drop" aria-hidden="true"><svg viewBox="0 0 24 30" width="26" height="32"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+          <span class="brand-drop" aria-hidden="true"><svg viewBox="0 0 24 30" width="26" height="32"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
           <p class="section-label" data-i18n="warum.label">Warum Pudado?</p>
           <h2 data-i18n="warum.h2">Wir denken das Badezimmer weiter.</h2>
           <p class="section-text center" data-i18n="warum.text">Pudado entwickelt durchdachte Sanitärlösungen für Menschen, die Hygiene, Komfort und einen bewussteren Umgang mit Ressourcen verbinden möchten. Unser Anspruch ist es, bestehende Badezimmer einfach und sinnvoll aufzuwerten – mit klarer Funktion, modernem Design und ehrlicher Kommunikation. EcoBum ist unser erster Schritt.</p>
         </div>
+        <!-- PUDADO-FIRMENSIGNATUR: rein dekoratives, stummes Brand-Video (daher
+             aria-hidden, keine Controls). Der 760px-Breakpoint der media-Attribute
+             muss zu .brand-signature in style.css passen; Browser ohne
+             media-Attribut-Support fallen überall auf die 16:9-Version zurück. -->
+        <figure class="media-band brand-signature" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="assets/videos/pudado-company-signature-v1.0.mp4" type="video/mp4" media="(min-width: 761px)" />
+            <source src="assets/videos/pudado-company-signature-vertical-v1.0.mp4" type="video/mp4" media="(max-width: 760px)" />
+          </video>
+        </figure>
         <div class="cards-grid three">
           <article class="card on-dark"><h3 data-i18n="warum.c1t">Sanitäre Upgrades für den Alltag</h3><p data-i18n="warum.c1d">Wir möchten Lösungen entwickeln, die sich sinnvoll in bestehende Badezimmer integrieren lassen und alltägliche Hygieneroutinen einfacher und angenehmer machen.</p></article>
           <article class="card on-dark"><h3 data-i18n="warum.c2t">Ressourcen bewusster nutzen</h3><p data-i18n="warum.c2d">Unsere Produkte sollen dabei helfen, Papier, Feuchttücher und andere Einwegprodukte bewusster zu verwenden. Nachhaltigkeit verstehen wir als Entwicklungsziel – transparent und ohne übertriebene Versprechen.</p></article>
@@ -660,15 +676,19 @@
           <h2><span data-i18n="faq.h2a">Häufige</span> <span class="accent" data-i18n="faq.h2b">Fragen.</span></h2>
         </div>
         <div class="faq-list">
+          <details class="faq-item"><summary data-i18n="faq.q_what">Was ist EcoBum Home und wie funktioniert es?</summary><p data-i18n="faq.a_what">EcoBum Home ist ein geplantes Plug-and-Play-Handbidet-Set für die Reinigung mit Wasser. Es wird am Wasseranschluss der Toilette angebracht und reinigt mit einem dosierbaren Wasserstrahl – als Ergänzung zu trockenem Papier.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q1">Passt EcoBum in jede Toilette?</summary><p data-i18n="faq.a1">EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab — unser Installations-Check gibt eine erste Einschätzung.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q8">Braucht EcoBum Strom?</summary><p data-i18n="faq.a8">Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q3">Muss ich bohren?</summary><p data-i18n="faq.a3">Nein, nicht zwingend. Die Wandhalterung kann auch geklebt werden. Für eine besonders feste Montage ist Schrauben möglich.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q2">Kann EcoBum ohne Bohren montiert werden?</summary><p data-i18n="faq.a2">Die Halterung kann je nach Untergrund geklebt oder geschraubt werden. Der Anschluss am Wasserzulauf sollte vor der Installation geprüft werden. Bei Unsicherheit empfehlen wir fachkundige Hilfe.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q3">Muss ich bohren?</summary><p data-i18n="faq.a3">Nein, nicht zwingend. Die Wandhalterung kann geklebt oder für besonders festen Halt geschraubt werden – je nach Untergrund. Der Wasseranschluss sollte vor der Installation trotzdem geprüft werden; bei Unsicherheit hilft eine Fachperson.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q11">Passt EcoBum bei Unterputz-Spülkästen?</summary><p data-i18n="faq.a11">Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q12">Was ist, wenn ich ein starres Rohr statt flexiblem Schlauch habe?</summary><p data-i18n="faq.a12">Dann ist häufig ein flexibler Zulaufschlauch nötig, um das T-Stück anzuschließen. Das ist meist unkompliziert, sollte aber vor dem Kauf geprüft werden.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q4">Ist EcoBum für sensible Haut geeignet?</summary><p data-i18n="faq.a4">Wasser kann eine sanftere Ergänzung zu trockenem Papier sein und zu einem angenehmeren Hautgefühl beitragen. Bei medizinischen Beschwerden bitte ärztlichen Rat einholen.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q5">Ist EcoBum während der Menstruation praktisch?</summary><p data-i18n="faq.a5">Viele Menschen empfinden Reinigung mit Wasser als zusätzliche Frische und angenehme Ergänzung der täglichen Hygiene — einfach, diskret und ohne Strom.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q6">Ist EcoBum in Schwangerschaft oder Wochenbett sinnvoll?</summary><p data-i18n="faq.a6">In dieser Zeit kann der Intimbereich besonders empfindlich sein. Eine sanfte Reinigung mit Wasser kann angenehmer sein als ausschließlich trockenes Wischen. Bei Beschwerden bitte immer ärztlichen Rat einholen.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q_rental">Ist EcoBum für Mietwohnungen geeignet?</summary><p data-i18n="faq.a_rental">Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q9">Was mache ich, wenn ich meinen Anschluss nicht kenne?</summary><p data-i18n="faq.a9">Nutze den Installations-Check für eine erste Einschätzung. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q_setcontent">Was ist im geplanten Set enthalten?</summary><p data-i18n="faq.a_setcontent">Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q_safety_parts">Warum sind Absperrhahn und Rückflussverhinderer wichtig?</summary><p data-i18n="faq.a_safety_parts">Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q8">Braucht EcoBum Strom?</summary><p data-i18n="faq.a8">Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q7">Ersetzt EcoBum Toilettenpapier komplett?</summary><p data-i18n="faq.a7">Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier — zum Beispiel nur noch zum Trocknen.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q_situations">Ist EcoBum bei sensibler Haut, Menstruation oder Schwangerschaft geeignet?</summary><p data-i18n="faq.a_situations">Wasser kann in diesen Phasen eine sanftere Ergänzung zu trockenem Papier sein und wird von vielen als angenehm empfunden. Bei medizinischen Beschwerden bitte immer ärztlichen Rat einholen.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q_cert">Gibt es Zertifizierungen?</summary><p data-i18n="faq.a_cert">Ziel der Produktentwicklung ist es, relevante Anforderungen und Prüfungen zu berücksichtigen. Aktuell liegen noch keine Zertifizierungen vor – sobald sich das ändert, aktualisieren wir diese Angabe.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q10">Gibt es Garantie oder Rückgabe?</summary><p data-i18n="faq.a10">Die genauen Garantie- und Rückgabebedingungen stehen noch nicht fest und werden vor dem Verkaufsstart bekanntgegeben.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q21">Wann ist EcoBum verfügbar?</summary><p data-i18n="faq.a21">EcoBum befindet sich in Vorbereitung. Trage dich für das Launch-Update ein, dann informieren wir dich als Erstes über Verfügbarkeit und Start.</p></details>
         </div>
         <p class="faq-more"><span data-i18n="faq.more">Weitere Fragen? Schreib uns gerne.</span> <a href="#kontakt" data-i18n="faq.more_link">Zum Kontakt</a></p>
@@ -702,8 +722,8 @@
               <option value="other" data-i18n="kon.r_other">Sonstiges</option>
             </select>
           </div>
-          <div class="field"><label for="cName" data-i18n="kon.f_name">Name</label><input type="text" id="cName" name="name" required disabled /></div>
-          <div class="field"><label for="cEmail" data-i18n="kon.f_email">E-Mail</label><input type="email" id="cEmail" name="email" required disabled /></div>
+          <div class="field"><label for="cName" data-i18n="kon.f_name">Name</label><input type="text" id="cName" name="name" autocomplete="name" required disabled /></div>
+          <div class="field"><label for="cEmail" data-i18n="kon.f_email">E-Mail</label><input type="email" id="cEmail" name="email" autocomplete="email" required disabled /></div>
           <div class="field"><label for="cMessage" data-i18n="kon.f_msg">Nachricht</label><textarea id="cMessage" name="message" rows="4" required disabled></textarea></div>
           <!-- Honeypot (Spamschutz): für Menschen unsichtbar, von Bots oft ausgefüllt -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="cHp" name="website" tabindex="-1" autocomplete="off" /></label></div>
@@ -717,7 +737,7 @@
 
     <section class="section section-dark" id="newsletter">
       <div class="container narrow center">
-        <span class="logo-tile brand-mark" aria-hidden="true" style="margin:0 auto 22px;"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+        <span class="logo-tile brand-mark" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
         <div class="section-head">
           <h2 data-i18n="news.h2">Sei dabei, wenn EcoBum startet.</h2>
           <p class="section-text center" data-i18n="news.text">Trage dich ein und erfahre als Erster, wann EcoBum verfügbar ist. Erhalte Updates, Produktinfos und Launch-News von Pudado.</p>
@@ -726,8 +746,8 @@
         <form class="form newsletter-form" id="newsletterForm" novalidate>
           <p class="form-notice on-dark" data-i18n="news.notice">Die Newsletter-Anmeldung wird gerade vorbereitet. Sobald sie live ist, kannst du dich offiziell anmelden.</p>
           <div class="newsletter-row">
-            <input type="text" id="nFirst" name="firstname" data-i18n-ph="news.ph_first" placeholder="Vorname (optional)" disabled />
-            <input type="email" id="nEmail" name="email" data-i18n-ph="news.ph_email" placeholder="E-Mail-Adresse" required disabled />
+            <input type="text" id="nFirst" name="firstname" data-i18n-ph="news.ph_first" placeholder="Vorname (optional)" aria-label="Vorname (optional)" autocomplete="given-name" disabled />
+            <input type="email" id="nEmail" name="email" data-i18n-ph="news.ph_email" placeholder="E-Mail-Adresse" aria-label="E-Mail-Adresse" autocomplete="email" required disabled />
           </div>
           <!-- Honeypot (Spamschutz) -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="nHp" name="website" tabindex="-1" autocomplete="off" /></label></div>
@@ -744,11 +764,20 @@
   <footer class="site-footer" id="footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo"><span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="logo-word">Pudado</span></div>
+        <div class="footer-logo"><span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span class="logo-word">Pudado</span></div>
         <p class="footer-claim" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
         <p class="footer-text" data-i18n="foot.text">EcoBum by Pudado — moderne Hygiene mit Wasser.</p>
       </div>
-      <nav class="footer-links" aria-label="Footer Navigation">
+      <nav class="footer-links" aria-label="EcoBum entdecken">
+        <p class="footer-col-title" data-i18n="foot.col_explore">Entdecken</p>
+        <a href="#produkt" data-i18n="nav.produkt">Produkt</a>
+        <a href="#checker" data-i18n="chk.label">Installations-Check</a>
+        <a href="#rechner" data-i18n="nav.rechner">Rechner</a>
+        <a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </nav>
+      <nav class="footer-links" aria-label="Rechtliches und Kontakt">
+        <p class="footer-col-title" data-i18n="foot.col_legal">Rechtliches</p>
         <a href="impressum.html" data-i18n="foot.impressum">Impressum</a>
         <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
         <a href="#" id="openCookieSettings" data-i18n="foot.cookie">Cookie-Einstellungen</a>
@@ -769,7 +798,7 @@
   <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie-Hinweis" hidden>
     <div class="cookie-inner">
       <div class="cookie-text">
-        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Wir verwenden Cookies</span></h3>
+        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Wir verwenden Cookies</span></h3>
         <p data-i18n="ck.text">Wir nutzen notwendige Cookies, damit diese Website funktioniert. Mit deiner Zustimmung verwenden wir außerdem optionale Cookies für Statistik, Marketing und externe Medien. Du kannst deine Auswahl jederzeit ändern.</p>
       </div>
       <div class="cookie-actions">
@@ -784,10 +813,10 @@
     <div class="cookie-modal-card">
       <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookie-Einstellungen</h3>
       <p class="modal-intro" data-i18n="ck.modal_intro">Wähle aus, welche Cookies du erlauben möchtest. Notwendige Cookies sind für den Betrieb der Website erforderlich und immer aktiv.</p>
-      <div class="cookie-option"><div><strong data-i18n="ck.necessary">Notwendige Cookies</strong><p data-i18n="ck.necessary_d">Erforderlich für grundlegende Funktionen der Website. Immer aktiv.</p></div><label class="switch"><input type="checkbox" checked disabled /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.stats">Statistik / Analytics</strong><p data-i18n="ck.stats_d">Hilft uns zu verstehen, wie die Website genutzt wird (z. B. Google Analytics).</p></div><label class="switch"><input type="checkbox" id="ckStats" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.marketing">Marketing</strong><p data-i18n="ck.marketing_d">Wird genutzt, um Werbung relevanter zu machen (z. B. Meta Pixel, TikTok Pixel).</p></div><label class="switch"><input type="checkbox" id="ckMarketing" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.media">Externe Medien</strong><p data-i18n="ck.media_d">Ermöglicht das Laden externer Inhalte (z. B. Videos, Karten).</p></div><label class="switch"><input type="checkbox" id="ckMedia" /><span class="slider"></span></label></div>
+      <div class="cookie-option"><div><strong id="ckNecessaryLabel" data-i18n="ck.necessary">Notwendige Cookies</strong><p data-i18n="ck.necessary_d">Erforderlich für grundlegende Funktionen der Website. Immer aktiv.</p></div><label class="switch"><input type="checkbox" checked disabled aria-labelledby="ckNecessaryLabel" /><span class="slider"></span></label></div>
+      <div class="cookie-option"><div><strong id="ckStatsLabel" data-i18n="ck.stats">Statistik / Analytics</strong><p data-i18n="ck.stats_d">Hilft uns zu verstehen, wie die Website genutzt wird.</p></div><label class="switch"><input type="checkbox" id="ckStats" aria-labelledby="ckStatsLabel" /><span class="slider"></span></label></div>
+      <div class="cookie-option"><div><strong id="ckMarketingLabel" data-i18n="ck.marketing">Marketing</strong><p data-i18n="ck.marketing_d">Wird genutzt, um Werbung relevanter zu machen.</p></div><label class="switch"><input type="checkbox" id="ckMarketing" aria-labelledby="ckMarketingLabel" /><span class="slider"></span></label></div>
+      <div class="cookie-option"><div><strong id="ckMediaLabel" data-i18n="ck.media">Externe Medien</strong><p data-i18n="ck.media_d">Ermöglicht das Laden externer Inhalte (z. B. Videos, Karten).</p></div><label class="switch"><input type="checkbox" id="ckMedia" aria-labelledby="ckMediaLabel" /><span class="slider"></span></label></div>
       <div class="cookie-modal-actions">
         <button class="btn btn-ghost" id="modalNecessary" data-i18n="ck.only_nec">Nur notwendige</button>
         <button class="btn btn-primary" id="saveSettings" data-i18n="ck.save">Auswahl speichern</button>

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initChecker, initImagePreview,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initProgress, initReveal]
+   initScrollSpy, initReveal, initBrandVideo]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
 
@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
    ------------------------------------------------------------- */
 const LANG_KEY = 'pudado_lang';
 window.PUDADO_LANG = 'de';
+// Ursprünglicher <title> aus index.html (SEO-optimiert). Wird für die
+// Standardsprache (de) beibehalten statt durch die kürzere Marketing-
+// Variante aus translations.js überschrieben; nur bei echtem Wechsel
+// auf en/fr wird ein übersetzter Titel gesetzt.
+const DEFAULT_TITLE = document.title;
 
 function t(key) {
   const dict = (window.PUDADO_I18N || {});
@@ -39,17 +44,24 @@ function applyLanguage(lang) {
   window.PUDADO_LANG = lang;
 
   document.documentElement.lang = lang;
-  if (dict[lang]['meta.title']) document.title = dict[lang]['meta.title'];
+  if (lang === 'de') {
+    document.title = DEFAULT_TITLE;
+  } else if (dict[lang]['meta.title']) {
+    document.title = dict[lang]['meta.title'];
+  }
 
   // Textinhalte
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const val = dict[lang][el.getAttribute('data-i18n')];
     if (val != null) el.textContent = val;
   });
-  // Platzhalter
+  // Platzhalter (dient hier zugleich als aria-label, da diese Felder kein sichtbares <label> haben)
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const val = dict[lang][el.getAttribute('data-i18n-ph')];
-    if (val != null) el.setAttribute('placeholder', val);
+    if (val != null) {
+      el.setAttribute('placeholder', val);
+      el.setAttribute('aria-label', val);
+    }
   });
 
   // aktive Sprach-Schaltfläche markieren
@@ -329,9 +341,14 @@ function initChecker() {
   }
 
   function buildParts() {
-    // Bestätigte EcoBum-Home-Set-Bestandteile (Lieferumfang) — „im Set enthalten“
-    const parts = ['set.l1', 'set.l2', 'set.l3', 'set.l4', 'set.l5', 'set.l6'].map(k => ({ name: k, status: 'chk2.in_set' }));
-    if (a.hose === 'rigid' || a.hose === 'unsure' || !a.hose) parts.push({ name: 'chk2.parts_flex', status: 'chk2.maybe' });
+    // Bestätigte EcoBum-Home-Set-Bestandteile (Lieferumfang) — „im Set enthalten“.
+    // Der flexible Zulaufschlauch (set.l10) ist bereits regulärer Set-Bestandteil (kein
+    // separater "möglicherweise zusätzlich nötig"-Eintrag mehr, um keine Dopplung zu
+    // erzeugen). Ist die Anschlusssituation unklar/starr, wird nur sein Status auf
+    // "manuell prüfen" gesetzt statt eine zweite Zeile für dieselbe Komponente zu zeigen.
+    const hoseUnclear = a.hose === 'rigid' || a.hose === 'unsure' || !a.hose;
+    const parts = ['set.l1', 'set.l2', 'set.l4', 'set.l7', 'set.l8', 'set.l9', 'set.l10', 'set.l11', 'set.l6']
+      .map(k => ({ name: k, status: (k === 'set.l10' && hoseUnclear) ? 'chk2.manual' : 'chk2.in_set' }));
     return parts;
   }
 
@@ -723,7 +740,7 @@ function openModal(modal, ckStats, ckMarketing, ckMedia) {
 function closeModal(modal) { if (modal) modal.hidden = true; }
 
 /* -------------------------------------------------------------
-   6. AKTIVE NAVIGATION (Scroll-Spy) + dezenter Seitenfortschritt
+   6. AKTIVE NAVIGATION (Scroll-Spy)
    Nur auf Seiten mit gleichseitigen Ankern (Startseite).
    ------------------------------------------------------------- */
 function initScrollSpy() {
@@ -812,22 +829,33 @@ function initReveal() {
   }, 1200);
 }
 
-function initProgress() {
-  const bar = document.createElement('div');
-  bar.className = 'scroll-progress';
-  bar.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(bar);
-  let ticking = false;
-  function update() {
-    const h = document.documentElement;
-    const max = h.scrollHeight - h.clientHeight;
-    const p = max > 0 ? (h.scrollTop / max) * 100 : 0;
-    bar.style.width = Math.min(100, Math.max(0, p)) + '%';
-    ticking = false;
+/* -------------------------------------------------------------
+   12. BRAND-VIDEO (Pudado-Firmensignatur, dekorativ)
+   CSS kann Video-Autoplay nicht stoppen, daher hier:
+   Bei prefers-reduced-motion bleibt das erste Standbild stehen.
+   ------------------------------------------------------------- */
+function initBrandVideo() {
+  const video = document.querySelector('.brand-signature video');
+  if (!video) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+    return;
   }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }, { passive: true });
-  window.addEventListener('resize', update, { passive: true });
-  update();
+  // Chromium startet stumme Autoplay-Videos außerhalb des Viewports nicht
+  // zuverlässig; Pausieren außerhalb des Sichtbereichs spart zudem Akku.
+  // play() kann vom Browser abgelehnt werden -> Promise-Fehler ignorieren.
+  if (!('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const p = video.play();
+        if (p && p.catch) p.catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.2 });
+  obs.observe(video);
 }
+
