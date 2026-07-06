@@ -34,12 +34,11 @@
   <!-- ================== FONTS (DSGVO-konform, ohne externe Requests) ==================
        Es werden KEINE Google Fonts vom CDN geladen (keine IP-Übertragung an Google).
        Cabinet Grotesk (Headlines) + Inter (Fließtext) liegen selbst gehostet unter
-       assets/fonts/ (siehe @font-face in style.css). Preload nur für die beiden im
-       ersten Bildschirm sichtbaren Schnitte, damit der Text ohne Verzögerung im
-       Marken-Font erscheint. -->
-  <link rel="preload" href="assets/fonts/CabinetGrotesk-Bold.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin />
-
+       assets/fonts/ (siehe @font-face in style.css). Bewusst KEIN <link rel="preload">
+       für die Fonts: Bei Wiederbesuchen bedient der Font-Cache die @font-face-Requests
+       direkt, der Preload bleibt ungenutzt und Chrome loggt "preloaded but not used"-
+       Warnungen. Die Schnitte sind klein (~20 KB, font-display: swap), das CSS lädt
+       render-blockierend von derselben Origin - der Preload-Gewinn ist minimal. -->
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />

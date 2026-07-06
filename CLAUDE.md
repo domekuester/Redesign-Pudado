@@ -60,7 +60,7 @@ Regeln:
 
 - **Headlines:** `--font-head` = "Cabinet Grotesk" (selbst gehostet), Fallback auf Apple-/System-Font-Stack.
 - **Fließtext:** `--font-body` = "Inter" (selbst gehostet), gleicher Fallback-Stack.
-- Beide Schriftschnitte liegen unter `assets/fonts/` und werden per `@font-face` eingebunden; die im ersten Bildschirm sichtbaren Schnitte sind in `index.html` per `<link rel="preload">` vorab geladen – das gilt es bei neuen Schriftschnitten/Gewichten konsistent fortzuführen.
+- Beide Schriftschnitte liegen unter `assets/fonts/` und werden per `@font-face` mit `font-display: swap` eingebunden. Auf `<link rel="preload">` für Fonts wird bewusst verzichtet: Bei Wiederbesuchen bedient der Font-Cache die `@font-face`-Requests direkt, der Preload bleibt ungenutzt und Chrome loggt „preloaded but not used"-Warnungen; die kleinen, selbst gehosteten Schnitte laden über das render-blockierende CSS schnell genug. Keine Font-Preloads einführen, solange `@font-face` + `swap` sauber funktioniert.
 - Keine zusätzlichen Web-Fonts (insbesondere keine Google-Fonts-CDN-Einbindung) ohne ausdrückliche Freigabe – Verstoß gegen die DSGVO-Entscheidung oben.
 - Schriftgrößen und Zeilenhöhen folgen einer klaren hierarchischen Skala (Headline > Subheadline > Body > Caption); neue Textblöcke ordnen sich in diese Hierarchie ein statt neue Ad-hoc-Größen zu definieren.
 
@@ -146,7 +146,7 @@ Regeln:
 ## Performance-Regeln
 
 - Bilder immer mit `width`/`height`-Attributen (verhindert CLS), `loading="lazy"` für alles außerhalb des ersten Viewports, `decoding="async"` – wie im Bestand konsequent umgesetzt.
-- Fonts bleiben selbst gehostet und werden nur für tatsächlich above-the-fold sichtbare Schnitte per `<link rel="preload">` vorgeladen; keine ungenutzten Schriftschnitte nachladen.
+- Fonts bleiben selbst gehostet und laden über `@font-face` mit `font-display: swap`; keine Font-Preloads (siehe Typografie) und keine ungenutzten Schriftschnitte nachladen.
 - Kein zusätzliches Render-blocking JavaScript/CSS ohne Not; neue Skripte nach Möglichkeit `defer`/`async` laden.
 - Ungenutzten Code (CSS/JS/Bilder) konsequent entfernen statt anhäufen zu lassen (siehe Commit-Historie: "Remove dead CSS, unused PNG duplicates, and redundant inline style") – das ist gelebte Praxis, keine Ausnahme.
 - Core Web Vitals aktiv im Blick behalten:
