@@ -5,6 +5,11 @@
    Flächen, sanfte Pastell-Blau-Verläufe, weiche Schatten,
    ruhige Typografie, dezente Glas-Effekte, subtile Animationen.
    Mobile-first. Kein Framework.
+
+   Branch redesign/royal-blue-concept: alternatives Royal-Blue-
+   Konzept nach der Pudado-Logo-Referenz (PUDADO-Wortmarke auf
+   tiefem Royal-Verlauf). Royal-Bühnen: Header, Hero, Vorteile,
+   Wasser-Banner, Newsletter, Footer; Töne als --royal-* Tokens.
    ============================================================= */
 
 /* ================== FONTS (lokal, DSGVO-konform) ==================
@@ -54,7 +59,7 @@
   --shadow-sm:   0 4px 18px rgba(20,40,80,.06);
   --shadow-md:   0 16px 44px rgba(20,40,80,.09);
   --shadow-lg:   0 34px 90px rgba(20,40,80,.14);
-  --card-shadow: 0 10px 34px rgba(20,40,80,.07);
+  --card-shadow: 0 14px 44px rgba(20,40,80,.08);
 
   --radius-sm:   14px;
   --radius:      20px;
@@ -63,7 +68,9 @@
   --radius-pill: 999px;
 
   --container:   1200px;
-  --space:       clamp(76px, 10vw, 160px);
+  /* Straffer als zuvor (76–160px): Premium-Dichte statt Luft ohne
+     Aussage – der Rhythmus bleibt großzügig, verliert aber die Leere. */
+  --space:       clamp(64px, 8.5vw, 132px);
 
   /* Cabinet Grotesk/Inter zuerst (lokal selbst gehostet, s.o.) – sonst Apple-/System-Stack */
   --font-head: "Cabinet Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -78,6 +85,21 @@
      bewusst KEIN zweiter Marken-Akzent. Die Marke selbst bleibt
      konsequent einfarbig Blau. */
   --sage:        #4E7C63;
+
+  /* Royal-Blue-Konzept (Branch redesign/royal-blue-concept): Bühnentöne
+     aus der Pudado-Logo-Referenz gesampelt (PUDADO-Wortmarke auf tiefem
+     Royal-Verlauf mit Wasser-Spiegelung). Dieselbe Blau-Familie wie
+     --blue – kein zweiter Akzent, sondern die dunkle Marken-Bühne. */
+  --royal-high:  #0E3D8F;   /* Lichtkante oben (Referenz oben-mitte) */
+  --royal:       #08307A;   /* Kern-Bühnenton */
+  --royal-deep:  #021D52;   /* Verlaufsende, Footer (Referenz unten) */
+  --royal-text:  #C9D6F0;   /* Fließtext auf Royal (Kontrast ≈ 8:1) */
+  --royal-line:  rgba(255,255,255,.16);
+  /* Aqua Mist – einzige sanfte Zusatz-Akzentfarbe des Royal-Konzepts
+     (vom Nutzer freigegeben): Wasser-Licht für feine Linien und
+     Status-Icons AUF Royal-Flächen. Nie großflächig, nie auf Weiß
+     als Textfarbe (Kontrast), ersetzt --blue nicht. */
+  --aqua-mist:   #A9DCEC;
 }
 
 /* ----------------------- Reset / Base ----------------------- */
@@ -101,12 +123,20 @@ h4 { font-size: 1.06rem; font-weight: 600; letter-spacing: -.01em; }
 p  { margin: 0 0 1rem; }
 .lead, .section-text { text-wrap: pretty; }
 ::selection { background: rgba(35,95,208,.16); }
+/* Auf Royal-Bühnen bleibt markierter Text lesbar (heller Grund statt Blau-auf-Blau) */
+.hero ::selection, .section-dark ::selection, .site-header ::selection, .brand-stage ::selection { background: rgba(255,255,255,.28); color: #fff; }
 
 /* Zweifarbige Headline */
 .accent { color: var(--blue); }
 /* Prinzip-Headline: je ein vollständiger Satz pro Zeile (gilt für DE/EN/FR) –
-   verhindert den unschönen Umbruch mitten im ersten Satz. */
+   verhindert den unschönen Umbruch mitten im ersten Satz. Editorialer
+   Größensprung: die Papier-Zeile tritt zurück, "Wasser reinigt." trägt. */
 #insight h2 span { display: block; }
+#insight h2 span:first-child { font-size: .55em; font-weight: 600; color: var(--gray); letter-spacing: -.015em; margin-bottom: .3em; }
+#insight h2 { font-size: clamp(2.3rem, 5vw, 3.9rem); }
+#insight .section-text { font-size: 1.08rem; max-width: 580px; }
+#insight .section-head { margin-bottom: clamp(34px, 4vw, 52px); }
+#insight.section { padding: clamp(56px, 7vw, 104px) 0 clamp(64px, 8vw, 118px); }
 
 /* ----------------------- Layout helpers --------------------- */
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 26px; }
@@ -118,22 +148,22 @@ p  { margin: 0 0 1rem; }
    wirken optisch leicht "kopflastig", ein etwas großzügigerer unterer
    Rand lässt jede Section beim Scrollen ruhiger ausklingen. */
 .section { padding: var(--space) 0 calc(var(--space) * 1.15); }
-.section-alt { background: var(--mist); }
+/* Sanfter Verlaufs-Wash statt flacher Fläche: leise räumliche Tiefe */
+.section-alt { background: linear-gradient(180deg, var(--mist), #FAFCFF); }
 .section-ice { background: linear-gradient(180deg, var(--sky-soft), #ffffff); }
-#checker.section { padding: clamp(60px, 8vw, 120px) 0 clamp(70px, 9vw, 138px); }
 /* Rechner und Produkt sind zentrale Entscheidungsmomente im Scroll-Verlauf
    (Preisbewusstsein/Nutzen bzw. Produktverständnis) – etwas mehr Luft
    davor und danach hebt sie leicht vom gleichförmigen Grundrhythmus ab. */
 #rechner.section { padding-top: calc(var(--space) * 1.2); padding-bottom: calc(var(--space) * 1.35); }
 #produkt.section { padding-bottom: calc(var(--space) * 1.3); }
-.section-head { margin-bottom: clamp(48px, 5.5vw, 76px); }
+.section-head { margin-bottom: clamp(44px, 5vw, 70px); }
 .section-text { color: var(--gray); font-size: 1.16rem; max-width: 660px; line-height: 1.65; }
 
 /* Eyebrow / Label */
 .section-label {
-  font-family: var(--font-head); font-weight: 600; font-size: .8rem;
-  letter-spacing: .18em; text-transform: uppercase; color: var(--blue);
-  margin: 0 0 1.1rem;
+  font-family: var(--font-head); font-weight: 600; font-size: .78rem;
+  letter-spacing: .24em; text-transform: uppercase; color: var(--blue);
+  margin: 0 0 1.2rem;
 }
 .on-dark .section-label, .section-brand .section-label { color: var(--blue); }
 
@@ -149,8 +179,9 @@ p  { margin: 0 0 1rem; }
 /* Hover-Feedback bewusst minimal (1px statt 2px): spürbar, aber ohne Sprung. */
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
 .btn:active { transform: translateY(0) scale(.98); transition-duration: .12s; }
-.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 22px rgba(35,95,208,.28); }
-.btn-primary:hover { background: var(--blue-ink); color: #fff; box-shadow: 0 14px 34px rgba(35,95,208,.34); }
+/* Innere Lichtkante oben: dezente Tiefe/Taktilität statt flacher Füllung */
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 22px rgba(35,95,208,.28), inset 0 1px 0 rgba(255,255,255,.22); }
+.btn-primary:hover { background: var(--blue-ink); color: #fff; box-shadow: 0 14px 34px rgba(35,95,208,.34), inset 0 1px 0 rgba(255,255,255,.22); }
 .btn-ghost { background: #fff; color: var(--blue); border-color: var(--sky-line); }
 .btn-ghost:hover { background: #fff; color: var(--blue-ink); border-color: var(--blue-soft); box-shadow: var(--shadow-sm); }
 .btn-light { background: var(--blue); color: #fff; box-shadow: 0 8px 22px rgba(35,95,208,.28); }
@@ -161,14 +192,21 @@ p  { margin: 0 0 1rem; }
 .skip-link { position: absolute; left: -9999px; top: 0; z-index: 2000; background: var(--blue); color: #fff; padding: 10px 16px; border-radius: 0 0 8px 0; font-weight: 600; }
 .skip-link:focus { left: 0; }
 
-/* ----------------------- Header ----------------------------- */
+/* ----------------------- Header (Royal-Leiste) --------------- */
+/* Feiner Vertikal-Verlauf + weicher Abwurfschatten: Glas-Leiste mit
+   Materialtiefe statt flacher Farbfläche. */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,.72);
-  backdrop-filter: saturate(180%) blur(18px);
-  -webkit-backdrop-filter: saturate(180%) blur(18px);
-  border-bottom: 1px solid rgba(20,40,80,.06);
+  background: linear-gradient(180deg, rgba(7,40,102,.94), rgba(4,30,84,.86));
+  backdrop-filter: saturate(150%) blur(20px);
+  -webkit-backdrop-filter: saturate(150%) blur(20px);
+  border-bottom: 1px solid var(--royal-line);
+  box-shadow: 0 6px 24px rgba(1,10,40,.14);
+  transition: box-shadow .3s ease;
 }
+/* Sobald Inhalt unter die Leiste scrollt, vertieft sich der Schatten –
+   die Leiste "hebt ab" (Klasse setzt initHeaderState in script.js). */
+.site-header.is-scrolled { box-shadow: 0 14px 44px rgba(1,10,40,.32); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 76px; gap: 16px; }
 
 .logo { display: inline-flex; align-items: center; gap: 11px; }
@@ -178,33 +216,55 @@ p  { margin: 0 0 1rem; }
   display: grid; place-items: center; flex: 0 0 auto; color: #fff;
 }
 .logo-tile svg { width: 26px; height: 32px; }
-.site-header .logo-tile { color: var(--blue); }
-.logo-word { font-family: var(--font-head); font-weight: 600; font-size: 1.18rem; color: var(--navy); letter-spacing: .2em; text-transform: uppercase; }
+/* Royal-Header führt die reine Wortmarke wie in der Logo-Referenz;
+   der Tropfen bleibt der Produkt-/Content-Ebene vorbehalten. */
+.site-header .logo-tile { display: none; }
+/* Wortmarke nach Logo-Referenz: dünner geometrischer Schnitt (Inter 400),
+   Großbuchstaben, sehr großzügiges Letter-Spacing (Footer/Company). */
+.logo-word { font-family: var(--font-body); font-weight: 400; font-size: 1.05rem; color: var(--navy); letter-spacing: .34em; text-transform: uppercase; }
+/* Header-Markenlogik (Royal-Konzept): EcoBum als Produkt-Hauptmarke,
+   Pudado als Herkunft in der getrackten Corporate-Wortmarken-Typo. */
+.logo-stack { display: flex; flex-direction: column; gap: 4px; }
+.logo-product { font-family: var(--font-head); font-weight: 700; font-size: 1.24rem; letter-spacing: -.015em; line-height: 1; color: #fff; white-space: nowrap; }
+.logo-by { font-family: var(--font-body); font-weight: 400; font-size: .58rem; letter-spacing: .34em; text-transform: uppercase; line-height: 1; color: rgba(255,255,255,.6); white-space: nowrap; }
 
 .main-nav { display: flex; align-items: center; gap: 32px; }
 .nav-list { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; }
-.nav-list a { color: var(--navy); font-weight: 500; font-size: .97rem; letter-spacing: -.01em; transition: color .2s; }
-.nav-list a:hover { color: var(--blue); text-decoration: none; }
+.nav-list a { color: rgba(255,255,255,.75); font-weight: 500; font-size: .97rem; letter-spacing: -.01em; transition: color .2s; }
+.nav-list a:hover { color: #fff; text-decoration: none; }
 .nav-actions { display: flex; align-items: center; gap: 12px; }
 .nav-cta { padding: 11px 22px; font-size: .95rem; }
+/* CTAs auf der Royal-Leiste: Primäraktion als weiße Pille, Link-CTA hell */
+.site-header .btn-primary { background: #fff; color: var(--royal-deep); box-shadow: 0 8px 22px rgba(1,10,40,.35); }
+.site-header .btn-primary:hover { background: var(--sky); color: var(--royal-deep); box-shadow: 0 12px 30px rgba(1,10,40,.4); }
+.site-header .btn-link { color: rgba(255,255,255,.85); }
+.site-header .btn-link:hover { color: #fff; }
 
 .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 10px; cursor: pointer; }
-.hamburger span { width: 24px; height: 2.5px; background: var(--navy); border-radius: 2px; transition: .25s; }
+.hamburger span { width: 24px; height: 2.5px; background: #fff; border-radius: 2px; transition: .25s; }
 .hamburger.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
 .hamburger.active span:nth-child(2) { opacity: 0; }
 .hamburger.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
-/* ----------------------- Hero ------------------------------- */
+/* ----------------------- Hero (Royal-Bühne) ------------------ */
+/* Verlauf nach der Logo-Referenz: Lichtkante oben-mitte, ruhig ins
+   tiefe Royal auslaufend – die Marken-Bühne der Firmenmarke Pudado. */
 .hero {
   position: relative; overflow: hidden;
   background:
-    radial-gradient(1200px 640px at 78% -12%, #dfeafd, transparent 60%),
-    radial-gradient(900px 520px at 8% 8%, #eef4fe, transparent 62%),
-    linear-gradient(180deg, #ffffff, var(--mist));
-  padding: clamp(64px, 8vw, 120px) 0 clamp(72px, 10vw, 132px);
+    radial-gradient(1100px 560px at 50% -18%, var(--royal-high), transparent 62%),
+    linear-gradient(180deg, #0A3480 0%, var(--royal) 46%, var(--royal-deep) 100%);
+  padding: clamp(80px, 10vw, 150px) 0 clamp(92px, 12vw, 164px);
+}
+/* Ruhige "Horizontlinie" am Bühnenrand: Wasseroberfläche als leises,
+   futuristisches Detail – 1px, kein Glow, keine Bewegung. */
+.hero::after {
+  content: ""; position: absolute; left: 8%; right: 8%;
+  bottom: clamp(30px, 4.5vw, 52px); height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(169,220,236,.30) 35%, rgba(169,220,236,.30) 65%, transparent);
 }
 .hero > .container { position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(36px, 5vw, 80px); align-items: center; }
+.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(40px, 6vw, 96px); align-items: center; }
 
 /* Wasser-Kaustik-Licht: sehr ruhiger, langsamer Lichtreflex-Effekt als
    Marken-Signature (statt generischem Pastell-Verlauf ohne Bewegung).
@@ -228,6 +288,14 @@ p  { margin: 0 0 1rem; }
   50%  { transform: translate3d(-2%, 1.6%, 0) scale(1.04); }
   100% { transform: translate3d(1.6%, -1%, 0) scale(1); }
 }
+/* Auf der Royal-Bühne nur ein Hauch Licht statt heller Nebelflächen */
+.hero::before {
+  background:
+    radial-gradient(38% 30% at 26% 22%, rgba(255,255,255,.10), transparent 70%),
+    radial-gradient(30% 24% at 72% 64%, rgba(92,138,230,.14), transparent 72%),
+    radial-gradient(26% 22% at 84% 12%, rgba(255,255,255,.08), transparent 70%);
+  filter: blur(24px);
+}
 .eyebrow {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--font-head); font-weight: 600; font-size: .8rem;
@@ -237,15 +305,46 @@ p  { margin: 0 0 1rem; }
   box-shadow: var(--shadow-xs);
 }
 .eyebrow svg { width: 14px; height: 17px; }
-.hero h1 { margin-bottom: .28em; }
+/* PUDADO-Wortmarke mit Wasser-Spiegelung – die Signature des
+   Royal-Konzepts, direkt aus der Logo-Referenz abgeleitet. */
+.hero-wordmark {
+  position: relative; font-family: var(--font-body); font-weight: 400;
+  font-size: clamp(1.06rem, 1.6vw, 1.3rem); letter-spacing: .52em;
+  color: #fff; margin: 0 0 48px; line-height: 1;
+}
+/* Spiegelung wird von Hero-Wortmarke UND Firmenlogo-Bühne genutzt */
+.wordmark-mirror {
+  position: absolute; left: 0; top: calc(100% + 3px); line-height: 1;
+  transform: scaleY(-1); opacity: .16; pointer-events: none; user-select: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 18%, #000 90%);
+  mask-image: linear-gradient(180deg, transparent 18%, #000 90%);
+}
+/* Heroischere Skala nur im Hero (globale h1 auf Unterseiten unverändert) */
+.hero h1 { margin-bottom: .3em; color: #fff; font-size: clamp(3rem, 6.6vw, 5.5rem); line-height: 1.02; letter-spacing: -.04em; }
+.hero .accent { color: var(--royal-text); }
 .lead { font-size: 1.3rem; color: var(--navy); max-width: 540px; line-height: 1.5; font-weight: 400; }
+.hero .lead { color: var(--royal-text); margin-top: 20px; }
 /* Ruhige Meta-Zeile statt Pill: der mehrzeilige Umbruch machte die Pill-Form
    unruhig; leiser Text wirkt hochwertiger und konkurriert nicht mit den CTAs. */
 .trust-line {
   display: block; font-size: .95rem; color: var(--gray); font-weight: 500;
   margin-top: 14px; max-width: 540px; letter-spacing: -.01em; line-height: 1.6;
 }
+.hero .trust-line { color: rgba(255,255,255,.62); margin-top: 18px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+.hero .hero-actions { margin-top: 42px; gap: 16px; }
+/* CTAs auf Royal: weiße Primär-Pille, Ghost als heller Umriss */
+.hero .btn-primary { background: #fff; color: var(--royal-deep); box-shadow: 0 14px 34px rgba(1,10,40,.4); }
+.hero .btn-primary:hover { background: var(--sky); color: var(--royal-deep); box-shadow: 0 18px 44px rgba(1,10,40,.46); }
+.hero .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.34); }
+.hero .btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; border-color: #fff; box-shadow: none; }
+/* Randlose Produkt-Bühne: das Foto IST die Fläche, Badges liegen als
+   Glas-Chips im Bild – Objektinszenierung statt Bild-in-Box. */
+.hero .product-card { padding: 0; background: transparent; border: none; box-shadow: 0 44px 110px rgba(1,10,40,.55); }
+.hero .product-card img { border-radius: var(--radius-xl); }
+.hero .product-badges { position: absolute; left: 18px; right: 18px; bottom: 18px; margin: 0; justify-content: flex-start; }
+.hero .pill-badge { background: rgba(5,26,70,.55); color: #fff; border-color: rgba(255,255,255,.24); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.hero .pill-badge.accent { background: rgba(255,255,255,.94); color: var(--royal-deep); border-color: transparent; box-shadow: none; }
 
 /* Produktkarte (Bild) – ruhige weiße Fläche statt Glas/Glow: das Foto ist das
    Objekt, die Karte nur sein Rahmen. Transluzenz und Leucht-Effekte lenkten ab
@@ -263,29 +362,53 @@ p  { margin: 0 0 1rem; }
 }
 .pill-badge.accent { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 6px 16px rgba(35,95,208,.28); }
 
-/* ----------------------- VS-Vergleich ----------------------- */
-.compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: 30px; align-items: center; margin-top: 8px; }
-.compare-card { border-radius: var(--radius-lg); padding: 44px 40px; box-shadow: var(--shadow-sm); }
-.compare-card h3 { font-family: var(--font-head); font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 20px; }
-.compare-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 15px; }
-.compare-card li { display: flex; align-items: center; gap: 13px; font-weight: 500; color: var(--navy); }
-.compare-card .mark { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto; font-size: .8rem; }
-.compare-card.con { background: #fff; border: 1px solid var(--border); }
-.compare-card.con h3 { color: var(--gray-light); }
-.compare-card.con .mark { background: #f6e3e1; color: #c0564f; }
-.compare-card.pro { background: linear-gradient(165deg, #fff, var(--sky-soft)); border: 1px solid var(--sky-line); }
-.compare-card.pro h3 { color: var(--blue); }
-.compare-card.pro .mark { background: var(--blue); color: #fff; }
-.compare-media {
-  position: relative; border-radius: 50%; overflow: hidden; aspect-ratio: 1 / 1; width: 74px; margin: 0 auto;
-  background: #fff; border: 1px solid var(--sky-line);
-  display: grid; place-items: center; box-shadow: var(--shadow-sm);
+/* ----------------------- Prinzip-Duell ----------------------- */
+/* Ein geteiltes Panel: Papier-Seite als stilles Material, Wasser-Seite
+   auf der Royal-Bühne. Die Hierarchie erzählt das Prinzip, nicht die
+   Dekoration. Kompakt statt zwei verlorener Boxen im Weißraum. */
+.duel {
+  position: relative; display: grid; grid-template-columns: 1fr auto 1fr;
+  max-width: 1000px; margin: 0 auto; border-radius: var(--radius-xl);
+  overflow: hidden; background: #fff; border: 1px solid var(--border-soft);
+  box-shadow: 0 30px 80px rgba(20,40,80,.12);
 }
-.compare-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.compare-media .vs {
-  position: relative; z-index: 1; font-family: var(--font-head); font-weight: 700; font-size: .9rem; letter-spacing: .04em;
-  color: var(--blue); width: 100%; height: 100%; border-radius: 50%;
-  display: grid; place-items: center;
+.duel-side { padding: clamp(30px, 4vw, 46px) clamp(26px, 3.5vw, 44px); }
+.duel-side h3 { font-family: var(--font-head); font-weight: 700; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 22px; }
+.duel-side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 15px; }
+.duel-side li { display: flex; align-items: flex-start; gap: 13px; font-weight: 500; line-height: 1.45; }
+.duel-side .mark { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 9px; display: grid; place-items: center; margin-top: -1px; }
+.duel-side .mark svg { width: 13px; height: 13px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Linke Seite = stille Basis ("klassische Routine"), keine Negativ-Liste:
+   neutrale Strich-Marker in feinen Umriss-Chips, zurückhaltende Typo –
+   die Royal-Seite überzeugt durch Kontrast, nicht durch rote Warnungen. */
+.duel-side.con { background: linear-gradient(180deg, #FBFCFE, var(--mist-2)); color: var(--gray); }
+.duel-side.con h3 { color: var(--gray-light); }
+.duel-side.con li { font-weight: 400; }
+.duel-side.con .mark { background: transparent; border: 1px solid var(--border-cool); }
+.duel-side.con .mark svg { stroke: var(--gray-light); }
+.duel-side.pro {
+  background:
+    radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%),
+    linear-gradient(180deg, #0A3480, var(--royal) 60%, var(--royal-deep));
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12); /* präzise Lichtkante */
+}
+.duel-side.pro h3 { color: var(--aqua-mist); }
+.duel-side.pro .mark { background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.duel-side.pro .mark svg { stroke: var(--aqua-mist); }
+.duel-divider { position: relative; width: 1px; background: var(--border-soft); display: grid; place-items: center; }
+/* Upgrade-Moment statt "VS": ein ruhiger Pfeil von der alten zur neuen
+   Routine – Transformation, kein Kampf. Mobile zeigt er nach unten. */
+.duel-shift {
+  position: absolute; width: 40px; height: 40px; display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--border-soft); border-radius: 50%;
+  box-shadow: var(--shadow-sm); z-index: 1;
+}
+.duel-shift svg { width: 16px; height: 16px; fill: none; stroke: var(--blue); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 760px) {
+  .duel { grid-template-columns: 1fr; }
+  .duel-divider { width: auto; height: 1px; }
+  .duel-shift svg { transform: rotate(90deg); }
 }
 
 /* ----------------------- Cards / Grids ---------------------- */
@@ -304,9 +427,10 @@ p  { margin: 0 0 1rem; }
 
 /* Icon-Kachel mit Line-Icon */
 .icon-tile {
-  width: 56px; height: 56px; border-radius: 16px; background: var(--sky);
+  width: 56px; height: 56px; border-radius: 16px;
+  background: linear-gradient(180deg, #F3F8FF, var(--sky));
   display: grid; place-items: center; margin-bottom: 22px;
-  box-shadow: inset 0 0 0 1px rgba(35,95,208,.06);
+  box-shadow: inset 0 0 0 1px rgba(35,95,208,.06), inset 0 1px 0 rgba(255,255,255,.8);
 }
 .icon-tile svg { width: 27px; height: 27px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
 
@@ -322,15 +446,30 @@ p  { margin: 0 0 1rem; }
 @media (max-width: 980px) { .usecase-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } .usecase-card { padding: 24px 22px; } }
 @media (max-width: 560px) { .usecase-grid { grid-template-columns: 1fr; gap: 16px; } }
 
-/* ----------------------- Benefits (ehem. dunkel → hell) ----- */
+/* ----------------------- Benefits & Newsletter (Royal-Bühne) --- */
+/* Kopfzeilen gezielt über .section-head hell stellen – NICHT alle h3,
+   sonst würden Überschriften in den weißen Karten unlesbar. */
 .section-dark {
   background:
-    radial-gradient(1000px 520px at 85% -10%, #e4eefe, transparent 60%),
-    linear-gradient(180deg, var(--mist), #ffffff);
-  color: var(--ink);
+    radial-gradient(1000px 520px at 82% -12%, var(--royal-high), transparent 60%),
+    linear-gradient(180deg, var(--royal), var(--royal-deep));
+  color: var(--royal-text);
+  /* feine Lichtkante als präziser Übergang von hellen Flächen */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
-.section-dark h2, .section-dark h3 { color: var(--ink); }
-.section-dark .section-text { color: var(--gray); }
+.section-dark .section-head h2, .section-dark .section-head h3 { color: #fff; }
+.section-dark .section-text { color: var(--royal-text); }
+.section-dark .section-label { color: #9FC1F5; }
+/* Feature-Module auf der Royal-Bühne: rahmenlos schwebend statt Box */
+.section-dark .card.glass { border: none; box-shadow: 0 28px 64px rgba(1,10,40,.38); }
+.section-dark .card.glass:hover { transform: translateY(-3px); box-shadow: 0 34px 76px rgba(1,10,40,.44); }
+/* Newsletter schließt mit der Horizontlinien-Signatur zum Footer */
+#newsletter { position: relative; }
+#newsletter::after {
+  content: ""; position: absolute; left: 8%; right: 8%;
+  bottom: clamp(26px, 3.5vw, 44px); height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(169,220,236,.22) 35%, rgba(169,220,236,.22) 65%, transparent);
+}
 /* Ehem. Glas-Karten: solide weiße Flächen lesen sich ruhiger und sparen das
    Blur-Compositing; die überlappende Icon-Kachel bleibt als einziges Tiefen-Detail. */
 .card.glass {
@@ -365,6 +504,7 @@ p  { margin: 0 0 1rem; }
 .form textarea, .form input:not([type="checkbox"]):not([type="radio"]) {
   font-family: var(--font-body); font-size: 1rem; color: var(--navy);
   padding: 13px 15px; border: 1px solid var(--border-cool); border-radius: 12px; background: #fff; width: 100%;
+  box-shadow: inset 0 1px 2px rgba(20,40,80,.04);
   transition: border-color .18s, box-shadow .18s;
 }
 .form textarea:focus, .form input:not([type="checkbox"]):not([type="radio"]):focus {
@@ -383,9 +523,10 @@ p  { margin: 0 0 1rem; }
 .steps { display: grid; gap: 20px; }
 .step { display: flex; gap: 20px; align-items: flex-start; }
 .step-num {
-  flex: 0 0 auto; width: 52px; height: 52px; border-radius: 16px; background: var(--sky); color: var(--blue);
+  flex: 0 0 auto; width: 52px; height: 52px; border-radius: 16px;
+  background: linear-gradient(180deg, #F3F8FF, var(--sky)); color: var(--blue);
   font-family: var(--font-head); font-weight: 700; font-size: 1.08rem; display: grid; place-items: center;
-  box-shadow: inset 0 0 0 1px rgba(35,95,208,.08);
+  box-shadow: inset 0 0 0 1px rgba(35,95,208,.08), inset 0 1px 0 rgba(255,255,255,.8);
 }
 .step h3 { margin-bottom: .2em; }
 .step p { color: var(--gray); margin: 0; }
@@ -394,8 +535,8 @@ p  { margin: 0 0 1rem; }
 /* ----------------------- Produkt ---------------------------- */
 .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,5vw,72px); align-items: center; }
 .num-list { list-style: none; padding: 0; margin: 28px 0 0; }
-.num-list li { display: flex; gap: 20px; align-items: center; padding: 18px 0; border-top: 1px solid var(--border); }
-.num-list li:last-child { border-bottom: 1px solid var(--border); }
+.num-list li { display: flex; gap: 20px; align-items: center; padding: 20px 0; border-top: 1px solid var(--border-soft); }
+.num-list li:last-child { border-bottom: 1px solid var(--border-soft); }
 .num-list .n { font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: var(--blue-soft); width: 34px; flex: 0 0 auto; }
 .num-list .t { font-weight: 500; color: var(--navy); }
 
@@ -430,51 +571,91 @@ p  { margin: 0 0 1rem; }
 #warum .section-text { max-width: 740px; }
 .brand-mark { height: 40px; width: auto; margin: 0 auto 22px; display: block; }
 .section-brand .brand-drop { color: var(--blue); }
-/* Logo-Tropfen in den (jetzt hellen) ehemals dunklen Sektionen sichtbar halten */
-.section-dark .logo-tile, .section-brand .logo-tile, #newsletter .logo-tile { color: var(--blue); }
+/* Logo-Tropfen: hell auf Royal-Bühnen, blau auf hellen Sektionen */
+.section-brand .logo-tile { color: var(--blue); }
+.section-dark .logo-tile, #newsletter .logo-tile { color: #EAF2FE; }
+/* Nachhaltigkeit: die Transparenz-Karte trägt die Royal-Bühne – das
+   ehrliche Versprechen ist das Premium-Statement der Sektion. */
+#nachhaltigkeit .cards-grid .card:last-child {
+  background:
+    radial-gradient(120% 120% at 80% -10%, var(--royal-high), transparent 60%),
+    linear-gradient(170deg, var(--royal), var(--royal-deep));
+  border: none;
+  box-shadow: 0 24px 60px rgba(2,20,60,.3), inset 0 1px 0 rgba(255,255,255,.14);
+}
+#nachhaltigkeit .cards-grid .card:last-child h3 { color: #fff; }
+#nachhaltigkeit .cards-grid .card:last-child p { color: var(--royal-text); }
+#nachhaltigkeit .cards-grid .card:last-child .icon-tile { background: rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
+#nachhaltigkeit .cards-grid .card:last-child .icon-tile svg { stroke: var(--aqua-mist); }
+/* Absende-Button des Newsletters auf der Royal-Bühne als weiße Pille */
+.section-dark .btn-light { background: #fff; color: var(--royal-deep); box-shadow: 0 10px 26px rgba(1,10,40,.4); }
+.section-dark .btn-light:hover { background: var(--sky); color: var(--royal-deep); }
 
 /* Feature-Bild ("Warum Pudado") */
 .media-band { position: relative; margin: clamp(44px,6vw,72px) auto 0; max-width: 460px;
   border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg);
   background: linear-gradient(135deg, #e7effc, #cfddf3 60%, #b9cdea); }
 .media-band img { display: block; width: 100%; height: auto; }
-/* Pudado-Firmensignatur ("Warum Pudado?"): stummes Brand-Video. Feste
-   aspect-ratio reserviert die Höhe vor dem Laden (kein CLS); der
-   760px-Breakpoint muss zu den media-Attributen der <source>-Elemente
-   in index.html passen (Desktop 16:9, Mobile 9:16). */
-.media-band.brand-signature { max-width: 560px; aspect-ratio: 16 / 9; }
-.media-band.brand-signature video { display: block; width: 100%; height: 100%; object-fit: cover; }
-@media (max-width: 760px) {
-  .media-band.brand-signature { max-width: 300px; aspect-ratio: 9 / 16; }
+/* Pudado-Firmensignatur ("Warum Pudado?"): statische Logo-Bühne nach der
+   Logo-Referenz (ersetzt im Royal-Konzept das Brand-Video). Frei stehend,
+   zentriert, mit Lichtkante oben und Wasser-Spiegelung der Wortmarke –
+   Premium-Signature statt Content-Box. */
+.brand-stage {
+  position: relative; max-width: 880px;
+  margin: clamp(56px, 8vw, 96px) auto clamp(56px, 8vw, 96px);
+  border-radius: var(--radius-xl); overflow: hidden;
+  background:
+    radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%),
+    linear-gradient(180deg, #0A3480, var(--royal) 45%, var(--royal-deep));
+  box-shadow: 0 44px 96px rgba(2,20,60,.34), inset 0 1px 0 rgba(255,255,255,.16);
+  display: grid; place-items: center;
+  padding: clamp(72px, 11vw, 136px) 24px clamp(84px, 12vw, 152px);
+}
+/* Ambient-Loop unter der Wortmarke: Video verschmilzt farblich mit dem
+   CSS-Verlauf; bei reduced motion bleibt allein die statische Bühne. */
+.brand-stage-ambient { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+@media (prefers-reduced-motion: reduce) { .brand-stage-ambient { display: none; } }
+.brand-stage-word {
+  position: relative; z-index: 1; margin: 0 0 0 .5em; /* gleicht das Nachlauf-Tracking optisch aus */
+  font-family: var(--font-body); font-weight: 400;
+  font-size: clamp(1.6rem, 3.4vw, 2.75rem); letter-spacing: .5em;
+  line-height: 1; color: #fff;
 }
 
-/* ----------------------- FAQ -------------------------------- */
-.faq-list { display: grid; gap: 14px; }
-.faq-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 28px; box-shadow: var(--shadow-xs); transition: box-shadow .25s, border-color .25s; }
-.faq-item[open] { box-shadow: var(--shadow-sm); border-color: var(--sky-line); }
-.faq-item summary { cursor: pointer; list-style: none; font-family: var(--font-head); font-weight: 600; font-size: 1.06rem; padding: 22px 40px 22px 0; position: relative; color: var(--navy); letter-spacing: -.01em; }
+/* ----------------------- FAQ (editorial: Hairlines statt Boxen) --- */
+.faq-list { display: grid; gap: 0; }
+.faq-item { background: transparent; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 4px 6px; box-shadow: none; transition: border-color .25s; }
+.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-item[open] { box-shadow: none; border-color: var(--sky-line); }
+.faq-item summary { cursor: pointer; list-style: none; font-family: var(--font-head); font-weight: 600; font-size: 1.06rem; padding: 24px 40px 24px 0; position: relative; color: var(--navy); letter-spacing: -.01em; }
 .faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary { transition: color .2s ease; }
+.faq-item summary:hover { color: var(--blue); }
 .faq-item summary::after { content: "+"; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--blue); transition: transform .25s; font-weight: 300; }
 .faq-item[open] summary::after { transform: translateY(-50%) rotate(45deg); }
 .faq-item p { color: var(--gray); margin: 0 0 22px; }
+/* Antwort blendet ruhig ein statt zu springen (reduced-motion kürzt auf 0) */
+.faq-item[open] p { animation: faq-open .32s cubic-bezier(.16,.84,.44,1); }
+@keyframes faq-open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
 /* ----------------------- Forms ------------------------------ */
 .form { padding: 38px; }
-.form.card { border-radius: var(--radius-lg); }
+/* Abschluss-Formular in der Insight-Materialsprache (wie Rechner-Ergebnis) */
+.form.card { border-radius: var(--radius-lg); background: linear-gradient(180deg, #fff, #FAFCFF); border-color: var(--border-soft); box-shadow: 0 18px 50px rgba(20,40,80,.1); }
 .form .field { margin-bottom: 20px; }
 .checkbox { display: flex; gap: 12px; align-items: flex-start; font-size: .9rem; color: var(--gray); margin: 6px 0 24px; cursor: pointer; line-height: 1.5; }
 .checkbox input { margin-top: 3px; width: 18px; height: 18px; flex: 0 0 auto; accent-color: var(--blue); cursor: pointer; }
 /* Textknoten war zuvor ein Flex-Item mit min-width:auto und konnte auf
    schmalen Screens die Zeile aufbrechen (horizontales Scrollen). */
 .checkbox > span { min-width: 0; }
-.checkbox.on-dark { color: var(--gray); }
-.checkbox.on-dark a { color: var(--blue); text-decoration: underline; }
+.checkbox.on-dark { color: var(--royal-text); }
+.checkbox.on-dark a { color: #BFD8FF; text-decoration: underline; }
 .form-message { margin: 16px 0 0; padding: 14px 16px; border-radius: 12px; background: var(--sky); color: var(--blue-ink); font-weight: 500; font-size: .95rem; }
 .form-message.on-dark { background: var(--sky); color: var(--blue-ink); }
 .form-fallback { margin: 14px 0 0; font-size: .9rem; color: var(--gray); }
 .form-fallback a { font-weight: 600; }
 .news-optin { margin: 12px 0 0; font-size: .82rem; line-height: 1.5; opacity: .9; color: var(--gray); }
-.news-optin.on-dark { color: var(--gray); }
+.news-optin.on-dark { color: rgba(255,255,255,.68); }
 .brand-drop { display: block; color: var(--blue); margin: 0 auto 10px; line-height: 0; }
 .brand-drop svg { display: inline-block; }
 .newsletter-form { max-width: 640px; margin: 0 auto; text-align: left; }
@@ -483,8 +664,13 @@ p  { margin: 0 0 1rem; }
 .newsletter-form input:not([type="checkbox"]):focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(35,95,208,.12); }
 .newsletter-form .btn-light { width: 100%; }
 
-/* ----------------------- Footer (bleibt dunkel) ------------- */
-.site-footer { background: var(--navy-deep); color: rgba(255,255,255,.78); padding: 76px 0 30px; }
+/* ----------------------- Footer (Royal-Fundament) ----------- */
+.site-footer {
+  background: linear-gradient(180deg, var(--royal-deep), #010F33);
+  color: rgba(255,255,255,.78);
+  padding: clamp(84px, 10vw, 116px) 0 34px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07); /* präzise Lichtkante zum Inhalt */
+}
 .footer-grid { display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
 .footer-logo { display: flex; align-items: center; gap: 11px; margin-bottom: 8px; }
 .footer-logo .logo-tile { background: transparent; color: #fff; }
@@ -494,7 +680,7 @@ p  { margin: 0 0 1rem; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; }
 .footer-links a { color: rgba(255,255,255,.8); font-size: .95rem; }
 .footer-links a:hover { color: #fff; }
-.footer-col-title { font-family: var(--font-head); font-weight: 600; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.66); margin: 0 0 4px; }
+.footer-col-title { font-family: var(--font-head); font-weight: 600; font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.62); margin: 0 0 6px; }
 .footer-bottom { margin-top: 46px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: .85rem; color: rgba(255,255,255,.55); }
 
 /* ----------------------- Cookie Banner ---------------------- */
@@ -535,25 +721,54 @@ p  { margin: 0 0 1rem; }
 .legal-page .legal-hint { background: var(--sky); color: var(--blue-ink); padding: 18px 20px; border-radius: var(--radius); margin: 0 0 32px; font-size: .92rem; }
 
 /* ----------------------- Sprachumschalter ------------------- */
-.lang-switch { display: inline-flex; background: rgba(35,95,208,.06); border: 1px solid var(--sky-line); border-radius: var(--radius-pill); padding: 3px; }
+.lang-switch { display: inline-flex; background: rgba(255,255,255,.08); border: 1px solid var(--royal-line); border-radius: var(--radius-pill); padding: 3px; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
 .lang-switch button {
   font-family: var(--font-head); font-weight: 600; font-size: .78rem; letter-spacing: .04em;
-  color: var(--gray); background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,.72); background: transparent; border: none; cursor: pointer;
   padding: 6px 12px; border-radius: var(--radius-pill); transition: .22s;
 }
-.lang-switch button:hover { color: var(--blue); }
-.lang-switch button.active { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(35,95,208,.28); }
+.lang-switch button:hover { color: #fff; }
+.lang-switch button.active { background: #fff; color: var(--royal-deep); box-shadow: 0 4px 12px rgba(1,10,40,.35); }
 
 /* ----------------------- Foto-Check ------------------------- */
 .fotocheck { padding: 38px; }
 .fc-guide { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 13px; }
 .fc-guide li { display: flex; align-items: flex-start; gap: 12px; color: var(--gray); line-height: 1.55; }
 .fc-num { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--sky); color: var(--blue); display: inline-grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: .82rem; margin-top: 1px; }
-.fc-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.fc-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+/* Concierge-Auswahlfläche: eine ruhige, große Einladung statt eines
+   Formular-Buttons. Öffnet weiterhin nur die lokale Dateiauswahl. */
+.fc-select {
+  display: grid; place-items: center; gap: 12px; width: 100%;
+  padding: clamp(30px, 4vw, 44px) 20px;
+  font-family: var(--font-body); font-weight: 600; font-size: 1.02rem;
+  color: var(--blue); letter-spacing: -.01em;
+  background: linear-gradient(180deg, #FBFDFF, var(--sky-soft));
+  border: 1.5px dashed var(--sky-line); border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.fc-select::before {
+  content: ""; width: 44px; height: 44px; border-radius: 50%;
+  background:
+    linear-gradient(var(--blue), var(--blue)) center / 16px 2px no-repeat,
+    linear-gradient(var(--blue), var(--blue)) center / 2px 16px no-repeat,
+    var(--sky);
+  box-shadow: inset 0 0 0 1px rgba(35,95,208,.1);
+}
+.fc-select:hover {
+  border-color: transparent;
+  background: linear-gradient(180deg, #F8FCFF, var(--sky-soft));
+  box-shadow: 0 0 0 4px rgba(169,220,236,.4), 0 14px 36px rgba(35,95,208,.12);
+}
+.fc-select:active { transform: scale(.995); }
 .fc-status { margin: 16px 0 0; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); }
 .fc-previews { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
 .fc-previews:empty { display: none; }
-.fc-thumb { position: relative; margin: 0; width: 96px; }
+/* Sanfte Einblendung neuer Vorschauen: der Service-Moment fühlt sich
+   wertig an (globale reduced-motion-Regel kürzt die Animation auf 0). */
+.fc-thumb { position: relative; margin: 0; width: 96px; animation: fc-thumb-in .45s cubic-bezier(.16,.84,.44,1); }
+@keyframes fc-thumb-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .fc-thumb img { width: 96px; height: 96px; object-fit: cover; display: block; border-radius: 12px; border: 1px solid var(--border); }
 .fc-thumb figcaption { margin-top: 6px; font-size: .72rem; line-height: 1.4; color: var(--gray-light); word-break: break-word; }
 .fc-thumb-rm { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; }
@@ -580,22 +795,40 @@ p  { margin: 0 0 1rem; }
 .sticky-cta.show { transform: translateY(0); }
 
 .product-card-photo img { max-height: 580px; object-fit: contain; }
+/* Produkt-Bühne: das Set-Bild schwebt tiefer und großzügiger (Begehrlichkeit
+   durch Inszenierung, nicht durch Effekte) */
+.product-visual .product-card { padding: 16px; border-radius: var(--radius-xl); box-shadow: 0 40px 90px rgba(20,40,80,.16); }
 
 /* ----------------------- Nachhaltigkeit Leaf-Band ----------- */
-.leaf-band { margin: clamp(40px,5vw,64px) auto 0; max-width: 1040px; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); aspect-ratio: 16 / 7; }
+.leaf-band { margin: clamp(40px,5vw,64px) auto 0; max-width: 1040px; border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 30px 80px rgba(20,40,80,.14); aspect-ratio: 16 / 7; }
 .leaf-band img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* ----------------------- FAQ "mehr" ------------------------- */
 .faq-more { text-align: center; margin: 24px 0 0; color: var(--gray); font-size: .95rem; }
 .faq-more a { font-weight: 600; }
 
-/* ----------------------- Wasser-Banner ---------------------- */
-.water-banner { position: relative; width: 100%; height: clamp(260px, 36vw, 440px); overflow: hidden; }
+/* ----------------------- Wasser-Banner (Statement-Band) ------ */
+/* Lichtkante oben: dieselbe Übergangsregel wie alle dunklen Bühnen –
+   jede Royal-/Bild-Bühne beginnt mit einer präzisen hellen Kante. */
+.water-banner { position: relative; width: 100%; height: clamp(300px, 40vw, 500px); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.35); }
+/* Horizontlinie: wiederkehrende Marken-Signatur der Royal-Bühnen */
+.water-banner::before {
+  content: ""; position: absolute; left: 8%; right: 8%; z-index: 1;
+  bottom: clamp(26px, 3.5vw, 44px); height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(169,220,236,.36) 35%, rgba(169,220,236,.36) 65%, transparent);
+}
 .water-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.water-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(19,30,54,.6), rgba(19,30,54,.24) 45%, rgba(19,30,54,0) 75%); }
+/* Überlagerung auf das Tropfen-Motiv abgestimmt: links Royal-Bühne für
+   den Claim, rechts fast frei, damit Tropfen und Kreise tragen. */
+.water-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(2,29,82,.82), rgba(4,38,100,.38) 45%, rgba(8,48,122,.04) 72%); }
+/* Mobile: Text läuft weiter nach rechts – Abdunklung entsprechend breiter,
+   der Tropfen am rechten Rand bleibt frei. */
+@media (max-width: 760px) {
+  .water-banner::after { background: linear-gradient(90deg, rgba(2,29,82,.84), rgba(4,38,100,.52) 58%, rgba(8,48,122,.12) 92%); }
+}
 .water-banner-text { position: relative; z-index: 1; max-width: var(--container); margin: 0 auto; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 26px; }
-.wb-claim { font-family: var(--font-head); font-weight: 700; font-size: clamp(2rem, 4.4vw, 3.4rem); color: #fff; margin: 0; letter-spacing: -.03em; text-shadow: 0 2px 22px rgba(0,0,0,.22); }
-.wb-sub { font-family: var(--font-head); font-weight: 600; font-size: clamp(.98rem, 1.6vw, 1.18rem); color: #e6eefb; margin: 10px 0 0; letter-spacing: .02em; }
+.wb-claim { font-family: var(--font-head); font-weight: 700; font-size: clamp(2.4rem, 5.6vw, 4.4rem); color: #fff; margin: 0; letter-spacing: -.035em; line-height: 1.02; text-wrap: balance; text-shadow: 0 2px 22px rgba(0,0,0,.22); }
+.wb-sub { font-family: var(--font-body); font-weight: 600; font-size: clamp(.72rem, 1vw, .84rem); color: #DCE8FA; margin: 16px 0 0; letter-spacing: .3em; text-transform: uppercase; }
 
 /* Detail-Nahaufnahmen */
 .detail-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 960px; margin: 0 auto; }
@@ -627,7 +860,8 @@ p  { margin: 0 0 1rem; }
 
 /* ----------------------- Detail-Sektion --------------------- */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 960px; margin: 0 auto; }
-.detail-col { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 34px 34px; box-shadow: var(--shadow-xs); }
+/* Letzte Standard-Boxen der Seite auf die Karten-Materialsprache gehoben */
+.detail-col { background: linear-gradient(180deg, #fff, #FBFCFE); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 34px 34px; box-shadow: var(--card-shadow); }
 .detail-col h3 { margin-bottom: 18px; }
 .cert-note { max-width: 960px; margin: 26px auto 0; background: var(--sky-soft); border: 1px solid var(--sky-line); border-radius: var(--radius); padding: 26px 30px; }
 .cert-note h4 { color: var(--blue); margin-bottom: .4em; }
@@ -655,10 +889,13 @@ p  { margin: 0 0 1rem; }
 .eyebrow .mini-icon { display: inline-flex; }
 
 /* Premium-Platzhalter-Figuren */
+/* Royal-Tokens statt Alt-Blau: Unterseiten sprechen dieselbe Bühnensprache */
 .situation-figure, .article-hero {
   position: relative; width: 100%; border-radius: var(--radius-xl); overflow: hidden;
   box-shadow: var(--shadow-lg); display: grid; place-items: center;
-  background: linear-gradient(150deg, #3468c8, var(--blue) 55%, #163a86);
+  background:
+    radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%),
+    linear-gradient(160deg, #0A3480, var(--royal) 55%, var(--royal-deep));
 }
 .situation-figure { aspect-ratio: 4 / 3.6; max-width: 470px; }
 .situation-icon svg { width: 86px; height: 86px; stroke: rgba(255,255,255,.92); opacity: .95; }
@@ -674,7 +911,13 @@ p  { margin: 0 0 1rem; }
 .install-card .btn { margin-top: 8px; }
 
 /* CTA-Band (Unterseiten): eleganter Blau-Akzent statt dunkler Masse */
-.cta-band { text-align: center; background: linear-gradient(150deg, #3468c8, var(--blue) 55%, var(--blue-deep)); border-radius: 0; }
+.cta-band {
+  text-align: center; border-radius: 0;
+  background:
+    radial-gradient(1000px 480px at 82% -12%, var(--royal-high), transparent 60%),
+    linear-gradient(180deg, var(--royal), var(--royal-deep));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
 .cta-band .container { position: relative; }
 .cta-band h2 { color: #fff; }
 .cta-band .section-text { color: rgba(255,255,255,.9); }
@@ -698,7 +941,7 @@ p  { margin: 0 0 1rem; }
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
 .blog-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s; color: var(--ink); }
 .blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); text-decoration: none; }
-.blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: linear-gradient(150deg, #3468c8, var(--blue) 55%, #163a86); }
+.blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%), linear-gradient(160deg, #0A3480, var(--royal) 55%, var(--royal-deep)); }
 .blog-card figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .blog-card-body { padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1; }
 .blog-card-body h3 { margin-bottom: .4em; }
@@ -707,10 +950,12 @@ p  { margin: 0 0 1rem; }
 /* ===================== Rechner v2 (kompakt, 3 Eingaben) ===================== */
 .calc2-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 24px; align-items: start; max-width: 1040px; margin: 0 auto; }
 .calc2-inputs, .calc2-results { border-radius: var(--radius); padding: 28px; }
+/* Ergebnis-Karte als Premium-Insight leicht über den Eingaben schwebend */
+.calc2-results { background: linear-gradient(180deg, #fff, #FAFCFF); border-color: var(--border-soft); box-shadow: 0 18px 50px rgba(20,40,80,.1); }
 .calc2-field { margin-bottom: 20px; }
 .calc2-field > label, .calc2-field > #lblPersons { display: block; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
 .calc2-help { margin: 7px 0 0; font-size: .8rem; line-height: 1.5; color: var(--gray); }
-.calc2-inputs input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid var(--border-cool); border-radius: 12px; font: inherit; font-size: 1rem; color: var(--navy); background: #fff; }
+.calc2-inputs input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid var(--border-cool); border-radius: 12px; font: inherit; font-size: 1rem; color: var(--navy); background: #fff; box-shadow: inset 0 1px 2px rgba(20,40,80,.04); }
 .calc2-inputs input[type="number"]:focus-visible, .step-btn:focus-visible, #usage:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .stepper { display: inline-flex; align-items: stretch; border: 1px solid var(--border-cool); border-radius: 12px; overflow: hidden; background: #fff; }
 .stepper input { width: 64px; text-align: center; border: none; border-radius: 0; -moz-appearance: textfield; appearance: textfield; }
@@ -729,10 +974,20 @@ p  { margin: 0 0 1rem; }
 .calc2-basis-note, .calc2-basis-src { font-size: .78rem; line-height: 1.5; color: var(--gray); margin: 8px 0 0; }
 .calc2-pricefield { margin: 12px 0 0; }
 .calc2-pricefield label { font-size: .82rem; }
-.calc2-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* Drei ruhige Kennzahlen in einer Reihe, darunter der Ergebnis-Held */
+.calc2-kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .kpi { background: #fff; border: 1px solid var(--border-cool); border-radius: 16px; padding: 18px; }
-.kpi.accent { background: var(--blue); border-color: var(--blue); box-shadow: 0 10px 26px rgba(35,95,208,.24); }
-.kpi-num { display: block; font-family: var(--font-head); font-weight: 700; font-size: 1.36rem; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
+/* Ergebnis-Held: die Kernzahl schließt als royale Bühne in voller Breite ab */
+.kpi.accent {
+  grid-column: 1 / -1;
+  background:
+    radial-gradient(120% 140% at 85% -20%, var(--royal-high), transparent 55%),
+    linear-gradient(160deg, var(--royal), var(--royal-deep));
+  border: none;
+  box-shadow: 0 18px 44px rgba(2,20,60,.3), inset 0 1px 0 rgba(255,255,255,.16);
+}
+.kpi.accent .kpi-num { font-size: 1.9rem; }
+.kpi-num { display: block; font-family: var(--font-head); font-weight: 700; font-size: 1.52rem; letter-spacing: -.02em; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .kpi.accent .kpi-num { color: #fff; }
 .kpi-lab { display: block; margin-top: 5px; font-size: .76rem; line-height: 1.35; color: var(--gray); }
 .kpi.accent .kpi-lab { color: rgba(255,255,255,.85); }
@@ -748,7 +1003,7 @@ p  { margin: 0 0 1rem; }
 .calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
 .calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
 .calc2-more-list strong { color: var(--navy); }
-.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); }
+.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); border-left: 3px solid var(--aqua-mist); }
 .co2-label { font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--navy); margin: 0 0 4px; }
 .co2-result { margin: 0; font-size: .95rem; color: var(--gray); }
 .co2-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray-light); }
@@ -757,7 +1012,8 @@ p  { margin: 0 0 1rem; }
 @media (max-width: 480px) { .calc2-kpis { grid-template-columns: 1fr; } }
 
 /* ===================== Scroll-Reveal (subtile Animationen) ===================== */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s cubic-bezier(.16,.84,.44,1), transform .55s cubic-bezier(.16,.84,.44,1); will-change: opacity, transform; }
+/* Etwas längerer, weicherer Reveal: ruhige, cineastische Einblendung */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); will-change: opacity, transform; }
 .reveal.in-view { opacity: 1; transform: none; }
 .reveal-1 { transition-delay: .06s; }
 .reveal-2 { transition-delay: .12s; }
@@ -774,10 +1030,10 @@ p  { margin: 0 0 1rem; }
   /* Deckend statt transluzent: durchscheinender Seiteninhalt machte die
      Liste unruhig; ein opakes Panel liest sich ruhiger und spart zudem das
      Blur-Compositing (Scroll-Performance). */
-  .main-nav { position: fixed; top: 76px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: #fff; border-bottom: 1px solid var(--border); box-shadow: var(--shadow-md); max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 24px; }
+  .main-nav { position: fixed; top: 76px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--royal-deep); border-bottom: 1px solid var(--royal-line); box-shadow: 0 24px 60px rgba(1,10,40,.45); max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 24px; }
   .main-nav.open { max-height: 620px; padding: 12px 24px 24px; }
   .nav-list { flex-direction: column; gap: 4px; width: 100%; }
-  .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--border); }
+  .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--royal-line); }
   .nav-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
   .nav-actions .btn { width: 100%; }
   .lang-switch { align-self: center; }
@@ -786,9 +1042,6 @@ p  { margin: 0 0 1rem; }
   .hamburger { display: flex; }
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
-  .compare { grid-template-columns: 1fr; gap: 16px; justify-items: center; }
-  .compare-card { width: 100%; }
-  .compare-media { width: 56px; order: 0; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
   .wissen-grid { grid-template-columns: repeat(3, 1fr); }
   .detail-grid { grid-template-columns: 1fr; }
@@ -813,7 +1066,8 @@ p  { margin: 0 0 1rem; }
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: 1fr; }
   .set-list { grid-template-columns: 1fr; }
   .blog-grid, .wissen-grid { grid-template-columns: 1fr; }
-  .logo-word { font-size: 1.1rem; }
+  .logo-word { font-size: .94rem; }
+  .logo-product { font-size: 1.12rem; }
   .container { padding: 0 20px; }
   .btn { width: 100%; }
   .hero-actions .btn { width: 100%; }
@@ -840,8 +1094,16 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 }
 
 /* ===== Audit: aktive Navigation, Formular-Hinweis ===== */
-.nav-list a.active { color: var(--blue); }
-.nav-list a.active::after { content: ""; display: block; height: 2px; background: var(--blue); border-radius: 2px; margin-top: 3px; }
+/* Unterstrich absolut positioniert: beim Aktiv-Wechsel durch den
+   ScrollSpy darf sich die Zeilenhöhe nicht ändern (kein Text-Jiggle). */
+.nav-list a { position: relative; }
+.nav-list a.active { color: #fff; }
+.nav-list a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--aqua-mist); border-radius: 2px; }
+@media (max-width: 980px) {
+  .nav-list a.active::after { left: 0; right: auto; width: 28px; bottom: 8px; }
+}
+/* Auf Royal-Flächen weißer Fokusring statt Blau (Kontrast zur Bühne) */
+.site-header :focus-visible, .hero :focus-visible, .section-dark :focus-visible { outline-color: #fff; }
 .form-notice { margin: 0 0 16px; padding: 13px 15px; border-radius: 12px; background: var(--sky); color: var(--blue-ink); font-size: .9rem; line-height: 1.5; border: 1px solid var(--sky-line); }
 .form-notice.on-dark { background: var(--sky); color: var(--blue-ink); border-color: var(--sky-line); }
 .form .field input:disabled, .form .field select:disabled, .form .field textarea:disabled,
