@@ -1,2 +1,5 @@
 # macOS
 .DS_Store
+
+# Playwright-MCP Session-Artefakte (Screenshots/Logs vom Browser-Testen)
+.playwright-mcp/

@@ -75,11 +75,11 @@
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "Was ist EcoBum Home und wie funktioniert es?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum Home ist ein geplantes Plug-and-Play-Handbidet-Set für die Reinigung mit Wasser. Es wird am Wasseranschluss der Toilette angebracht und reinigt mit einem dosierbaren Wasserstrahl – als Ergänzung zu trockenem Papier." } },
-      { "@type": "Question", "name": "Passt EcoBum in jede Toilette?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab – unser Installations-Check gibt eine erste Einschätzung." } },
+      { "@type": "Question", "name": "Passt EcoBum in jede Toilette?", "acceptedAnswer": { "@type": "Answer", "text": "EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab – unser Foto-Check gibt eine erste Einschätzung." } },
       { "@type": "Question", "name": "Muss ich bohren?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, nicht zwingend. Die Wandhalterung kann geklebt oder für besonders festen Halt geschraubt werden – je nach Untergrund. Der Wasseranschluss sollte vor der Installation trotzdem geprüft werden; bei Unsicherheit hilft eine Fachperson." } },
       { "@type": "Question", "name": "Passt EcoBum bei Unterputz-Spülkästen?", "acceptedAnswer": { "@type": "Answer", "text": "Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden." } },
       { "@type": "Question", "name": "Ist EcoBum für Mietwohnungen geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind." } },
-      { "@type": "Question", "name": "Was mache ich, wenn ich meinen Anschluss nicht kenne?", "acceptedAnswer": { "@type": "Answer", "text": "Nutze den Installations-Check für eine erste Einschätzung. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person." } },
+      { "@type": "Question", "name": "Was mache ich, wenn ich meinen Anschluss nicht kenne?", "acceptedAnswer": { "@type": "Answer", "text": "Mach 2–3 Fotos deines Anschlusses für den Foto-Check. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person." } },
       { "@type": "Question", "name": "Was ist im geplanten Set enthalten?", "acceptedAnswer": { "@type": "Answer", "text": "Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern." } },
       { "@type": "Question", "name": "Warum sind Absperrhahn und Rückflussverhinderer wichtig?", "acceptedAnswer": { "@type": "Answer", "text": "Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt." } },
       { "@type": "Question", "name": "Braucht EcoBum Strom?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom." } },
@@ -142,7 +142,7 @@
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
           <div class="hero-actions">
             <a href="#newsletter" class="btn btn-primary" data-i18n="hero.cta_launch">Launch-Update sichern</a>
-            <a href="#checker" class="btn btn-ghost" data-i18n="ctaA.btn">Installations-Check starten</a>
+            <a href="#checker" class="btn btn-ghost" data-i18n="ctaA.btn">Foto-Check starten</a>
           </div>
         </div>
         <div class="hero-visual">
@@ -317,129 +317,27 @@
     <section class="section section-ice" id="checker">
       <div class="container narrow">
         <div class="section-head center">
-          <p class="section-label" data-i18n="chk.label">Installations-Check</p>
-          <h2 data-i18n="chk.h2">Passt EcoBum in dein Badezimmer?</h2>
-          <p class="section-text center" data-i18n="chk.intro">Beantworte ein paar kurze Fragen für eine erste, unverbindliche Einschätzung.</p>
+          <p class="section-label" data-i18n="chk.label">Foto-Check</p>
+          <h2 data-i18n="chk.h2">Unsicher, ob EcoBum passt?</h2>
+          <p class="section-text center" data-i18n="chk.intro">Lade einfach 2–3 Fotos deines Anschlusses hoch – wir prüfen es für dich.</p>
         </div>
-        <div class="checker card" id="checkerForm">
-
-          <!-- Schritt 1 -->
-          <fieldset class="chk-step"><legend><span class="chk-step-n">1</span> <span data-i18n="chk.step1">Badezimmer-Situation</span></legend>
-            <div class="chk-q"><span id="chk-lbl-eck" data-i18n="chk.q_eck">Ist ein Eckventil neben/hinter der Toilette sichtbar?</span>
-              <div class="chk-opts" data-q="eck" role="group" aria-labelledby="chk-lbl-eck">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-cistern" data-i18n="chk.q_cistern">Ist der Spülkasten sichtbar oder in der Wand verbaut?</span>
-              <div class="chk-opts" data-q="cistern" role="group" aria-labelledby="chk-lbl-cistern">
-                <button type="button" data-val="visible" data-i18n="chk.cistern_vis">Sichtbarer Spülkasten</button>
-                <button type="button" data-val="concealed" data-i18n="chk.cistern_con">Unterputz-Spülkasten</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-hose" data-i18n="chk.q_hose">Gibt es einen flexiblen Zulaufschlauch zwischen Eckventil und Spülkasten?</span>
-              <div class="chk-opts" data-q="hose" role="group" aria-labelledby="chk-lbl-hose">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="rigid" data-i18n="chk.q2_rigid">Nein, starres Rohr</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-space" data-i18n="chk.q_space">Ist neben der Toilette Platz für ein T-Stück und Schlauch?</span>
-              <div class="chk-opts" data-q="space" role="group" aria-labelledby="chk-lbl-space">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="little" data-i18n="chk.little">Wenig</button>
-                <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-          </fieldset>
-
-          <!-- Schritt 2 -->
-          <fieldset class="chk-step"><legend><span class="chk-step-n">2</span> <span data-i18n="chk.step2">Anschluss & Maße</span></legend>
-            <div class="chk-q"><span id="chk-lbl-size" data-i18n="chk.q_size">Kennst du die Anschlussgröße?</span>
-              <div class="chk-opts" data-q="size" role="group" aria-labelledby="chk-lbl-size">
-                <button type="button" data-val="38" data-i18n="chk.size_38">3/8 Zoll</button>
-                <button type="button" data-val="12" data-i18n="chk.size_12">1/2 Zoll</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-shutoff" data-i18n="chk.q_shutoff">Kannst du das Eckventil zudrehen?</span>
-              <div class="chk-opts" data-q="shutoff" role="group" aria-labelledby="chk-lbl-shutoff">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-dist" data-i18n="chk.q_dist">Wie weit ist der Anschluss ungefähr vom WC entfernt?</span>
-              <div class="chk-opts" data-q="dist" role="group" aria-labelledby="chk-lbl-dist">
-                <button type="button" data-val="near" data-i18n="chk.dist_near">unter 30 cm</button>
-                <button type="button" data-val="mid" data-i18n="chk.dist_mid">30–70 cm</button>
-                <button type="button" data-val="far" data-i18n="chk.dist_far">über 70 cm</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-          </fieldset>
-
-          <!-- Schritt 3 -->
-          <fieldset class="chk-step"><legend><span class="chk-step-n">3</span> <span data-i18n="chk.step3">Montage</span></legend>
-            <div class="chk-q"><span id="chk-lbl-nodrill" data-i18n="chk.q_nodrill">Möchtest du ohne Bohren montieren?</span>
-              <div class="chk-opts" data-q="nodrill" role="group" aria-labelledby="chk-lbl-nodrill">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
-                <button type="button" data-val="egal" data-i18n="chk.q5_egal">Egal</button></div></div>
-            <div class="chk-q"><span id="chk-lbl-glue" data-i18n="chk.q_glue">Ist Kleben an Fliesen für dich okay?</span>
-              <div class="chk-opts" data-q="glue" role="group" aria-labelledby="chk-lbl-glue">
-                <button type="button" data-val="yes" data-i18n="chk.yes">Ja</button>
-                <button type="button" data-val="no" data-i18n="chk.no">Nein</button>
-                <button type="button" data-val="unsure" data-i18n="chk.unsure">Weiß nicht</button></div></div>
-          </fieldset>
-
-          <!-- Schritt 4: Bilder -->
-          <fieldset class="chk-step"><legend><span class="chk-step-n">4</span> <span data-i18n="chk.step4">Bilder (optional)</span></legend>
-            <p class="chk-upload-hint" data-i18n="chk.upload_hint">Fotos helfen bei einer späteren Einschätzung. Welche Bilder hilfreich sind:</p>
-            <div class="chk-uploads">
-              <div class="chk-upload"><label for="chkFile1" data-i18n="chk.up1">Überblick hinter/neben der Toilette</label><input type="file" class="chk-file" id="chkFile1" accept="image/*" multiple /><div class="chk-previews" id="chkPrev1"></div></div>
-              <div class="chk-upload"><label for="chkFile2" data-i18n="chk.up2">Nahaufnahme Eckventil</label><input type="file" class="chk-file" id="chkFile2" accept="image/*" multiple /><div class="chk-previews" id="chkPrev2"></div></div>
-              <div class="chk-upload"><label for="chkFile3" data-i18n="chk.up3">Verbindung zum Spülkasten</label><input type="file" class="chk-file" id="chkFile3" accept="image/*" multiple /><div class="chk-previews" id="chkPrev3"></div></div>
-              <div class="chk-upload"><label for="chkFile4" data-i18n="chk.up4">Platz an der Wand für die Halterung</label><input type="file" class="chk-file" id="chkFile4" accept="image/*" multiple /><div class="chk-previews" id="chkPrev4"></div></div>
-            </div>
-            <p class="legal-hint" data-i18n="chk.upload_privacy">Deine Bilder bleiben in dieser Version lokal in deinem Browser und werden nicht hochgeladen. Für eine echte Prüfung muss später ein Kontakt- oder Support-Backend angeschlossen werden.</p>
-            <!-- TODO BACKEND: Hier später Datei-Upload an Support-/Kontakt-Backend anbinden. -->
-          </fieldset>
-
-          <button class="btn btn-primary" id="chkBtn" data-i18n="chk.btn">Einschätzung anzeigen</button>
-
-          <!-- Schritt 5: Ergebnis -->
-          <div class="chk-result" id="chkResult" hidden role="status" aria-live="polite">
-            <div class="chk-print-head" aria-hidden="true">
-              <span class="chk-print-logo"><svg viewBox="0 0 24 30" width="22" height="28" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <strong>Pudado</strong></span>
-              <span class="chk-print-title" data-i18n="chk2.pass_title">Pudado Installations-Check</span>
-              <span class="chk-print-date"><span data-i18n="chk2.pass_date">Geprüft am</span>: <span id="chkPassDate"></span></span>
-            </div>
-            <h3 id="chkResultTitle"></h3>
-            <p id="chkResultText"></p>
-            <div class="chk-result-block" id="chkProBlock" hidden><h4 data-i18n="chk.r_pro">Das spricht dafür</h4><ul id="chkResultPro" class="chk-tips good"></ul></div>
-            <div class="chk-result-block"><h4 data-i18n="chk.r_check">Was du vor dem Kauf prüfen solltest</h4><ul id="chkResultCheck" class="chk-tips"></ul></div>
-            <div class="chk-result-block"><h4 data-i18n="chk.r_photos">Welche Fotos uns helfen würden</h4><ul id="chkResultPhotos" class="chk-tips"></ul></div>
-            <div class="chk-result-block"><h4 data-i18n="chk.r_next">Empfohlene nächste Schritte</h4><ul id="chkResultNext" class="chk-tips"></ul></div>
-            <div class="chk-result-block" id="chkWhyBlock" hidden><h4 data-i18n="chk2.why">Warum erhältst du dieses Ergebnis?</h4><p id="chkWhyText" class="chk-why"></p></div>
-            <div class="chk-result-block" id="chkPathBlock" hidden><h4 data-i18n="chk2.path">Dein voraussichtlicher Anschlussweg</h4><ol id="chkPathList" class="chk-steps"></ol><p class="chk-mini" id="chkPathNote"></p></div>
-            <div class="chk-result-block" id="chkPartsBlock" hidden><h4 data-i18n="chk2.parts">Voraussichtlich benötigte Bestandteile</h4><ul id="chkPartsList" class="chk-parts"></ul><p class="chk-mini" data-i18n="chk2.parts_note">Ob ein zusätzlicher Anschluss oder Schlauch benötigt wird, muss anhand eines Fotos oder durch Fachpersonal geprüft werden.</p></div>
-            <div class="chk-result-block" id="chkOpenBlock" hidden><h4 data-i18n="chk2.open">Das solltest du noch prüfen</h4><ul id="chkOpenList" class="chk-tips"></ul></div>
-            <p class="legal-hint chk-safety" id="chkSafety" data-i18n="chk2.safety">Diese Auswertung ist eine unverbindliche Ersteinschätzung auf Grundlage deiner Angaben. Sie ersetzt keine Prüfung vor Ort und keine fachgerechte Installation. Wasseranschlüsse müssen dicht, geeignet und nach den geltenden Vorgaben ausgeführt werden.</p>
-            <button type="button" class="btn btn-ghost chk-print-btn" id="chkPassPrint" data-i18n="chk2.print">Ergebnis speichern oder drucken</button>
-            <div class="chk-result-actions">
-              <a href="#kontakt" class="btn btn-primary" data-i18n="chk.cta_contact">Installationsfrage an Pudado senden</a>
-              <a href="#produkt" class="btn btn-ghost" data-i18n="chk.cta_product">Zum Produkt</a>
-              <a href="#rechner" class="btn btn-ghost" data-i18n="chk.cta_calc">Rechner ausprobieren</a>
-            </div>
-          </div>
-
-          <p class="legal-hint" data-i18n="chk.disclaimer">Diese Einschätzung ist unverbindlich und ersetzt keine Prüfung vor Ort. Bei Unsicherheit bitte eine fachkundige Person fragen.</p>
-        </div>
-
-        <!-- Druckbare/teilbare Checkliste -->
-        <div class="checklist card" id="checklist">
-          <h3 data-i18n="chk.list_t">Deine EcoBum Installations-Checkliste</h3>
-          <ul class="checklist-items">
-            <li data-i18n="chk.li1">Eckventil sichtbar?</li>
-            <li data-i18n="chk.li2">Flexibler Zulaufschlauch vorhanden?</li>
-            <li data-i18n="chk.li3">Platz für T-Stück?</li>
-            <li data-i18n="chk.li4">Anschlussgröße bekannt (3/8 oder 1/2 Zoll)?</li>
-            <li data-i18n="chk.li_shutoff">Wasser abstellbar?</li>
-            <li data-i18n="chk.li5">Montageort für die Halterung?</li>
-            <li data-i18n="chk.li6">Untergrund für die Halterung geprüft (kleben/schrauben)?</li>
-            <li data-i18n="chk.li7">Bei Unsicherheit: Fachperson fragen</li>
+        <div class="fotocheck card">
+          <ul class="fc-guide">
+            <li><span class="fc-num" aria-hidden="true">1</span><span data-i18n="chk.p1">Bereich unter dem Waschbecken bzw. rund um den Wasseranschluss</span></li>
+            <li><span class="fc-num" aria-hidden="true">2</span><span data-i18n="chk.p2">T-Stück- und Ventilbereich aus der Nähe</span></li>
+            <li><span class="fc-num" aria-hidden="true">3</span><span data-i18n="chk.p3">Optional: Abstand zwischen Anschluss und Toilette</span></li>
           </ul>
-          <button type="button" class="btn btn-ghost" id="chkPrint" data-i18n="chk.print">Checkliste drucken</button>
+          <div class="fc-actions">
+            <input type="file" id="fcFile" accept="image/*" multiple hidden />
+            <button type="button" class="btn btn-primary" id="fcBtn" data-i18n="chk.btn">Fotos auswählen</button>
+            <a href="#kontakt" class="btn btn-ghost" data-i18n="chk.cta_contact">Installationsfrage an Pudado senden</a>
+          </div>
+          <p class="fc-status" id="fcStatus" role="status" aria-live="polite" hidden></p>
+          <div class="fc-previews" id="fcPreviews"></div>
+          <!-- TODO BACKEND: Hier später Datei-Upload an Support-/Kontakt-Backend anbinden. -->
+          <p class="hint-box" data-i18n="chk.local">Aktuell bleiben deine Bilder lokal auf deinem Gerät. Die direkte Übermittlung wird vor dem Launch aktiviert.</p>
+          <p class="legal-hint" data-i18n="chk.privacy">Datenschutz: Es werden keine Fotos an Pudado übertragen oder gespeichert, solange die Übermittlung nicht aktiviert ist.</p>
+          <p class="legal-hint" data-i18n="chk.disclaimer">Der Foto-Check ist eine unverbindliche Ersteinschätzung und ersetzt keine Prüfung vor Ort. Bei Unsicherheit bitte eine fachkundige Person fragen.</p>
         </div>
       </div>
     </section>
@@ -657,7 +555,7 @@
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c1t">Warum Wasser?</h3><p data-i18n="wi.c1d">Wasser wird überall dort genutzt, wo es wirklich sauber werden soll. Im Bad kann es eine sanfte, gründliche Ergänzung zur Reinigung sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c2t">Papier vs. Wasser</h3><p data-i18n="wi.c2d">Trockenes Papier wischt mit Reibung. Wasser kann Rückstände sanfter lösen – danach genügt oft wenig Papier zum Trocknen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#how"><h3 data-i18n="wi.c3t">EcoBum richtig nutzen</h3><p data-i18n="wi.c3d">Nach dem Toilettengang kurz mit Wasser reinigen, die Wassermenge über den Hebel dosieren und bei Bedarf trockentupfen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Unser Check zeigt, ob dein Anschluss dafür geeignet ist.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Mit 2–3 Fotos deines Anschlusses gibt der Foto-Check eine erste Orientierung.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="situations/empfindliche-haut.html"><h3 data-i18n="wi.c5t">Sensible Haut</h3><p data-i18n="wi.c5d">Bei empfindlicher Haut kann Wasser eine sanftere Alternative zu wiederholtem trockenem Wischen sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="situations/menstruation.html"><h3 data-i18n="wi.c6t">Menstruation</h3><p data-i18n="wi.c6d">Wasser kann während der Periode für ein zusätzliches Frischegefühl sorgen – ohne Duftstoffe und ohne Feuchttücher.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="situations/schwangerschaft.html"><h3 data-i18n="wi.c7t">Schwangerschaft & Wochenbett</h3><p data-i18n="wi.c7d">In einer empfindlichen Zeit kann sanfte Reinigung mit Wasser angenehmer sein. Bei Beschwerden bitte Hebamme oder Ärztin/Arzt fragen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
@@ -676,11 +574,11 @@
         </div>
         <div class="faq-list">
           <details class="faq-item"><summary data-i18n="faq.q_what">Was ist EcoBum Home und wie funktioniert es?</summary><p data-i18n="faq.a_what">EcoBum Home ist ein geplantes Plug-and-Play-Handbidet-Set für die Reinigung mit Wasser. Es wird am Wasseranschluss der Toilette angebracht und reinigt mit einem dosierbaren Wasserstrahl – als Ergänzung zu trockenem Papier.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q1">Passt EcoBum in jede Toilette?</summary><p data-i18n="faq.a1">EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab — unser Installations-Check gibt eine erste Einschätzung.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q1">Passt EcoBum in jede Toilette?</summary><p data-i18n="faq.a1">EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab — unser Foto-Check gibt eine erste Einschätzung.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q3">Muss ich bohren?</summary><p data-i18n="faq.a3">Nein, nicht zwingend. Die Wandhalterung kann geklebt oder für besonders festen Halt geschraubt werden – je nach Untergrund. Der Wasseranschluss sollte vor der Installation trotzdem geprüft werden; bei Unsicherheit hilft eine Fachperson.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q11">Passt EcoBum bei Unterputz-Spülkästen?</summary><p data-i18n="faq.a11">Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_rental">Ist EcoBum für Mietwohnungen geeignet?</summary><p data-i18n="faq.a_rental">Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q9">Was mache ich, wenn ich meinen Anschluss nicht kenne?</summary><p data-i18n="faq.a9">Nutze den Installations-Check für eine erste Einschätzung. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q9">Was mache ich, wenn ich meinen Anschluss nicht kenne?</summary><p data-i18n="faq.a9">Mach 2–3 Fotos deines Anschlusses für den Foto-Check. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_setcontent">Was ist im geplanten Set enthalten?</summary><p data-i18n="faq.a_setcontent">Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_safety_parts">Warum sind Absperrhahn und Rückflussverhinderer wichtig?</summary><p data-i18n="faq.a_safety_parts">Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q8">Braucht EcoBum Strom?</summary><p data-i18n="faq.a8">Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom.</p></details>
@@ -770,7 +668,7 @@
       <nav class="footer-links" aria-label="EcoBum entdecken">
         <p class="footer-col-title" data-i18n="foot.col_explore">Entdecken</p>
         <a href="#produkt" data-i18n="nav.produkt">Produkt</a>
-        <a href="#checker" data-i18n="chk.label">Installations-Check</a>
+        <a href="#checker" data-i18n="chk.label">Foto-Check</a>
         <a href="#rechner" data-i18n="nav.rechner">Rechner</a>
         <a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
         <a href="#faq" data-i18n="nav.faq">FAQ</a>
@@ -788,7 +686,7 @@
 
   <!-- ============================ STICKY MOBILE CTA ============================ -->
   <nav class="sticky-cta" id="stickyCta" aria-label="Schnellzugriff">
-    <a href="#checker" data-i18n="sticky.check">Check starten</a>
+    <a href="#checker" data-i18n="sticky.check">Foto-Check</a>
     <a href="#rechner" data-i18n="sticky.calc">Rechner</a>
     <a href="#kontakt" class="primary" data-i18n="sticky.interest">Interesse anmelden</a>
   </nav>

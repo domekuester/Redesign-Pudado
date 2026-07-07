@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Jede Funktion einzeln absichern: Ein Fehler in einem Modul darf
   // die anderen (z. B. das Cookie-Banner) nicht blockieren.
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
-  [initI18n, initNav, initYear, initCalculator, initChecker, initImagePreview,
+  [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
    initScrollSpy, initReveal, initBrandVideo]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
@@ -71,7 +71,7 @@ function applyLanguage(lang) {
 
   try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
 
-  // andere Module benachrichtigen (Rechner-Formatierung, Checker-Ergebnis)
+  // andere Module benachrichtigen (Rechner-Formatierung, Foto-Check-Status)
   document.dispatchEvent(new CustomEvent('pudado:lang', { detail: { lang } }));
 }
 
@@ -229,242 +229,56 @@ function initCalculator() {
 }
 
 /* -------------------------------------------------------------
-   3b. EcoBum INSTALLATIONS-CHECKER (5 Schritte, Ampel)
-   Score aus Fragen. Bilder bleiben lokal (siehe initImagePreview).
+   3b. FOTO-CHECK (lokale Auswahl + Vorschau, KEIN Upload)
+   Der Button öffnet die Dateiauswahl; gewählte Bilder werden nur
+   im Browser als Vorschau gezeigt. Object-URLs werden freigegeben.
+   TODO BACKEND: Später echten Upload an Support-/Kontakt-Backend anbinden.
    ------------------------------------------------------------- */
-function initChecker() {
-  const root = document.getElementById('checker');
-  if (!root) return;
-  const btn = document.getElementById('chkBtn');
-  const resultBox = document.getElementById('chkResult');
-  const rTitle = document.getElementById('chkResultTitle');
-  const rText = document.getElementById('chkResultText');
-  const lists = {
-    pro: document.getElementById('chkResultPro'),
-    check: document.getElementById('chkResultCheck'),
-    photos: document.getElementById('chkResultPhotos'),
-    next: document.getElementById('chkResultNext')
+function initPhotoCheck() {
+  const input = document.getElementById('fcFile');
+  const btn = document.getElementById('fcBtn');
+  const previews = document.getElementById('fcPreviews');
+  const status = document.getElementById('fcStatus');
+  if (!input || !btn || !previews) return;
+
+  const urls = [];
+  const fmtSize = (bytes) => bytes >= 1048576
+    ? (bytes / 1048576).toFixed(1) + ' MB'
+    : Math.max(1, Math.round(bytes / 1024)) + ' KB';
+
+  const updateStatus = () => {
+    if (!status) return;
+    const n = previews.querySelectorAll('figure').length;
+    status.hidden = n === 0;
+    status.textContent = n ? n + ' ' + t(n === 1 ? 'chk.sel_one' : 'chk.sel_many') : '';
   };
-  const proBlock = document.getElementById('chkProBlock');
-  const a = {}; // answers by data-q
 
-  root.querySelectorAll('.chk-opts').forEach(group => {
-    const q = group.getAttribute('data-q');
-    group.querySelectorAll('button').forEach(opt => {
-      opt.setAttribute('aria-pressed', 'false');
-      opt.addEventListener('click', () => {
-        group.querySelectorAll('button').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
-        opt.classList.add('selected'); opt.setAttribute('aria-pressed', 'true');
-        a[q] = opt.getAttribute('data-val');
-      });
+  btn.addEventListener('click', () => input.click());
+
+  input.addEventListener('change', () => {
+    urls.splice(0).forEach(u => URL.revokeObjectURL(u));
+    previews.innerHTML = '';
+    Array.from(input.files || []).filter(f => f.type.startsWith('image/')).forEach(file => {
+      const url = URL.createObjectURL(file);
+      urls.push(url);
+      const fig = document.createElement('figure');
+      fig.className = 'fc-thumb';
+      const img = document.createElement('img');
+      img.src = url; img.alt = file.name;
+      const cap = document.createElement('figcaption');
+      cap.textContent = file.name + ' · ' + fmtSize(file.size);
+      const rm = document.createElement('button');
+      rm.type = 'button'; rm.className = 'fc-thumb-rm';
+      rm.setAttribute('aria-label', t('a11y.remove')); rm.textContent = '×';
+      rm.addEventListener('click', () => { URL.revokeObjectURL(url); fig.remove(); updateStatus(); });
+      fig.appendChild(img); fig.appendChild(cap); fig.appendChild(rm);
+      previews.appendChild(fig);
     });
+    updateStatus();
   });
 
-  function evaluate() {
-    const eck = a.eck || 'unsure', cistern = a.cistern || 'unsure', hose = a.hose || 'unsure',
-          space = a.space || 'unsure', size = a.size || 'unsure', shutoff = a.shutoff || 'unsure';
-    // Rot: kein Eckventil, Unterputz-Spülkasten, Wasser nicht abstellbar
-    if (eck === 'no' || cistern === 'concealed' || shutoff === 'no') return 'red';
-    // Grün: alle Kernbedingungen klar erfüllt
-    if (eck === 'yes' && hose === 'yes' && cistern === 'visible' && space === 'yes'
-        && (size === '38' || size === '12') && shutoff === 'yes') return 'green';
-    // sonst Gelb
-    return 'yellow';
-  }
-
-  function buildLists(score) {
-    // Das spricht dafür (positive Signale)
-    const pro = [];
-    if (a.eck === 'yes') pro.push('chk.pro_eck');
-    if (a.hose === 'yes') pro.push('chk.pro_hose');
-    if (a.cistern === 'visible') pro.push('chk.pro_cistern');
-    if (a.space === 'yes') pro.push('chk.pro_space');
-    if (a.shutoff === 'yes') pro.push('chk.pro_shutoff');
-    if (a.size === '38' || a.size === '12') pro.push('chk.pro_size');
-    // Was du vor dem Kauf prüfen solltest
-    const check = ['chk.r_check1', 'chk.r_check2', 'chk.r_check3'];
-    if (a.hose === 'rigid') check.push('chk.r_check_hose');
-    if (a.size === 'unsure') check.push('chk.r_check_size');
-    if (a.space === 'little' || a.space === 'no') check.push('chk.r_check_space');
-    if (a.shutoff !== 'yes') check.push('chk.r_check_shutoff');
-    // Welche Fotos
-    const photos = ['chk.up1', 'chk.up2', 'chk.up3', 'chk.up4'];
-    // Nächste Schritte
-    const next = [];
-    if (score === 'green') next.push('chk.next_green');
-    if (score === 'yellow') next.push('chk.next_yellow');
-    if (score === 'red') next.push('chk.next_red');
-    if (a.nodrill === 'yes' || a.glue === 'yes') next.push('chk.next_glue');
-    next.push('chk.next_contact');
-    return { pro, check, photos, next };
-  }
-
-  function fill(ul, keys) {
-    if (!ul) return;
-    ul.innerHTML = '';
-    keys.forEach(k => { const li = document.createElement('li'); li.dataset.k = k; li.textContent = t(k); ul.appendChild(li); });
-  }
-
-  function render(score, sets) {
-    resultBox.dataset.result = score;
-    resultBox.classList.remove('green', 'yellow', 'red');
-    resultBox.classList.add(score);
-    rTitle.textContent = t('chk.s_' + score + '_t');
-    rText.textContent = t('chk.s_' + score + '_d');
-    fill(lists.pro, sets.pro);
-    if (proBlock) proBlock.hidden = !(sets.pro && sets.pro.length);
-    fill(lists.check, sets.check);
-    fill(lists.photos, sets.photos);
-    fill(lists.next, sets.next);
-    resultBox.hidden = false;
-  }
-
-  // ---- Erweiterte Auswertung: Begründung, Anschlussweg, Teile, offene Punkte ----
-  const el = (id) => document.getElementById(id);
-
-  function buildWhy(score) {
-    const keys = [];
-    if (a.eck) keys.push('chk2.why_eck_' + (a.eck === 'yes' ? 'yes' : a.eck === 'no' ? 'no' : 'unsure'));
-    if (a.hose) keys.push('chk2.why_hose_' + (a.hose === 'yes' ? 'yes' : a.hose === 'rigid' ? 'rigid' : 'unsure'));
-    if (a.cistern === 'concealed') keys.push('chk2.why_cistern_concealed');
-    if (a.dist) keys.push('chk2.why_dist_' + (['near', 'mid', 'far'].includes(a.dist) ? a.dist : 'unsure'));
-    if (a.shutoff) keys.push('chk2.why_shutoff_' + (a.shutoff === 'yes' ? 'yes' : a.shutoff === 'no' ? 'no' : 'unsure'));
-    if (a.glue === 'yes' || a.nodrill === 'yes') keys.push('chk2.why_mount_glue');
-    else if (a.glue === 'no' && a.nodrill === 'no') keys.push('chk2.why_mount_drill');
-    keys.push('chk2.why_concl_' + score);
-    return keys;
-  }
-
-  function buildPath(score) {
-    if (score === 'red') return { steps: [], note: 'chk2.path_red' };
-    return { steps: ['chk2.path1', 'chk2.path2', 'chk2.path3', 'chk2.path4', 'chk2.path5'], note: 'chk2.path_note' };
-  }
-
-  function buildParts() {
-    // Bestätigte EcoBum-Home-Set-Bestandteile (Lieferumfang) — „im Set enthalten“.
-    // Der flexible Zulaufschlauch (set.l10) ist bereits regulärer Set-Bestandteil (kein
-    // separater "möglicherweise zusätzlich nötig"-Eintrag mehr, um keine Dopplung zu
-    // erzeugen). Ist die Anschlusssituation unklar/starr, wird nur sein Status auf
-    // "manuell prüfen" gesetzt statt eine zweite Zeile für dieselbe Komponente zu zeigen.
-    const hoseUnclear = a.hose === 'rigid' || a.hose === 'unsure' || !a.hose;
-    const parts = ['set.l1', 'set.l2', 'set.l4', 'set.l7', 'set.l8', 'set.l9', 'set.l10', 'set.l11', 'set.l6']
-      .map(k => ({ name: k, status: (k === 'set.l10' && hoseUnclear) ? 'chk2.manual' : 'chk2.in_set' }));
-    return parts;
-  }
-
-  const hasPhotos = () => document.querySelectorAll('#checkerForm .chk-previews figure').length > 0;
-
-  function buildOpen() {
-    const o = [];
-    if (!a.eck || a.eck === 'unsure') o.push('chk2.open_eck');
-    if (a.cistern === 'concealed') o.push('chk2.open_cistern');
-    if (a.hose === 'rigid') o.push('chk2.open_rigid');
-    else if (!a.hose || a.hose === 'unsure') o.push('chk2.open_hose');
-    if (!a.shutoff || a.shutoff === 'unsure') o.push('chk2.open_shutoff');
-    if (!a.size || a.size === 'unsure') o.push('chk2.open_size');
-    if (!a.dist || a.dist === 'unsure') o.push('chk2.open_dist');
-    if (a.space === 'little' || a.space === 'no' || a.space === 'unsure' || !a.space) o.push('chk2.open_space');
-    if (!a.glue && !a.nodrill) o.push('chk2.open_mount');
-    if (!hasPhotos()) o.push('chk2.open_photo');
-    return o;
-  }
-
-  function fillKeyed(parent, tag, keys) {
-    if (!parent) return;
-    parent.innerHTML = '';
-    keys.forEach(k => { const node = document.createElement(tag); node.dataset.k = k; node.textContent = t(k); parent.appendChild(node); });
-  }
-
-  function renderExtended(score) {
-    const why = buildWhy(score);
-    if (el('chkWhyText')) el('chkWhyText').textContent = why.map(t).join(' ');
-    if (el('chkWhyBlock')) el('chkWhyBlock').hidden = why.length === 0;
-
-    const path = buildPath(score);
-    fillKeyed(el('chkPathList'), 'li', path.steps);
-    if (el('chkPathList')) el('chkPathList').hidden = path.steps.length === 0;
-    if (el('chkPathNote')) { el('chkPathNote').dataset.k = path.note; el('chkPathNote').textContent = t(path.note); }
-    if (el('chkPathBlock')) el('chkPathBlock').hidden = false;
-
-    const partsList = el('chkPartsList');
-    if (partsList) {
-      partsList.innerHTML = '';
-      buildParts().forEach(p => {
-        const li = document.createElement('li');
-        const name = document.createElement('span'); name.className = 'chk-part-name'; name.dataset.k = p.name; name.textContent = t(p.name);
-        const badge = document.createElement('span');
-        badge.className = 'chk-badge ' + (p.status === 'chk2.in_set' ? 'is-set' : p.status === 'chk2.maybe' ? 'is-maybe' : 'is-manual');
-        badge.dataset.k = p.status; badge.textContent = t(p.status);
-        li.appendChild(name); li.appendChild(badge); partsList.appendChild(li);
-      });
-    }
-    if (el('chkPartsBlock')) el('chkPartsBlock').hidden = false;
-
-    const open = buildOpen();
-    fillKeyed(el('chkOpenList'), 'li', open.length ? open : ['chk2.open_none']);
-    if (el('chkOpenBlock')) el('chkOpenBlock').hidden = false;
-  }
-
-  function run() {
-    const score = evaluate();
-    render(score, buildLists(score));
-    renderExtended(score);
-  }
-
-  btn && btn.addEventListener('click', () => {
-    run();
-    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-
-  // Druck-Checkliste (statische Liste)
-  const printBtn = document.getElementById('chkPrint');
-  if (printBtn) printBtn.addEventListener('click', () => window.print());
-
-  // Ergebnis-Pass drucken (saubere Druckansicht via window.print)
-  const passPrint = el('chkPassPrint');
-  if (passPrint) passPrint.addEventListener('click', () => {
-    const dateEl = el('chkPassDate');
-    if (dateEl) { const loc = { de: 'de-DE', en: 'en-IE', fr: 'fr-FR' }[window.PUDADO_LANG] || 'de-DE'; dateEl.textContent = new Date().toLocaleDateString(loc); }
-    document.body.classList.add('print-pass');
-    window.print();
-  });
-  window.addEventListener('afterprint', () => document.body.classList.remove('print-pass'));
-
-  // Bei Sprachwechsel: Ergebnis vollständig neu aufbauen (inkl. Erweiterungen)
-  document.addEventListener('pudado:lang', () => {
-    if (!resultBox.hidden) run();
-  });
-}
-
-/* -------------------------------------------------------------
-   3c. BILD-VORSCHAU (lokal, KEIN Upload)
-   Zeigt gewählte Bilder als Vorschau mit Entfernen-Button.
-   Dateien bleiben im Browser; Object-URLs werden wieder freigegeben.
-   ------------------------------------------------------------- */
-function initImagePreview() {
-  document.querySelectorAll('.chk-file').forEach(input => {
-    const target = document.getElementById(input.id.replace('File', 'Prev'));
-    if (!target) return;
-    const urls = [];
-    input.addEventListener('change', () => {
-      // alte Object-URLs freigeben
-      urls.splice(0).forEach(u => URL.revokeObjectURL(u));
-      target.innerHTML = '';
-      const files = Array.from(input.files || []).filter(f => f.type.startsWith('image/'));
-      files.forEach(file => {
-        const url = URL.createObjectURL(file);
-        urls.push(url);
-        const fig = document.createElement('figure');
-        fig.className = 'chk-thumb';
-        const img = document.createElement('img');
-        img.src = url; img.alt = file.name; img.loading = 'lazy';
-        const rm = document.createElement('button');
-        rm.type = 'button'; rm.className = 'chk-thumb-rm'; rm.setAttribute('aria-label', t('a11y.remove')); rm.textContent = '×';
-        rm.addEventListener('click', () => { URL.revokeObjectURL(url); fig.remove(); });
-        fig.appendChild(img); fig.appendChild(rm); target.appendChild(fig);
-      });
-    });
-  });
+  // Statuszeile bei Sprachwechsel neu formatieren
+  document.addEventListener('pudado:lang', updateStatus);
 }
 
 /* -------------------------------------------------------------
@@ -788,7 +602,7 @@ function initReveal() {
     '.compare-card', '.step', '.num-list', '.set-list', '.feature-list',
     '.product-visual', '.set-visual', '.how-figure', '.detail-strip figure',
     '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note', '.leaf-band',
-    '.media-band', '.checker', '.checklist', '.calc2-inputs', '.calc2-results',
+    '.media-band', '.calc2-inputs', '.calc2-results',
     '.faq-item', '.install-card', '.article-body p', '.trust-band-inner'
   ].join(',');
 

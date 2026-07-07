@@ -74,9 +74,9 @@
   --cream:       #F6F9FE;
   --cream-2:     #EFF4FC;
 
-  /* Nur als semantische Status-Farbe genutzt (Installations-Check-Ampel:
-     grün = passt gut) – bewusst KEIN zweiter Marken-Akzent. Die Marke
-     selbst bleibt konsequent einfarbig Blau. */
+  /* Reserviert als semantische Status-Farbe (grün = positiv/bestanden) –
+     bewusst KEIN zweiter Marken-Akzent. Die Marke selbst bleibt
+     konsequent einfarbig Blau. */
   --sage:        #4E7C63;
 }
 
@@ -544,33 +544,21 @@ p  { margin: 0 0 1rem; }
 .lang-switch button:hover { color: var(--blue); }
 .lang-switch button.active { background: var(--blue); color: #fff; box-shadow: 0 4px 12px rgba(35,95,208,.28); }
 
-/* ----------------------- Installations-Check ---------------- */
-.checker { padding: 38px; }
-.chk-q { margin-bottom: 26px; }
-.chk-q > span { display: block; font-family: var(--font-head); font-weight: 600; color: var(--navy); margin-bottom: 13px; }
-.chk-opts { display: flex; flex-wrap: wrap; gap: 10px; }
-.chk-opts button {
-  font-family: var(--font-body); font-weight: 600; font-size: .92rem; color: var(--navy);
-  background: #fff; border: 1px solid var(--border-cool); border-radius: var(--radius-pill);
-  padding: 11px 21px; cursor: pointer; transition: transform .12s cubic-bezier(.16,.84,.44,1), border-color .2s, color .2s, box-shadow .2s, background .2s;
-}
-.chk-opts button:hover { border-color: var(--blue); color: var(--blue); box-shadow: var(--shadow-xs); }
-.chk-opts button:active { transform: scale(.96); }
-.chk-opts button.selected { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 6px 16px rgba(35,95,208,.26); }
-.checker #chkBtn { margin-top: 4px; }
-.chk-result { margin-top: 26px; padding: 26px 28px; border-radius: var(--radius); border-left: 4px solid var(--blue); background: var(--sky-soft); }
-.chk-result h3 { margin-bottom: .3em; }
-.chk-result p { margin: 0; color: var(--gray); }
-.chk-result.green { background: #eaf3ed; border-left-color: var(--sage); }
-.chk-result.green h3 { color: #3f6a52; }
-.chk-result.yellow { background: #fbf3e1; border-left-color: #d6a94e; }
-.chk-result.yellow h3 { color: #946f24; }
-.chk-result.red { background: #fbe9e7; border-left-color: #cf5b4f; }
-.chk-result.red h3 { color: #a23b30; }
-.chk-tips { margin: 14px 0 0; padding-left: 20px; }
-.chk-tips li { color: var(--gray); font-size: .92rem; margin-bottom: 5px; }
-.chk-tips:empty { display: none; }
-.checker .legal-hint { margin-top: 20px; }
+/* ----------------------- Foto-Check ------------------------- */
+.fotocheck { padding: 38px; }
+.fc-guide { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 13px; }
+.fc-guide li { display: flex; align-items: flex-start; gap: 12px; color: var(--gray); line-height: 1.55; }
+.fc-num { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--sky); color: var(--blue); display: inline-grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: .82rem; margin-top: 1px; }
+.fc-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.fc-status { margin: 16px 0 0; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); }
+.fc-previews { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+.fc-previews:empty { display: none; }
+.fc-thumb { position: relative; margin: 0; width: 96px; }
+.fc-thumb img { width: 96px; height: 96px; object-fit: cover; display: block; border-radius: 12px; border: 1px solid var(--border); }
+.fc-thumb figcaption { margin-top: 6px; font-size: .72rem; line-height: 1.4; color: var(--gray-light); word-break: break-word; }
+.fc-thumb-rm { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; }
+.fotocheck .hint-box { margin-top: 24px; }
+.fotocheck .legal-hint { margin-top: 14px; }
 
 /* ----------------------- Vertrauensband (→ hell) ------------ */
 .trust-band { background: var(--mist); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -590,32 +578,6 @@ p  { margin: 0 0 1rem; }
    bleibt und die Leiste nicht durch eine höhere Pille aus der Balance gerät. */
 .sticky-cta a.primary { background: var(--blue); color: #fff; flex: 1.6; }
 .sticky-cta.show { transform: translateY(0); }
-
-/* ----------------------- Checker (Schritte) ----------------- */
-.chk-step { border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 28px; margin: 0 0 18px; background: #fff; }
-.chk-step legend { font-family: var(--font-head); font-weight: 700; color: var(--navy); padding: 0 8px; display: inline-flex; align-items: center; gap: 10px; }
-.chk-step-n { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff; display: inline-grid; place-items: center; font-size: .82rem; }
-.chk-uploads { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.chk-upload label { display: block; font-weight: 600; font-size: .9rem; color: var(--navy); margin-bottom: 8px; }
-.chk-file { width: 100%; font-size: .85rem; }
-.chk-previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.chk-thumb { position: relative; margin: 0; width: 72px; height: 72px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-.chk-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.chk-thumb-rm { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; }
-.chk-upload-hint { color: var(--gray); font-size: .92rem; margin-bottom: 14px; }
-.chk-result-block { margin-top: 18px; }
-.chk-result-block h4 { font-size: 1rem; margin-bottom: .4em; }
-.chk-result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-.checklist { margin-top: 24px; padding: 32px 34px; }
-.checklist.card { border-radius: var(--radius-lg); }
-.checklist h3 { margin-bottom: 16px; }
-.checklist-items { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 11px; }
-.checklist-items li { position: relative; padding-left: 30px; color: var(--navy); }
-.checklist-items li::before { content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border: 2px solid var(--blue); border-radius: 6px; }
-
-.chk-tips.good { list-style: none; padding-left: 0; }
-.chk-tips.good li { position: relative; padding-left: 26px; }
-.chk-tips.good li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--sage); font-weight: 700; }
 
 .product-card-photo img { max-height: 580px; object-fit: contain; }
 
@@ -662,19 +624,6 @@ p  { margin: 0 0 1rem; }
 .wissen-card:hover { transform: translateY(-2px); border-color: var(--blue-soft); text-decoration: none; }
 .wissen-card h3 { font-size: 1.04rem; margin-bottom: .45em; }
 .wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; flex: 1; line-height: 1.6; }
-
-/* ----------------------- Print (Checkliste) ----------------- */
-@media print {
-  body:not(.print-pass) * { visibility: hidden; }
-  body:not(.print-pass) #checklist, body:not(.print-pass) #checklist * { visibility: visible; }
-  body:not(.print-pass) #checklist { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
-  #chkPrint, .chk-print-btn { display: none; }
-  body.print-pass * { visibility: hidden; }
-  body.print-pass #chkResult, body.print-pass #chkResult * { visibility: visible; }
-  body.print-pass #chkResult { position: absolute; left: 0; top: 0; width: 100%; margin: 0; border: none; box-shadow: none; background: #fff; }
-  body.print-pass #chkResult .chk-result-actions { display: none !important; }
-  body.print-pass .chk-print-head { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px; }
-}
 
 /* ----------------------- Detail-Sektion --------------------- */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 960px; margin: 0 auto; }
@@ -848,7 +797,6 @@ p  { margin: 0 0 1rem; }
 }
 @media (max-width: 760px) {
   h1 { font-size: clamp(2.4rem, 9vw, 3.2rem); }
-  .chk-uploads { grid-template-columns: 1fr; }
   .wissen-grid { grid-template-columns: repeat(2, 1fr); }
   .detail-strip { grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .lifestyle-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 190px; }
@@ -886,25 +834,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   }
   .reveal { opacity: 1 !important; transform: none !important; }
 }
-
-/* ===== Installations-Check: erweiterte Ergebnis-Blöcke ===== */
-.chk-why { color: var(--gray); line-height: 1.6; margin: 0; }
-.chk-mini { margin: 10px 0 0; font-size: .82rem; color: var(--gray-light); line-height: 1.5; }
-.chk-steps { margin: 12px 0 0; padding-left: 20px; color: var(--navy); }
-.chk-steps li { margin: 0 0 6px; line-height: 1.5; }
-.chk-parts { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
-.chk-parts li { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.chk-part-name { color: var(--navy); font-weight: 500; }
-.chk-badge { font-size: .72rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
-.chk-badge.is-set { background: #eaf3ed; color: #3f6a52; }
-.chk-badge.is-maybe { background: #fbf3e1; color: #946f24; }
-.chk-badge.is-manual { background: var(--sky); color: var(--blue); }
-.chk-safety { margin-top: 16px; }
-.chk-print-btn { margin-top: 14px; }
-.chk-print-head { display: none; }
-.chk-print-head strong { color: var(--blue); }
-.chk-print-title { font-family: var(--font-head); font-weight: 700; }
-.chk-print-date { color: var(--gray); font-size: .85rem; }
 
 /* ===== Audit: aktive Navigation, Formular-Hinweis ===== */
 .nav-list a.active { color: var(--blue); }
