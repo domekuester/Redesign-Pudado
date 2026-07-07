@@ -133,13 +133,18 @@ function initCalculator() {
   const SHEETS_PER_ROLL   = 200;   // Blätter pro Rolle (gerundeter Median)
   const DEFAULT_PRICE_ROLL = 0.36; // € pro Rolle (gerundeter Median regulärer Preise)
   const REDUCTION_FACTOR  = 0.50;  // Modellannahme – keine garantierte Wirkung
+  // Konservative Website-Annahme: typisches Rollengewicht um ca. 100 g ×
+  // ca. 1,8–2,5 kg CO₂e pro kg Tissue (je nach LCA-/EPD-Methodik) ≈ 0,18–0,25 kg.
+  // Bewusst vereinfachte Verbraucherorientierung, keine vollständige Ökobilanz.
+  const CO2E_PER_ROLL     = 0.20;  // kg CO₂e pro Rolle (geschätzt)
 
   const LOCALES = { de: 'de-DE', en: 'en-IE', fr: 'fr-FR' };
   const APPROX  = { de: 'ca.', en: 'approx.', fr: 'env.' };
-  let nf0, euro, approx;
+  let nf0, nf1, euro, approx;
   function buildFormatters() {
     const lang = window.PUDADO_LANG || 'de';
     nf0   = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { maximumFractionDigits: 0 });
+    nf1   = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     euro  = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { style: 'currency', currency: 'EUR' });
     approx = APPROX[lang] || 'ca.';
   }
@@ -158,7 +163,7 @@ function initCalculator() {
 
   function compute() {
     const persons   = clamp(Math.round(readNum('persons', 1, 10, 2)), 1, 10, 2);
-    const rollsWeek = clamp(readNum('rollsWeek', 0.5, 30, 4), 0.5, 30, 4);
+    const rollsWeek = clamp(readNum('rollsWeek', 0, 30, 4), 0, 30, 4);
     const usage     = clamp(Math.round(readNum('usage', 0, 100, 70) / 10) * 10, 0, 100, 70);
     let priceRoll   = readNum('priceRoll', 0.05, 3, DEFAULT_PRICE_ROLL);
     if (!isFinite(priceRoll) || priceRoll <= 0) priceRoll = DEFAULT_PRICE_ROLL;
@@ -175,9 +180,13 @@ function initCalculator() {
     const costYearEco  = rollsYearEco * priceRoll;
     const costDiff     = rollsSaved * priceRoll;
 
+    // Geschätzter CO₂e-Fußabdruck des heutigen Verbrauchs (siehe CO2E_PER_ROLL)
+    const co2YearNow = rollsYearNow * CO2E_PER_ROLL;
+    const co2WeekNow = rollsWeek * CO2E_PER_ROLL;
+
     return { persons, rollsWeek, usage, priceRoll, rollsYearNow, rollsMonthNow,
              sheetsYearNow, costYearNow, rollsYearEco, rollsSaved, sheetsSaved,
-             costYearEco, costDiff };
+             costYearEco, costDiff, co2YearNow, co2WeekNow };
   }
 
   const setTxt = (id, v) => { const el = $(id); if (el) el.textContent = v; };
@@ -206,6 +215,9 @@ function initCalculator() {
     setTxt('mSheetsLess', nf0.format(Math.round(r.sheetsSaved)));
     setTxt('mCostNow', euro.format(Math.max(0, r.costYearNow)));
     setTxt('mCostEco', euro.format(Math.max(0, r.costYearEco)));
+    setTxt('mCo2Week', nf1.format(Math.max(0, r.co2WeekNow)) + ' kg');
+    // CO₂e-Satz aus Übersetzungs-Template; Zahl wird lokalisiert eingesetzt
+    setTxt('co2Result', t('rc2.co2_result').replace('{x}', nf0.format(Math.max(0, Math.round(r.co2YearNow)))));
   }
 
   // Stepper Personen

@@ -748,6 +748,10 @@ p  { margin: 0 0 1rem; }
 .calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
 .calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
 .calc2-more-list strong { color: var(--navy); }
+.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); }
+.co2-label { font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--navy); margin: 0 0 4px; }
+.co2-result { margin: 0; font-size: .95rem; color: var(--gray); }
+.co2-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray-light); }
 .calc2-disclaimer { margin: 16px 0 0; font-size: .8rem; line-height: 1.55; color: var(--gray); }
 @media (max-width: 860px) { .calc2-wrap { grid-template-columns: 1fr; gap: 16px; } }
 @media (max-width: 480px) { .calc2-kpis { grid-template-columns: 1fr; } }

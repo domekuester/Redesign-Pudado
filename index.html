@@ -398,7 +398,7 @@
             </div>
             <div class="calc2-field">
               <label for="rollsWeek" data-i18n="rc2.rolls">Wie viele Rollen verbraucht ihr ungefähr pro Woche?</label>
-              <input type="number" id="rollsWeek" value="4" min="0.5" max="30" step="0.5" inputmode="decimal" />
+              <input type="number" id="rollsWeek" value="4" min="0" max="30" step="0.5" inputmode="decimal" />
               <p class="calc2-help" data-i18n="rc2.rolls_help">Schätze, wie viele vollständige Rollen euer gesamter Haushalt in einer normalen Woche verbraucht.</p>
             </div>
             <div class="calc2-field">
@@ -416,9 +416,11 @@
                 <li><span data-i18n="rc2.basis_sheets">Angenommene Blätter pro Rolle</span>: <strong>200</strong></li>
                 <li><span data-i18n="rc2.basis_price">Referenzpreis pro Rolle</span>: <strong>0,36&nbsp;€</strong></li>
                 <li><span data-i18n="rc2.basis_factor">Modell-Reduktionsfaktor</span>: <strong>50&nbsp;%</strong></li>
+                <li><span data-i18n="rc2.basis_co2">Angenommener CO₂e-Wert pro Rolle</span>: <strong>0,20&nbsp;kg</strong></li>
                 <li><span data-i18n="rc2.basis_date">Letzte Quellenprüfung</span>: <strong>Juni 2026</strong></li>
               </ul>
-              <p class="calc2-basis-note" data-i18n="rc2.basis_formula">Formeln: Rollen/Jahr = Rollen/Woche × 52. Mit EcoBum = Rollen/Jahr × (1 − Nutzung% × 0,50). Die EcoBum-Reduktion ist eine Modellschätzung und keine garantierte Wirkung.</p>
+              <p class="calc2-basis-note" data-i18n="rc2.basis_formula">Formeln: Rollen/Jahr = Rollen/Woche × 52. Mit EcoBum = Rollen/Jahr × (1 − Nutzung% × 0,50). Geschätzter CO₂e-Fußabdruck = Rollen/Jahr × 0,20 kg. Die EcoBum-Reduktion ist eine Modellschätzung und keine garantierte Wirkung.</p>
+              <p class="calc2-basis-note" data-i18n="rc2.co2_explain">Toilettenpapier verursacht je nach Material, Herstellung, Transport und Verpackung einen unterschiedlichen Fußabdruck. Für diese vereinfachte Schätzung rechnen wir vorsichtig mit ca. 0,20 kg CO₂e pro Rolle.</p>
               <p class="calc2-basis-src" data-i18n="rc2.basis_src">Preisquellen (3-lagig, reguläre Preise, geprüft Juni 2026): dm, Rossmann, Aldi Süd, Müller. Umweltkontext: Umweltbundesamt. Median ≈ 200 Blätter und ≈ 0,36 € pro Rolle.</p>
               <div class="calc2-field calc2-pricefield">
                 <label for="priceRoll" data-i18n="rc2.price_opt">Preis pro Rolle anpassen (€, optional)</label>
@@ -447,8 +449,14 @@
                 <li><span data-i18n="rc2.m_sheetsless">Blätter weniger / Jahr</span>: <strong id="mSheetsLess">–</strong></li>
                 <li><span data-i18n="rc2.m_costnow">Kosten / Jahr (heute)</span>: <strong id="mCostNow">–</strong></li>
                 <li><span data-i18n="rc2.m_costeco">Kosten / Jahr (mit EcoBum)</span>: <strong id="mCostEco">–</strong></li>
+                <li><span data-i18n="rc2.m_co2week">CO₂e / Woche (geschätzt)</span>: <strong id="mCo2Week">–</strong></li>
               </ul>
             </details>
+            <div class="calc2-co2">
+              <p class="co2-label" data-i18n="rc2.co2_label">Geschätzter CO₂e-Fußabdruck</p>
+              <p class="co2-result" id="co2Result">–</p>
+              <p class="co2-note" data-i18n="rc2.co2_note">Vereinfachte Orientierung, keine vollständige Ökobilanz. Der tatsächliche Wert hängt von Papierart, Recyclinganteil, Energie, Verpackung und Transport ab.</p>
+            </div>
             <p class="calc2-disclaimer" data-i18n="rc2.disclaimer">Die Ergebnisse sind unverbindliche Modellschätzungen. Der tatsächliche Verbrauch hängt von Produkt, Gewohnheiten und Nutzung ab. EcoBum kann den Papierverbrauch ergänzend reduzieren, eine bestimmte Einsparung wird nicht garantiert.</p>
           </div>
         </div>
