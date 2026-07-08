@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initBrandVideo]
+   initScrollSpy, initReveal, initAmbientLoop, initHeaderState]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
 
@@ -611,7 +611,7 @@ function initReveal() {
   const selector = [
     '.section-head', '.hero-copy', '.hero-visual',
     '.card', '.usecase-card', '.wissen-card', '.situation-card', '.blog-card',
-    '.compare-card', '.step', '.num-list', '.set-list', '.feature-list',
+    '.duel', '.step', '.num-list', '.set-list', '.feature-list',
     '.product-visual', '.set-visual', '.how-figure', '.detail-strip figure',
     '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note', '.leaf-band',
     '.media-band', '.calc2-inputs', '.calc2-results',
@@ -656,21 +656,32 @@ function initReveal() {
 }
 
 /* -------------------------------------------------------------
-   12. BRAND-VIDEO (Pudado-Firmensignatur, dekorativ)
-   CSS kann Video-Autoplay nicht stoppen, daher hier:
-   Bei prefers-reduced-motion bleibt das erste Standbild stehen.
+   TODO SOUND (bewusst NICHT aktiv): Optionales UI-Sounddesign ist
+   vorbereitet als Konzept, nicht als Code. Regeln bei Umsetzung:
+   - Opt-in-Toggle im Header/Footer, Standard AUS, Wahl in
+     localStorage ('pudado_sound'), kein Sound ohne Nutzeraktion.
+   - Nur 2-3 sehr leise UI-Sounds (Soft-Tap CTA, Bestätigung
+     Foto-Auswahl, dezenter Chime Rechner-Ergebnis), je < 20 KB,
+     WebAudio mit Gain ≈ 0.15, prefers-reduced-motion => stumm.
+   - Erst umsetzen, wenn LIZENZIERTE Audio-Dateien unter
+     assets/audio/ liegen – keine Fremdquellen, keine Platzhalter.
    ------------------------------------------------------------- */
-function initBrandVideo() {
-  const video = document.querySelector('.brand-signature video');
+
+/* -------------------------------------------------------------
+   12. AMBIENT-LOOP (Brand-Bühne, dekorativ)
+   Remotion-gerenderter 5-s-Royal-Loop. CSS blendet ihn bei
+   prefers-reduced-motion aus; hier zusätzlich: Autoplay entfernen
+   (kein unnötiger Download) und außerhalb des Viewports pausieren
+   (Akku). play() kann abgelehnt werden -> Promise-Fehler ignorieren.
+   ------------------------------------------------------------- */
+function initAmbientLoop() {
+  const video = document.querySelector('.brand-stage-ambient');
   if (!video) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     video.removeAttribute('autoplay');
     video.pause();
     return;
   }
-  // Chromium startet stumme Autoplay-Videos außerhalb des Viewports nicht
-  // zuverlässig; Pausieren außerhalb des Sichtbereichs spart zudem Akku.
-  // play() kann vom Browser abgelehnt werden -> Promise-Fehler ignorieren.
   if (!('IntersectionObserver' in window)) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -681,7 +692,28 @@ function initBrandVideo() {
         video.pause();
       }
     });
-  }, { threshold: 0.2 });
+  }, { threshold: 0.15 });
   obs.observe(video);
 }
 
+/* -------------------------------------------------------------
+   13. HEADER-ZUSTAND BEIM SCROLLEN
+   Vertieft den Header-Schatten, sobald Inhalt unter die Leiste
+   scrollt (CSS-Klasse .is-scrolled). Passiver Listener, nur ein
+   classList-Toggle pro Wechsel – kein Layout-Thrash.
+   ------------------------------------------------------------- */
+function initHeaderState() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  let scrolled = false;
+  const update = () => {
+    const y = window.scrollY || window.pageYOffset;
+    const next = y > 8;
+    if (next !== scrolled) {
+      scrolled = next;
+      header.classList.toggle('is-scrolled', scrolled);
+    }
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+}
