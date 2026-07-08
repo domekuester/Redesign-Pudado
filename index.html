@@ -386,10 +386,13 @@
     <section class="section" id="rechner">
       <div class="container">
         <div class="section-head center narrow">
-          <p class="section-label" data-i18n="rech.label">Toilettenpapierverbrauch realistisch einschätzen</p>
-          <h2><span data-i18n="rech.h2a">Wie viel</span> <span class="accent" data-i18n="rech.h2b">Toilettenpapier</span> <span data-i18n="rech.h2c">nutzt dein Haushalt wirklich?</span></h2>
-          <p class="section-text center" data-i18n="rech.text">Der Rechner zeigt eine vorsichtige Schätzung, wie viel Toilettenpapier im Alltag genutzt wird und wie sich der Verbrauch durch Reinigung mit Wasser reduzieren könnte.</p>
+          <p class="section-label" data-i18n="rech.label">Papier-Insight</p>
+          <h2><span data-i18n="rech.h2a">Wie viel</span> <span class="accent" data-i18n="rech.h2b">Papier</span> <span data-i18n="rech.h2c">steckt in deiner Routine?</span></h2>
+          <p class="section-text center" data-i18n="rech.text">Gib kurz Haushaltsgröße und Rollen pro Woche ein. Wir schätzen daraus Verbrauch, CO₂e und eine mögliche Reduktion.</p>
         </div>
+        <!-- Kompakter 2-Eingaben-Rechner: Nutzungsfrequenz-Slider und Preisfeld
+             bewusst entfernt (weniger Formulargefühl); Reduktion als vorsichtige
+             30–50%-Range statt Nutzer-Modell – keine garantierte Einsparung. -->
         <div class="calc2-wrap">
           <form class="calc2-inputs card" id="calcForm" novalidate>
             <div class="calc2-field">
@@ -401,67 +404,49 @@
               </div>
             </div>
             <div class="calc2-field">
-              <label for="rollsWeek" data-i18n="rc2.rolls">Wie viele Rollen verbraucht ihr ungefähr pro Woche?</label>
-              <input type="number" id="rollsWeek" value="4" min="0" max="30" step="0.5" inputmode="decimal" />
-              <p class="calc2-help" data-i18n="rc2.rolls_help">Schätze, wie viele vollständige Rollen euer gesamter Haushalt in einer normalen Woche verbraucht.</p>
-            </div>
-            <div class="calc2-field">
-              <label for="usage" data-i18n="rc2.usage">Wie häufig würdet ihr EcoBum voraussichtlich nutzen?</label>
-              <div class="slider-row">
-                <input type="range" id="usage" value="70" min="0" max="100" step="10" aria-describedby="usageVal" />
-                <output class="slider-val" id="usageVal" for="usage">70 %</output>
+              <span id="lblRolls" data-i18n="rc2.rolls">Rollen pro Woche im Haushalt</span>
+              <div class="stepper" role="group" aria-labelledby="lblRolls">
+                <button type="button" class="step-btn" id="rollMinus" aria-label="Weniger Rollen">−</button>
+                <input type="number" id="rollsWeek" value="4" min="0" max="30" step="0.5" inputmode="decimal" aria-labelledby="lblRolls" />
+                <button type="button" class="step-btn" id="rollPlus" aria-label="Mehr Rollen">+</button>
               </div>
-              <p class="calc2-help" data-i18n="rc2.usage_help">Der Wert beschreibt den geschätzten Anteil der Toilettengänge, bei denen EcoBum genutzt wird.</p>
+              <p class="calc2-help" data-i18n="rc2.rolls_help">Grobe Schätzung genügt – ganze Rollen pro Woche, gesamter Haushalt.</p>
             </div>
-            <p class="calc2-assume" data-i18n="rc2.assume">Standardannahmen: durchschnittliches 3-lagiges Toilettenpapier mit ca. 200 Blättern pro Rolle. Preis und Blattzahl können je nach Produkt abweichen.</p>
+            <!-- Bewusst klein und optional: Preis nur für die Geld-Schätzung,
+                 Default 0,50 € – anpassbar je nach Produkt. -->
+            <div class="calc2-field calc2-price">
+              <label for="priceRoll" data-i18n="rc2.price">Preis pro Rolle (€) – anpassbar</label>
+              <input type="number" id="priceRoll" value="0.50" min="0.20" max="2.00" step="0.05" inputmode="decimal" />
+            </div>
             <details class="calc2-basis">
               <summary data-i18n="rc2.basis_t">Berechnungsgrundlage ansehen</summary>
               <ul class="calc2-basis-list">
-                <li><span data-i18n="rc2.basis_sheets">Angenommene Blätter pro Rolle</span>: <strong>200</strong></li>
-                <li><span data-i18n="rc2.basis_price">Referenzpreis pro Rolle</span>: <strong>0,36&nbsp;€</strong></li>
-                <li><span data-i18n="rc2.basis_factor">Modell-Reduktionsfaktor</span>: <strong>50&nbsp;%</strong></li>
                 <li><span data-i18n="rc2.basis_co2">Angenommener CO₂e-Wert pro Rolle</span>: <strong>0,20&nbsp;kg</strong></li>
+                <li><span data-i18n="rc2.basis_range">Angenommene Reduktions-Spanne</span>: <strong>30–50&nbsp;%</strong></li>
                 <li><span data-i18n="rc2.basis_date">Letzte Quellenprüfung</span>: <strong>Juni 2026</strong></li>
               </ul>
-              <p class="calc2-basis-note" data-i18n="rc2.basis_formula">Formeln: Rollen/Jahr = Rollen/Woche × 52. Mit EcoBum = Rollen/Jahr × (1 − Nutzung% × 0,50). Geschätzter CO₂e-Fußabdruck = Rollen/Jahr × 0,20 kg. Die EcoBum-Reduktion ist eine Modellschätzung und keine garantierte Wirkung.</p>
+              <p class="calc2-basis-note" data-i18n="rc2.basis_formula">Formeln: Rollen/Jahr = Rollen/Woche × 52. CO₂e/Jahr = Rollen/Jahr × 0,20 kg. Die Reduktions-Spanne von 30–50 % ist eine vorsichtige Modellannahme, keine garantierte Wirkung.</p>
               <p class="calc2-basis-note" data-i18n="rc2.co2_explain">Toilettenpapier verursacht je nach Material, Herstellung, Transport und Verpackung einen unterschiedlichen Fußabdruck. Für diese vereinfachte Schätzung rechnen wir vorsichtig mit ca. 0,20 kg CO₂e pro Rolle.</p>
-              <p class="calc2-basis-src" data-i18n="rc2.basis_src">Preisquellen (3-lagig, reguläre Preise, geprüft Juni 2026): dm, Rossmann, Aldi Süd, Müller. Umweltkontext: Umweltbundesamt. Median ≈ 200 Blätter und ≈ 0,36 € pro Rolle.</p>
-              <div class="calc2-field calc2-pricefield">
-                <label for="priceRoll" data-i18n="rc2.price_opt">Preis pro Rolle anpassen (€, optional)</label>
-                <input type="number" id="priceRoll" value="0.36" min="0.05" max="3" step="0.01" inputmode="decimal" />
-              </div>
+              <p class="calc2-basis-src" data-i18n="rc2.basis_src">Umweltkontext: Umweltbundesamt. Vereinfachte Verbraucherorientierung, keine vollständige Ökobilanz.</p>
             </details>
           </form>
 
           <div class="calc2-results card" id="calcResults" aria-live="polite">
             <div class="calc2-kpis">
-              <div class="kpi"><span class="kpi-num" id="rNow">–</span><span class="kpi-lab" data-i18n="rc2.r_now">Aktueller Verbrauch · Rollen/Jahr</span></div>
-              <div class="kpi"><span class="kpi-num" id="rEco">–</span><span class="kpi-lab" data-i18n="rc2.r_eco">Mit EcoBum geschätzt · Rollen/Jahr</span></div>
-              <div class="kpi"><span class="kpi-num" id="rLess">–</span><span class="kpi-lab" data-i18n="rc2.r_less">Möglicherweise weniger · Rollen/Jahr</span></div>
-              <div class="kpi accent"><span class="kpi-num" id="rCost">–</span><span class="kpi-lab" data-i18n="rc2.r_cost">Mögliche Kostendifferenz · €/Jahr</span></div>
+              <div class="kpi">
+                <span class="kpi-num" id="rYear">–</span>
+                <span class="kpi-lab" data-i18n="rc2.r_year">Rollen pro Jahr · Haushalt</span>
+                <span class="kpi-sub" id="rPerson">–</span>
+              </div>
+              <div class="kpi"><span class="kpi-num" id="rCost">–</span><span class="kpi-lab" data-i18n="rc2.r_cost">Geschätzte Kosten pro Jahr</span></div>
+              <div class="kpi"><span class="kpi-num" id="rCo2">–</span><span class="kpi-lab" data-i18n="rc2.r_co2">Geschätzter CO₂e-Fußabdruck · kg/Jahr</span></div>
+              <div class="kpi accent">
+                <span class="kpi-num" id="rSaveRolls">–</span>
+                <span class="kpi-lab" data-i18n="rc2.r_save">Mögliche Reduktion bei 30–50 % weniger Papier · Rollen/Jahr</span>
+                <span class="kpi-sub" id="rSaveSub">–</span>
+              </div>
             </div>
-            <div class="calc2-bars" aria-hidden="true">
-              <div class="bar2"><span class="bar2-lab" data-i18n="rc2.bar_now">Aktueller Verbrauch</span><span class="bar2-track"><span class="bar2-fill now" id="barNow"></span></span><span class="bar2-val" id="barNowVal">–</span></div>
-              <div class="bar2"><span class="bar2-lab" data-i18n="rc2.bar_eco">Modellschätzung mit EcoBum</span><span class="bar2-track"><span class="bar2-fill eco" id="barEco"></span></span><span class="bar2-val" id="barEcoVal">–</span></div>
-            </div>
-            <details class="calc2-more">
-              <summary data-i18n="rc2.more_t">Weitere Ergebnisse</summary>
-              <ul class="calc2-more-list">
-                <li><span data-i18n="rc2.m_rollsmonth">Rollen / Monat (heute)</span>: <strong id="mRollsMonth">–</strong></li>
-                <li><span data-i18n="rc2.m_perperson">Rollen / Person & Jahr (heute)</span>: <strong id="mPerPerson">–</strong></li>
-                <li><span data-i18n="rc2.m_sheetsyear">Blätter / Jahr (heute)</span>: <strong id="mSheetsYear">–</strong></li>
-                <li><span data-i18n="rc2.m_sheetsless">Blätter weniger / Jahr</span>: <strong id="mSheetsLess">–</strong></li>
-                <li><span data-i18n="rc2.m_costnow">Kosten / Jahr (heute)</span>: <strong id="mCostNow">–</strong></li>
-                <li><span data-i18n="rc2.m_costeco">Kosten / Jahr (mit EcoBum)</span>: <strong id="mCostEco">–</strong></li>
-                <li><span data-i18n="rc2.m_co2week">CO₂e / Woche (geschätzt)</span>: <strong id="mCo2Week">–</strong></li>
-              </ul>
-            </details>
-            <div class="calc2-co2">
-              <p class="co2-label" data-i18n="rc2.co2_label">Geschätzter CO₂e-Fußabdruck</p>
-              <p class="co2-result" id="co2Result">–</p>
-              <p class="co2-note" data-i18n="rc2.co2_note">Vereinfachte Orientierung, keine vollständige Ökobilanz. Der tatsächliche Wert hängt von Papierart, Recyclinganteil, Energie, Verpackung und Transport ab.</p>
-            </div>
-            <p class="calc2-disclaimer" data-i18n="rc2.disclaimer">Die Ergebnisse sind unverbindliche Modellschätzungen. Der tatsächliche Verbrauch hängt von Produkt, Gewohnheiten und Nutzung ab. EcoBum kann den Papierverbrauch ergänzend reduzieren, eine bestimmte Einsparung wird nicht garantiert.</p>
+            <p class="calc2-disclaimer" data-i18n="rc2.disclaimer">Unverbindliche Modellschätzung. EcoBum kann helfen, Papierverbrauch zu reduzieren – wie viel, hängt von der Nutzung ab. Eine bestimmte Einsparung wird nicht garantiert.</p>
           </div>
         </div>
       </div>

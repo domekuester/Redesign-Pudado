@@ -120,32 +120,31 @@ function initYear() {
 }
 
 /* -------------------------------------------------------------
-   3. TOILETTENPAPIER- & EINSPAR-KALKULATOR
-   Modell auf Basis der Nutzereingaben. Alle Werte sind Schätzungen.
-   Annahmen sind in der Methodik-Box ("So rechnen wir") transparent.
-   Speichert Eingaben in localStorage, rechnet live, prüft Plausibilität.
+   3. KOMPAKTER PAPIER-RECHNER (2 Eingaben)
+   Nur Haushaltsgröße + Rollen/Woche. Reduktion als vorsichtige
+   30–50%-Spanne (Modellannahme) statt Nutzungsfrequenz-Modell –
+   keine garantierte Einsparung. Alle Werte sind Schätzungen.
    ------------------------------------------------------------- */
 function initCalculator() {
   const form = document.getElementById('calcForm');
   if (!form) return;
 
-  // Geprüfte Standardannahmen (Stand Juni 2026; Median aus dm/Rossmann/Aldi/Müller, 3-lagig)
-  const SHEETS_PER_ROLL   = 200;   // Blätter pro Rolle (gerundeter Median)
-  const DEFAULT_PRICE_ROLL = 0.36; // € pro Rolle (gerundeter Median regulärer Preise)
-  const REDUCTION_FACTOR  = 0.50;  // Modellannahme – keine garantierte Wirkung
   // Konservative Website-Annahme: typisches Rollengewicht um ca. 100 g ×
   // ca. 1,8–2,5 kg CO₂e pro kg Tissue (je nach LCA-/EPD-Methodik) ≈ 0,18–0,25 kg.
   // Bewusst vereinfachte Verbraucherorientierung, keine vollständige Ökobilanz.
-  const CO2E_PER_ROLL     = 0.20;  // kg CO₂e pro Rolle (geschätzt)
+  const CO2E_PER_ROLL = 0.20;  // kg CO₂e pro Rolle (geschätzt)
+  const RED_LOW  = 0.30;       // vorsichtige Reduktions-Spanne (Modellannahme)
+  const RED_HIGH = 0.50;
+  const DEFAULT_PRICE = 0.50;  // € pro Rolle (anpassbar, 0,20–2,00)
 
   const LOCALES = { de: 'de-DE', en: 'en-IE', fr: 'fr-FR' };
   const APPROX  = { de: 'ca.', en: 'approx.', fr: 'env.' };
-  let nf0, nf1, euro, approx;
+  let nf0, euro, approx;
   function buildFormatters() {
     const lang = window.PUDADO_LANG || 'de';
-    nf0   = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { maximumFractionDigits: 0 });
-    nf1   = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-    euro  = new Intl.NumberFormat(LOCALES[lang] || 'de-DE', { style: 'currency', currency: 'EUR' });
+    const loc = LOCALES[lang] || 'de-DE';
+    nf0    = new Intl.NumberFormat(loc, { maximumFractionDigits: 0 });
+    euro   = new Intl.NumberFormat(loc, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     approx = APPROX[lang] || 'ca.';
   }
   buildFormatters();
@@ -164,74 +163,60 @@ function initCalculator() {
   function compute() {
     const persons   = clamp(Math.round(readNum('persons', 1, 10, 2)), 1, 10, 2);
     const rollsWeek = clamp(readNum('rollsWeek', 0, 30, 4), 0, 30, 4);
-    const usage     = clamp(Math.round(readNum('usage', 0, 100, 70) / 10) * 10, 0, 100, 70);
-    let priceRoll   = readNum('priceRoll', 0.05, 3, DEFAULT_PRICE_ROLL);
-    if (!isFinite(priceRoll) || priceRoll <= 0) priceRoll = DEFAULT_PRICE_ROLL;
+    const price     = clamp(readNum('priceRoll', 0.20, 2.00, DEFAULT_PRICE), 0.20, 2.00, DEFAULT_PRICE);
 
-    const rollsYearNow  = rollsWeek * 52;
-    const rollsMonthNow = rollsYearNow / 12;
-    const sheetsYearNow = rollsYearNow * SHEETS_PER_ROLL;
-    const costYearNow   = rollsYearNow * priceRoll;
+    const rollsYear  = rollsWeek * 52;
+    const perPerson  = rollsYear / persons;
+    const co2Year    = rollsYear * CO2E_PER_ROLL;
+    const costYear   = rollsYear * price;
+    const saveLow    = rollsYear * RED_LOW;
+    const saveHigh   = rollsYear * RED_HIGH;
+    const co2SaveLow   = saveLow  * CO2E_PER_ROLL;
+    const co2SaveHigh  = saveHigh * CO2E_PER_ROLL;
+    const costSaveLow  = saveLow  * price;
+    const costSaveHigh = saveHigh * price;
 
-    const reduction    = (usage / 100) * REDUCTION_FACTOR;
-    const rollsYearEco = rollsYearNow * (1 - reduction);
-    const rollsSaved   = Math.max(0, rollsYearNow - rollsYearEco);
-    const sheetsSaved  = rollsSaved * SHEETS_PER_ROLL;
-    const costYearEco  = rollsYearEco * priceRoll;
-    const costDiff     = rollsSaved * priceRoll;
-
-    // Geschätzter CO₂e-Fußabdruck des heutigen Verbrauchs (siehe CO2E_PER_ROLL)
-    const co2YearNow = rollsYearNow * CO2E_PER_ROLL;
-    const co2WeekNow = rollsWeek * CO2E_PER_ROLL;
-
-    return { persons, rollsWeek, usage, priceRoll, rollsYearNow, rollsMonthNow,
-             sheetsYearNow, costYearNow, rollsYearEco, rollsSaved, sheetsSaved,
-             costYearEco, costDiff, co2YearNow, co2WeekNow };
+    return { persons, rollsWeek, rollsYear, perPerson, co2Year, costYear,
+             saveLow, saveHigh, co2SaveLow, co2SaveHigh, costSaveLow, costSaveHigh };
   }
 
   const setTxt = (id, v) => { const el = $(id); if (el) el.textContent = v; };
-  const ca = (n) => approx + ' ' + nf0.format(Math.max(0, Math.round(n)));
+  const r0 = (n) => nf0.format(Math.max(0, Math.round(n)));
+  const e0 = (n) => euro.format(Math.max(0, Math.round(n)));
 
   function render() {
     const r = compute();
-    setTxt('usageVal', r.usage + ' %');
-    // 4 Hauptergebnisse
-    setTxt('rNow',  ca(r.rollsYearNow));
-    setTxt('rEco',  ca(r.rollsYearEco));
-    setTxt('rLess', ca(r.rollsSaved));
-    setTxt('rCost', approx + ' ' + euro.format(Math.max(0, r.costDiff)));
-    // Vergleichsbalken (gleiche Skala, Maximum = heutiger Verbrauch)
-    const max = Math.max(r.rollsYearNow, 1);
-    const ecoPct = Math.max(0, Math.min(100, (r.rollsYearEco / max) * 100));
-    const bn = $('barNow'), be = $('barEco');
-    if (bn) bn.style.width = '100%';
-    if (be) be.style.width = ecoPct + '%';
-    setTxt('barNowVal', nf0.format(Math.round(r.rollsYearNow)));
-    setTxt('barEcoVal', nf0.format(Math.round(r.rollsYearEco)));
-    // Weitere Ergebnisse (Akkordeon)
-    setTxt('mRollsMonth', nf0.format(Math.round(r.rollsMonthNow)));
-    setTxt('mPerPerson', nf0.format(Math.round(r.rollsYearNow / Math.max(1, r.persons))));
-    setTxt('mSheetsYear', nf0.format(Math.round(r.sheetsYearNow)));
-    setTxt('mSheetsLess', nf0.format(Math.round(r.sheetsSaved)));
-    setTxt('mCostNow', euro.format(Math.max(0, r.costYearNow)));
-    setTxt('mCostEco', euro.format(Math.max(0, r.costYearEco)));
-    setTxt('mCo2Week', nf1.format(Math.max(0, r.co2WeekNow)) + ' kg');
-    // CO₂e-Satz aus Übersetzungs-Template; Zahl wird lokalisiert eingesetzt
-    setTxt('co2Result', t('rc2.co2_result').replace('{x}', nf0.format(Math.max(0, Math.round(r.co2YearNow)))));
+    setTxt('rYear',   approx + ' ' + r0(r.rollsYear));
+    setTxt('rPerson', approx + ' ' + r0(r.perPerson) + ' ' + t('rc2.per_person'));
+    setTxt('rCost',   approx + ' ' + e0(r.costYear));
+    setTxt('rCo2',    approx + ' ' + r0(r.co2Year));
+    setTxt('rSaveRolls', r0(r.saveLow) + '–' + r0(r.saveHigh));
+    // Geld- und CO₂e-Äquivalent der Range gleichwertig in einer ruhigen Zeile.
+    // Range-Konvention je Sprache: DE/FR "39–65 €", EN "€39–€65".
+    const lang = window.PUDADO_LANG || 'de';
+    const money = lang === 'en'
+      ? e0(r.costSaveLow) + '–' + e0(r.costSaveHigh)
+      : r0(r.costSaveLow) + '–' + r0(r.costSaveHigh) + ' €';
+    setTxt('rSaveSub', approx + ' ' + money
+      + ' · ' + approx + ' ' + r0(r.co2SaveLow) + '–' + r0(r.co2SaveHigh) + ' kg CO₂e');
   }
 
-  // Stepper Personen
-  const persInput = $('persons');
-  function stepPersons(delta) {
-    if (!persInput) return;
-    persInput.value = clamp(Math.round(parseFloat(persInput.value) || 2) + delta, 1, 10, 2);
-    render();
+  // Stepper (Personen ±1, Rollen ±1)
+  function bindStepper(inputId, minusId, plusId, min, max, def) {
+    const input = $(inputId);
+    const step = (delta) => {
+      if (!input) return;
+      input.value = clamp(Math.round((parseFloat(String(input.value).replace(',', '.')) || def) + delta), min, max, def);
+      render();
+    };
+    const m = $(minusId), p = $(plusId);
+    if (m) m.addEventListener('click', () => step(-1));
+    if (p) p.addEventListener('click', () => step(1));
   }
-  const pMinus = $('persMinus'), pPlus = $('persPlus');
-  if (pMinus) pMinus.addEventListener('click', () => stepPersons(-1));
-  if (pPlus)  pPlus.addEventListener('click', () => stepPersons(1));
+  bindStepper('persons', 'persMinus', 'persPlus', 1, 10, 2);
+  bindStepper('rollsWeek', 'rollMinus', 'rollPlus', 0, 30, 4);
 
-  ['persons', 'rollsWeek', 'usage', 'priceRoll'].forEach((id) => {
+  ['persons', 'rollsWeek', 'priceRoll'].forEach((id) => {
     const el = $(id);
     if (el) el.addEventListener('input', render);
   });

@@ -154,10 +154,9 @@ p  { margin: 0 0 1rem; }
 /* Sanfter Verlaufs-Wash statt flacher Fläche: leise räumliche Tiefe */
 .section-alt { background: linear-gradient(180deg, var(--mist), #FAFCFF); }
 .section-ice { background: linear-gradient(180deg, var(--sky-soft), #ffffff); }
-/* Rechner und Produkt sind zentrale Entscheidungsmomente im Scroll-Verlauf
-   (Preisbewusstsein/Nutzen bzw. Produktverständnis) – etwas mehr Luft
-   davor und danach hebt sie leicht vom gleichförmigen Grundrhythmus ab. */
-#rechner.section { padding-top: calc(var(--space) * 1.2); padding-bottom: calc(var(--space) * 1.35); }
+/* Produkt ist ein zentraler Entscheidungsmoment im Scroll-Verlauf – etwas
+   mehr Luft danach hebt ihn leicht vom Grundrhythmus ab. (Der Rechner ist
+   bewusst ein kompakter Insight und folgt dem normalen Rhythmus.) */
 #produkt.section { padding-bottom: calc(var(--space) * 1.3); }
 .section-head { margin-bottom: clamp(44px, 5vw, 70px); }
 .section-text { color: var(--gray); font-size: 1.16rem; max-width: 660px; line-height: 1.65; }
@@ -990,36 +989,35 @@ p  { margin: 0 0 1rem; }
 .blog-card-body h3 { margin-bottom: .4em; }
 .blog-card-body p { color: var(--gray); font-size: .95rem; margin: 0 0 16px; flex: 1; }
 
-/* ===================== Rechner v2 (kompakt, 3 Eingaben) ===================== */
-.calc2-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 24px; align-items: start; max-width: 1040px; margin: 0 auto; }
-.calc2-inputs, .calc2-results { border-radius: var(--radius); padding: 28px; }
+/* ===================== Rechner v3 (kompakter Insight, 2 Eingaben) ===================== */
+/* Bewusst schmaler und dichter als die übrigen Karten-Layouts: der Rechner
+   soll wie ein kleiner intelligenter Insight wirken, nicht wie ein Formular. */
+.calc2-wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 18px; align-items: start; max-width: 900px; margin: 0 auto; }
+.calc2-inputs, .calc2-results { border-radius: var(--radius); padding: 24px; }
 /* Ergebnis-Karte als Premium-Insight leicht über den Eingaben schwebend */
 .calc2-results { background: linear-gradient(180deg, #fff, #FAFCFF); border-color: var(--border-soft); box-shadow: 0 18px 50px rgba(20,40,80,.1); }
-.calc2-field { margin-bottom: 20px; }
-.calc2-field > label, .calc2-field > #lblPersons { display: block; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+.calc2-field { margin-bottom: 16px; }
+.calc2-field > #lblPersons, .calc2-field > #lblRolls { display: block; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
 .calc2-help { margin: 7px 0 0; font-size: .8rem; line-height: 1.5; color: var(--gray); }
-.calc2-inputs input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid var(--border-cool); border-radius: 12px; font: inherit; font-size: 1rem; color: var(--navy); background: #fff; box-shadow: inset 0 1px 2px rgba(20,40,80,.04); }
-.calc2-inputs input[type="number"]:focus-visible, .step-btn:focus-visible, #usage:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.calc2-inputs input[type="number"]:focus-visible, .step-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+/* Preis-Mini-Eingabe: bewusst schmal und leise – optionaler Feinschliff,
+   kein drittes großes Formularfeld */
+.calc2-price label { display: block; font-family: var(--font-head); font-weight: 600; font-size: .82rem; color: var(--gray); margin-bottom: 6px; line-height: 1.3; }
+.calc2-price input { width: 112px; padding: 9px 12px; border: 1px solid var(--border-cool); border-radius: 10px; font: inherit; font-size: .95rem; color: var(--navy); background: #fff; box-shadow: inset 0 1px 2px rgba(20,40,80,.04); }
 .stepper { display: inline-flex; align-items: stretch; border: 1px solid var(--border-cool); border-radius: 12px; overflow: hidden; background: #fff; }
 .stepper input { width: 64px; text-align: center; border: none; border-radius: 0; -moz-appearance: textfield; appearance: textfield; }
 .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .step-btn { width: 46px; min-height: 46px; border: none; background: var(--sky); color: var(--blue); font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: background .2s, transform .12s cubic-bezier(.16,.84,.44,1); }
 .step-btn:hover { background: #dfeafb; }
 .step-btn:active { transform: scale(.92); }
-.slider-row { display: flex; align-items: center; gap: 14px; }
-.slider-row input[type="range"] { flex: 1; accent-color: var(--blue); height: 28px; }
-.slider-val { font-family: var(--font-head); font-weight: 700; color: var(--blue); min-width: 52px; text-align: right; font-size: 1.08rem; font-variant-numeric: tabular-nums; }
-.calc2-assume { margin: 4px 0 12px; padding: 12px 15px; background: var(--sky); border-radius: 12px; font-size: .82rem; line-height: 1.55; color: var(--blue-ink); }
-.calc2-basis { font-size: .86rem; }
+.calc2-basis { font-size: .86rem; margin-top: 4px; }
 .calc2-basis > summary { cursor: pointer; color: var(--blue); font-weight: 600; font-size: .85rem; padding: 4px 0; }
 .calc2-basis-list { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; font-size: .84rem; color: var(--gray); }
 .calc2-basis-list strong { color: var(--navy); }
 .calc2-basis-note, .calc2-basis-src { font-size: .78rem; line-height: 1.5; color: var(--gray); margin: 8px 0 0; }
-.calc2-pricefield { margin: 12px 0 0; }
-.calc2-pricefield label { font-size: .82rem; }
 /* Drei ruhige Kennzahlen in einer Reihe, darunter der Ergebnis-Held */
-.calc2-kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.kpi { background: #fff; border: 1px solid var(--border-cool); border-radius: 16px; padding: 18px; }
+.calc2-kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.kpi { background: #fff; border: 1px solid var(--border-cool); border-radius: 16px; padding: 14px 16px; }
 /* Ergebnis-Held: die Kernzahl schließt als royale Bühne in voller Breite ab */
 .kpi.accent {
   grid-column: 1 / -1;
@@ -1029,32 +1027,18 @@ p  { margin: 0 0 1rem; }
   border: none;
   box-shadow: 0 18px 44px rgba(2,20,60,.3), inset 0 1px 0 rgba(255,255,255,.16);
 }
-.kpi.accent .kpi-num { font-size: 2.25rem; }
+.kpi.accent .kpi-num { font-size: 2rem; }
 /* Kennzahlen einen Schritt größer, Held-Zahl deutlich größer: die
    Insight-Hierarchie (Zahl > Label) trägt die Ergebnis-Karte. */
 .kpi-num { display: block; font-family: var(--font-head); font-weight: 700; font-size: 1.66rem; letter-spacing: -.02em; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .kpi.accent .kpi-num { color: #fff; }
 .kpi-lab { display: block; margin-top: 6px; font-size: .8rem; line-height: 1.4; color: var(--gray); }
 .kpi.accent .kpi-lab { color: rgba(255,255,255,.85); }
-.calc2-bars { margin: 18px 0 4px; display: grid; gap: 12px; }
-.bar2 { display: grid; gap: 5px; }
-.bar2-lab { font-size: .82rem; font-weight: 600; color: var(--navy); }
-.bar2-track { position: relative; height: 12px; background: var(--mist-2); border-radius: 999px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--border-soft); }
-.bar2-fill { position: absolute; inset: 0 auto 0 0; height: 100%; border-radius: 999px; transition: width .6s cubic-bezier(.16,.84,.44,1); }
-/* Baseline-Balken über Token statt Rohwert; dunkler als zuvor, damit
-   Balken vs. Spur die 3:1-Kontrastempfehlung für UI-Elemente erreicht. */
-.bar2-fill.now { background: var(--gray-light); }
-.bar2-fill.eco { background: var(--blue); }
-.bar2-val { font-size: .82rem; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
-.calc2-more { margin-top: 14px; font-size: .86rem; }
-.calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
-.calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
-.calc2-more-list strong { color: var(--navy); }
-.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); border-left: 3px solid var(--aqua-mist); }
-.co2-label { font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--navy); margin: 0 0 4px; }
-.co2-result { margin: 0; font-size: .95rem; color: var(--gray); }
-.co2-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray-light); }
-.calc2-disclaimer { margin: 16px 0 0; font-size: .8rem; line-height: 1.55; color: var(--gray); }
+/* Zweitzeile in Kacheln: gehört zur Kennzahl, tritt zurück. Auf weißen
+   Kacheln grau, auf dem royalen Ergebnis-Held in Aqua. */
+.kpi-sub { display: block; margin-top: 8px; font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--gray); font-variant-numeric: tabular-nums; }
+.kpi.accent .kpi-sub { color: var(--aqua-mist); }
+.calc2-disclaimer { margin: 14px 0 0; font-size: .8rem; line-height: 1.55; color: var(--gray); }
 @media (max-width: 860px) { .calc2-wrap { grid-template-columns: 1fr; gap: 16px; } }
 @media (max-width: 480px) { .calc2-kpis { grid-template-columns: 1fr; } }
 
