@@ -98,9 +98,9 @@
   <!-- ============================ HEADER ============================ -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a href="#top" class="logo" aria-label="Pudado Startseite">
+      <a href="#top" class="logo" aria-label="EcoBum by Pudado – Startseite">
         <span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
-        <span class="logo-word">Pudado</span>
+        <span class="logo-stack"><span class="logo-product">EcoBum Home</span><span class="logo-by" translate="no">by Pudado</span></span>
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="Hauptnavigation">
@@ -136,7 +136,9 @@
 <section class="hero" id="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="hero.eyebrow">EcoBum von Pudado</span></p>
+          <!-- Firmen-Wortmarke nach Logo-Referenz (Royal-Blue-Konzept):
+               sprachneutraler Markenname, daher bewusst ohne data-i18n. -->
+          <p class="hero-wordmark" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
           <h1><span data-i18n="hero.h1a">Wasser reinigt.</span> <span class="accent" data-i18n="hero.h1b">Papier reibt.</span></h1>
           <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser — frisch, sanft und einfach in deinem Badezimmer.</p>
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
@@ -179,26 +181,27 @@
           <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span></h2>
           <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine — klar, sanft und unkompliziert.</p>
         </div>
-        <div class="compare">
-          <div class="compare-card con">
-            <h3 data-i18n="logik.con">Papier allein</h3>
+        <!-- Prinzip-Duell: EIN geteiltes Premium-Panel statt zweier Boxen –
+             die Wasser-Seite steht auf der Royal-Bühne, die Hierarchie ist
+             sofort sichtbar. Gleiche Aussage, gleiche i18n-Keys. -->
+        <div class="duel">
+          <div class="duel-side con">
+            <h3 data-i18n="logik.con">Klassische Routine</h3>
             <ul>
-              <li><span class="mark" aria-hidden="true">✕</span> <span data-i18n="logik.con1">Trockenes Wischen</span></li>
-              <li><span class="mark" aria-hidden="true">✕</span> <span data-i18n="logik.con2">Mehr Reibung</span></li>
-              <li><span class="mark" aria-hidden="true">✕</span> <span data-i18n="logik.con3">Höherer Papierverbrauch möglich</span></li>
-              <li><span class="mark" aria-hidden="true">✕</span> <span data-i18n="logik.con4">Feuchttücher werden oft zusätzlich genutzt</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con1">Trockenes Wischen</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con2">Mehr Reibung</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con3">Höherer Papierverbrauch möglich</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con4">Feuchttücher werden oft zusätzlich genutzt</span></li>
             </ul>
           </div>
-          <figure class="compare-media">
-            <span class="vs">VS</span>
-          </figure>
-          <div class="compare-card pro">
-            <h3 data-i18n="logik.pro">Mit EcoBum</h3>
+          <div class="duel-divider" aria-hidden="true"><span class="duel-shift"><svg viewBox="0 0 16 16"><path d="M4 8h7M8.5 5L11.5 8l-3 3"/></svg></span></div>
+          <div class="duel-side pro">
+            <h3 data-i18n="logik.pro">Die EcoBum-Routine</h3>
             <ul>
-              <li><span class="mark" aria-hidden="true">✓</span> <span data-i18n="logik.pro1">Reinigung mit Wasser</span></li>
-              <li><span class="mark" aria-hidden="true">✓</span> <span data-i18n="logik.pro2">Sanfteres Gefühl</span></li>
-              <li><span class="mark" aria-hidden="true">✓</span> <span data-i18n="logik.pro3">Papier & Feuchttücher können reduziert werden</span></li>
-              <li><span class="mark" aria-hidden="true">✓</span> <span data-i18n="logik.pro4">Frischeres Badezimmergefühl</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro1">Reinigung mit Wasser</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro2">Sanfteres Gefühl</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro3">Papier & Feuchttücher können reduziert werden</span></li>
+              <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro4">Frischeres Badezimmergefühl</span></li>
             </ul>
           </div>
         </div>
@@ -268,9 +271,10 @@
           <p class="legal-hint" data-i18n="set.disclaimer">Die vorgesehenen Komponenten können sich je nach finaler Produktversion noch leicht ändern.</p>
         </div>
         <div class="set-visual">
-          <!-- Ruhiges Komponenten-Render statt Feature-Sheet: überladene Produktgrafiken
-               mit Call-outs sind laut Brand-PDO (Non-Goal "Marktplatz-Ästhetik") ausgeschlossen. -->
-          <div class="product-card"><img src="assets/ecobum-home-set-mit-halterung-optimized.jpg" alt="EcoBum Home Set mit Wandhalterung – Komponenten des Sets (Visualisierung)" width="990" height="1400" loading="lazy" decoding="async" /></div>
+          <!-- Bereinigtes Studio-Render (aus dem Sell-Sheet abgeleitet): Serifen-Headline,
+               englische Call-outs und Footer-Bänder entfernt, Produktname neu in
+               Website-Typografie gesetzt (Cabinet Grotesk + Inter) – Brand-PDO-konform. -->
+          <div class="product-card"><img src="assets/ecobum-home-set-studio.jpg" alt="EcoBum Home Set mit Wandhalterung – Komponenten des Sets (Visualisierung)" width="980" height="964" loading="lazy" decoding="async" /></div>
         </div>
       </div>
     </section>
@@ -329,7 +333,7 @@
           </ul>
           <div class="fc-actions">
             <input type="file" id="fcFile" accept="image/*" multiple hidden />
-            <button type="button" class="btn btn-primary" id="fcBtn" data-i18n="chk.btn">Fotos auswählen</button>
+            <button type="button" class="fc-select" id="fcBtn" data-i18n="chk.btn">Fotos auswählen</button>
             <a href="#kontakt" class="btn btn-ghost" data-i18n="chk.cta_contact">Installationsfrage an Pudado senden</a>
           </div>
           <p class="fc-status" id="fcStatus" role="status" aria-live="polite" hidden></p>
@@ -533,16 +537,19 @@
           <h2 data-i18n="warum.h2">Wir denken das Badezimmer weiter.</h2>
           <p class="section-text center" data-i18n="warum.text">Pudado entwickelt durchdachte Sanitärlösungen für Menschen, die Hygiene, Komfort und einen bewussteren Umgang mit Ressourcen verbinden möchten. Unser Anspruch ist es, bestehende Badezimmer einfach und sinnvoll aufzuwerten – mit klarer Funktion, modernem Design und ehrlicher Kommunikation. EcoBum ist unser erster Schritt.</p>
         </div>
-        <!-- PUDADO-FIRMENSIGNATUR: rein dekoratives, stummes Brand-Video (daher
-             aria-hidden, keine Controls). Der 760px-Breakpoint der media-Attribute
-             muss zu .brand-signature in style.css passen; Browser ohne
-             media-Attribut-Support fallen überall auf die 16:9-Version zurück. -->
-        <figure class="media-band brand-signature" aria-hidden="true">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/videos/pudado-company-signature-v1.0.mp4" type="video/mp4" media="(min-width: 761px)" />
-            <source src="assets/videos/pudado-company-signature-vertical-v1.0.mp4" type="video/mp4" media="(max-width: 760px)" />
+        <!-- PUDADO-FIRMENSIGNATUR (Royal-Konzept): statische Logo-Bühne nach der
+             Logo-Referenz – Wortmarke nativ in Typo/CSS statt Video, dadurch
+             gestochen scharf und ohne Video-Payload. Die Videodateien bleiben
+             unangetastet unter assets/videos/ erhalten. -->
+        <div class="brand-stage" role="img" aria-label="Pudado">
+          <!-- Ambient-Loop (Remotion-Render, 442 KB, 5 s, nahtlos): Farbwerte
+               identisch zu den --royal-* Tokens, verschmilzt mit dem CSS-
+               Verlauf darunter (Fallback bei reduced motion / ohne Video). -->
+          <video class="brand-stage-ambient" muted loop playsinline autoplay preload="metadata" aria-hidden="true">
+            <source src="assets/videos/royal-ambient-loop-v1.0.mp4" type="video/mp4" />
           </video>
-        </figure>
+          <p class="brand-stage-word" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
+        </div>
         <div class="cards-grid three">
           <article class="card on-dark"><h3 data-i18n="warum.c1t">Sanitäre Upgrades für den Alltag</h3><p data-i18n="warum.c1d">Wir möchten Lösungen entwickeln, die sich sinnvoll in bestehende Badezimmer integrieren lassen und alltägliche Hygieneroutinen einfacher und angenehmer machen.</p></article>
           <article class="card on-dark"><h3 data-i18n="warum.c2t">Ressourcen bewusster nutzen</h3><p data-i18n="warum.c2d">Unsere Produkte sollen dabei helfen, Papier, Feuchttücher und andere Einwegprodukte bewusster zu verwenden. Nachhaltigkeit verstehen wir als Entwicklungsziel – transparent und ohne übertriebene Versprechen.</p></article>
@@ -601,7 +608,7 @@
     </section>
 
     <section class="water-banner" aria-label="Pudado – Wasser. Reinheit. Lifestyle.">
-      <img src="assets/water-banner.jpg" alt="Frisches Wasser mit Tropfen – Symbol für Reinheit und Hygiene" width="1600" height="900" loading="lazy" decoding="async" onerror="this.closest('section').remove()" />
+      <img src="assets/water-drop-statement.jpg" alt="Ein einzelner Wassertropfen fällt in stilles, klares Wasser und zieht feine Kreise" width="1600" height="900" loading="lazy" decoding="async" onerror="this.closest('section').remove()" />
       <div class="water-banner-text">
         <p class="wb-claim" data-i18n="hero.h1a">Wasser reinigt.</p>
         <p class="wb-sub" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
