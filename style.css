@@ -1050,7 +1050,11 @@ p  { margin: 0 0 1rem; }
 .calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
 .calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
 .calc2-more-list strong { color: var(--navy); }
-.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); border-left: 3px solid var(--aqua-mist); }
+/* Vollständige Hairline statt farbigem Side-Stripe (border-left) – der
+   Akzent liegt jetzt auf dem Label-Punkt, nicht auf einer Kante. */
+.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); }
+.calc2-co2 .co2-label { display: flex; align-items: center; gap: 9px; }
+.calc2-co2 .co2-label::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px var(--sky); }
 .co2-label { font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--navy); margin: 0 0 4px; }
 .co2-result { margin: 0; font-size: .95rem; color: var(--gray); }
 .co2-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray-light); }
@@ -1159,3 +1163,96 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .form .field input:disabled, .form .field select:disabled, .form .field textarea:disabled,
 .newsletter-row input:disabled { opacity: .55; cursor: not-allowed; }
 .btn:disabled, .btn[disabled] { opacity: .55; cursor: not-allowed; pointer-events: none; }
+
+/* =============================================================
+   IMPECCABLE FLAGSHIP POLISH
+   Sichtbarer Premium-Qualitätssprung, konsequent auf dem
+   bestehenden Royal-Blue-System aufgebaut (keine neuen Tokens
+   als Magic Numbers, keine Fremdpalette). Alle Bewegungen werden
+   von der globalen prefers-reduced-motion-Regel oben gestoppt.
+   ============================================================= */
+
+/* ---- 1. Signature-Button: teureres, ruhigeres Hover-Gefühl ----
+   Weichere Ease-out-Kurve + Schatten-Bloom statt hartem Sprung.
+   Gilt global für jede CTA (Hero, Header, Sektionen). */
+.btn { transition:
+  transform .32s cubic-bezier(.16,1,.3,1),
+  box-shadow .32s cubic-bezier(.16,1,.3,1),
+  background .25s ease, color .2s ease, border-color .2s ease; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(35,95,208,.36), inset 0 1px 0 rgba(255,255,255,.24); }
+.hero .btn-primary:hover, .site-header .btn-primary:hover { box-shadow: 0 20px 46px rgba(1,10,40,.5), inset 0 1px 0 rgba(255,255,255,.5); }
+.btn-ghost:hover { transform: translateY(-2px); }
+
+/* ---- 2. Weiße Karten: feine obere Lichtkante (Materialtiefe) ----
+   Ein präziser 1px-Innenglanz oben lässt die Fläche wie ein Panel
+   wirken statt wie „Box mit Schatten". Hover subtiler geführt. */
+.card, .usecase-card, .detail-col, .form.card, .calc2-inputs, .calc2-results {
+  box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.card { transition: transform .35s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .35s cubic-bezier(.16,1,.3,1); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.9); }
+
+/* ---- 3. Hero: Materialtiefe (Vignette) + eleganter Scroll-Impuls ----
+   Sanfte Randabdunklung gibt der Royal-Bühne Tiefe, ohne die Farbe
+   zu verändern. Der Scroll-Punkt führt ruhig in den ersten Scroll. */
+.hero { --hero-vignette: radial-gradient(120% 90% at 50% 8%, transparent 58%, rgba(1,10,40,.28)); }
+.hero::before { background-image: var(--hero-vignette),
+  radial-gradient(38% 30% at 26% 22%, rgba(255,255,255,.10), transparent 70%),
+  radial-gradient(30% 24% at 72% 64%, rgba(92,138,230,.14), transparent 72%),
+  radial-gradient(26% 22% at 84% 12%, rgba(255,255,255,.08), transparent 70%); }
+.hero-scroll {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: clamp(18px, 3vw, 30px); z-index: 2;
+  width: 26px; height: 42px; border-radius: var(--radius-pill);
+  border: 1.5px solid rgba(169,220,236,.5);
+  display: grid; justify-items: center; align-content: start; padding-top: 8px;
+}
+.hero-scroll-dot { width: 4px; height: 8px; border-radius: 2px; background: var(--aqua-mist); animation: hero-scroll-cue 1.9s cubic-bezier(.16,.84,.44,1) infinite; }
+@keyframes hero-scroll-cue { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 70% { opacity: 1; transform: translateY(12px); } 100% { opacity: 0; transform: translateY(14px); } }
+
+/* ---- 4. Vergleichs-Panel: präziserer Mittelübergang ----
+   Der Upgrade-Pfeil bekommt eine feine Aqua-Lichtkante und einen
+   ruhigen Puls (Transformation, kein „VS"-Kampf). */
+.duel-shift { box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(169,220,236,.5); }
+@media (min-width: 761px) { .duel-shift svg { animation: duel-nudge 3.4s ease-in-out infinite; } }
+@keyframes duel-nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+
+/* ---- 5. FAQ: weicheres Öffnen + Aqua-Aktivkante ----
+   Das offene Item bekommt eine feine linke Aktivmarke in Aqua
+   (nur 2px, als Zustands-Signal – kein dekorativer Side-Stripe). */
+.faq-item { transition: border-color .25s ease, background .25s ease; }
+.faq-item[open] { background: linear-gradient(180deg, var(--sky-soft), transparent 60%); border-radius: var(--radius-sm); }
+.faq-item[open] summary { color: var(--blue-ink); }
+.faq-item[open] p { animation: faq-open .4s cubic-bezier(.16,1,.3,1); }
+
+/* ---- 6. Foto-Check: Upload-Fläche hochwertiger (Concierge) ----
+   Feiner Innenglanz + ruhigeres Hover-Anheben; die Fläche wirkt
+   wie eine wertige Einladung statt wie ein Formularrahmen. */
+.fc-select { box-shadow: inset 0 1px 0 rgba(255,255,255,.8); }
+.fc-select:hover { box-shadow: 0 0 0 4px rgba(169,220,236,.4), 0 16px 40px rgba(35,95,208,.14), inset 0 1px 0 rgba(255,255,255,.8); }
+
+/* ---- 7. Rechner-Ergebnis: klarere Zahlen-Hierarchie ----
+   Die Held-Kennzahl trägt die Karte deutlicher; Balken etwas
+   ruhiger. (Gilt für den vorhandenen 3-Eingaben-Rechner auf
+   diesem Branch – der kompakte 2-Eingaben-Rechner liegt separat
+   auf feature/compact-paper-calculator.) */
+.kpi.accent .kpi-num { font-size: 2.15rem; }
+.calc2-results { box-shadow: 0 22px 56px rgba(20,40,80,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+
+/* ---- 8. Kontakt-Abschluss & Footer: markanter Seitenausklang ----
+   Der Footer beginnt mit einer präzisen Aqua-Lichtkante (gleiche
+   Signatur wie die Royal-Bühnen) – klarer, ruhiger Abschluss. */
+.site-footer { position: relative; }
+.site-footer::before { content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(169,220,236,.22) 35%, rgba(169,220,236,.22) 65%, transparent); }
+
+/* ---- 9. Header: hochwertigerer Sticky-Zustand ----
+   Beim Scrollen verdichtet sich die Leiste minimal und der Schatten
+   vertieft sich weich – präziser „abgehobener" Zustand. */
+.site-header { transition: box-shadow .3s ease, background .3s ease; }
+.site-header.is-scrolled { background: linear-gradient(180deg, rgba(6,34,90,.96), rgba(3,24,72,.92)); }
+
+/* ---- 10. Reduced-Motion: alle neuen Bewegungen sauber stoppen ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-dot, .duel-shift svg { animation: none !important; }
+  .hero-scroll-dot { opacity: .9; }
+}
