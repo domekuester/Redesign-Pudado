@@ -3,3 +3,8 @@
 
 # Playwright-MCP Session-Artefakte (Screenshots/Logs vom Browser-Testen)
 .playwright-mcp/
+
+# Lokale, datierte Arbeitskopien vor einzelnen Änderungen. Bewusst nur dieser
+# Ordner: _backup_original/ bleibt versioniert, es ist der Rollback-Stand vor
+# dem Redesign (siehe CLAUDE.md) und gehört ins Repository.
+/_backup/

@@ -92,7 +92,7 @@
   }
   </script>
 </head>
-<body>
+<body data-page="home">
   <a class="skip-link" href="#main-content" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
   <!-- ============================ HEADER ============================ -->
@@ -123,7 +123,7 @@
             <button type="button" data-lang="en">EN</button>
             <button type="button" data-lang="fr">FR</button>
           </div>
-          <a href="#kontakt" class="btn btn-link nav-cta" data-i18n="cta.interesse">Interesse anmelden</a>
+          <a href="#kontakt" class="btn btn-link nav-cta nav-cta-secondary" data-i18n="cta.interesse">Interesse anmelden</a>
           <a href="#produkt" class="btn btn-primary nav-cta" data-i18n="cta.entdecken">EcoBum entdecken</a>
         </div>
       </nav>
@@ -150,8 +150,10 @@
         <div class="hero-visual">
           <div class="product-card product-card-photo">
             
-            <!-- HERO-PRODUKTBILD (nicht lazy, priorisiert). Fallback nur falls Datei fehlt. -->
-            <img src="assets/hero-bild-1-optimized.jpg" alt="EcoBum Home Set in modernem Badezimmer"
+            <!-- HERO-PRODUKTBILD (nicht lazy, priorisiert). Fallback nur falls Datei fehlt.
+                 Es ist eine Visualisierung, kein finales Produktfoto – Alt-Text und
+                 .media-note benennen das offen (Prelaunch-Ehrlichkeit). -->
+            <img src="assets/hero-bild-1-optimized.jpg" alt="Visualisierung des EcoBum Home Sets in einem modernen Badezimmer"
                  width="1200" height="959" fetchpriority="high" decoding="async"
                  onerror="this.onerror=null;this.src='assets/ecobum-box.jpg';" />
             <div class="product-badges">
@@ -159,8 +161,14 @@
               <span class="pill-badge accent" data-i18n="badge.soon">Bald verfügbar</span>
             </div>
           </div>
+          <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
         </div>
       </div>
+      <!-- Ruhiger Scroll-Impuls: leitet den Blick in den ersten Scroll,
+           dekorativ (aria-hidden), Bewegung wird bei reduced-motion gestoppt. -->
+      <a class="hero-scroll" href="#insight" aria-hidden="true" tabindex="-1">
+        <span class="hero-scroll-dot"></span>
+      </a>
     </section>
 
     <section class="trust-band" aria-label="Vorteile auf einen Blick">
@@ -242,7 +250,8 @@
         <div class="product-visual">
           <!-- PRODUKTBILD 2: helles Lifestyle-Foto als assets/ecobum-lifestyle.jpg ablegen.
                Fehlt die Datei, wird automatisch das Set-Render gezeigt. -->
-          <div class="product-card product-card-photo"><img src="assets/ecobum-lifestyle.jpg" alt="EcoBum im hellen, modernen Badezimmer mit Eichenmöbeln" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/ecobum-home-set.jpg';" /></div>
+          <div class="product-card product-card-photo"><img src="assets/ecobum-lifestyle.jpg" alt="Visualisierung von EcoBum im hellen, modernen Badezimmer mit Eichenmöbeln" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/ecobum-home-set.jpg';" /></div>
+          <p class="media-note" data-i18n="media.viz_room">Visualisierung im Badezimmer – kein finales Produktfoto</p>
         </div>
       </div>
     </section>
@@ -274,7 +283,8 @@
           <!-- Bereinigtes Studio-Render (aus dem Sell-Sheet abgeleitet): Serifen-Headline,
                englische Call-outs und Footer-Bänder entfernt, Produktname neu in
                Website-Typografie gesetzt (Cabinet Grotesk + Inter) – Brand-PDO-konform. -->
-          <div class="product-card"><img src="assets/ecobum-home-set-studio.jpg" alt="EcoBum Home Set mit Wandhalterung – Komponenten des Sets (Visualisierung)" width="980" height="964" loading="lazy" decoding="async" /></div>
+          <div class="product-card"><img src="assets/ecobum-home-set-studio.jpg" alt="Visualisierung des EcoBum Home Sets mit Wandhalterung und Komponenten des Sets" width="980" height="964" loading="lazy" decoding="async" /></div>
+          <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
         </div>
       </div>
     </section>
@@ -287,13 +297,14 @@
           <p class="section-text center" data-i18n="gal.intro">Vom hellen Holz-Bad bis zum dunklen Stein-Look – EcoBum fügt sich ruhig und hochwertig in moderne Badezimmer ein.</p>
         </div>
         <div class="lifestyle-gallery" id="lifestyleGallery">
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-1.jpg" alt="EcoBum in einem dunklen, hochwertigen Badezimmer mit Holzlamellen" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-2.jpg" alt="EcoBum in einem hellen Holzbad mit blauen Textil-Akzenten" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-3.jpg" alt="EcoBum in einem hellen Badezimmer mit blauer Glasvase" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-4.jpg" alt="EcoBum in einem warmen, mediterran inspirierten Badezimmer" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-5.jpg" alt="Blick durch die Tür auf EcoBum in einem modernen Holzbad" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-6.jpg" alt="EcoBum in einem eleganten Badezimmer mit warmen Gold-Akzenten" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-1.jpg" alt="Visualisierung von EcoBum in einem dunklen, hochwertigen Badezimmer mit Holzlamellen" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-2.jpg" alt="Visualisierung von EcoBum in einem hellen Holzbad mit blauen Textil-Akzenten" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-3.jpg" alt="Visualisierung von EcoBum in einem hellen Badezimmer mit blauer Glasvase" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-4.jpg" alt="Visualisierung von EcoBum in einem warmen, mediterran inspirierten Badezimmer" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-5.jpg" alt="Visualisierung mit Blick durch die Tür auf EcoBum in einem modernen Holzbad" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure class="lg-item"><img width="1000" height="1249" src="assets/bath-6.jpg" alt="Visualisierung von EcoBum in einem eleganten Badezimmer mit warmen Gold-Akzenten" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
         </div>
+        <p class="media-note" data-i18n="media.viz_room">Visualisierung im Badezimmer – kein finales Produktfoto</p>
       </div>
     </section>
 
@@ -304,7 +315,8 @@
           <h2><span data-i18n="how.h2a">In vier</span> <span class="accent" data-i18n="how.h2b">Schritten.</span></h2>
         </div>
         <div class="how-grid">
-          <figure class="how-figure"><img src="assets/how-it-works.jpg" alt="EcoBum Handbidet im modernen Badezimmer" width="900" height="900" loading="lazy" decoding="async" onerror="this.remove()" /></figure>
+          <figure class="how-figure"><img src="assets/how-it-works.jpg" alt="Visualisierung des EcoBum Handbidets im modernen Badezimmer" width="900" height="900" loading="lazy" decoding="async" onerror="var f=this.closest('figure'),n=f.nextElementSibling;if(n&amp;&amp;n.classList.contains('media-note'))n.remove();f.remove();" /></figure>
+          <p class="media-note media-note-figure" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
           <div>
             <div class="steps">
               <div class="step"><span class="step-num">01</span><div><h3 data-i18n="how.s1t">Wasser abstellen</h3><p data-i18n="how.s1d">Vor jeder Installation muss das Wasser am Eckventil abgestellt werden.</p></div></div>
@@ -482,7 +494,8 @@
         </div>
         <!-- Wasser-Motiv statt Blatt-Grün: Öko-Klischee-Bildsprache ist laut Brand-PDO
              ausgeschlossen; das Wasserbild stützt die Kernbotschaft und bleibt im Blau-System. -->
-        <figure class="leaf-band"><img src="assets/design-1.jpg" alt="Wassertropfen an einer Glasscheibe in warmem Tageslicht" width="1500" height="844" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+        <figure class="leaf-band"><img src="assets/design-1.jpg" alt="Wassertropfen an einer Glasscheibe in warmem Tageslicht" width="1500" height="844" loading="lazy" decoding="async" onerror="var f=this.closest('figure'),n=f.nextElementSibling;if(n&amp;&amp;n.classList.contains('media-note'))n.remove();f.remove();" /></figure>
+        <p class="media-note" data-i18n="media.mood">Moodbild – dient der Atmosphäre</p>
       </div>
     </section>
 
@@ -495,10 +508,11 @@
         </div>
         <!-- DETAIL-NAHAUFNAHMEN (Produktvisualisierungen/Renderings): assets/detail-1..3.jpg -->
         <div class="detail-strip">
-          <figure><img src="assets/detail-1.jpg" alt="Makro-Nahaufnahme des EcoBum Sprühkopfs mit feinem Strahlbild" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure><img src="assets/detail-2.jpg" alt="EcoBum Sprühkopf in der Wandhalterung (Visualisierung)" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
-          <figure><img src="assets/detail-3.jpg" alt="Nahaufnahme von T-Stück, Absperrhahn und Brauseschlauch des EcoBum" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure><img src="assets/detail-1.jpg" alt="Visualisierung einer Makro-Nahaufnahme des EcoBum Sprühkopfs mit feinem Strahlbild" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure><img src="assets/detail-2.jpg" alt="Visualisierung des EcoBum Sprühkopfs in der Wandhalterung" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
+          <figure><img src="assets/detail-3.jpg" alt="Visualisierung von T-Stück, Absperrhahn und Brauseschlauch des EcoBum" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
         </div>
+        <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
         <p class="detail-cap" data-i18n="det.material_cap">Geplante Premium-Materialrichtung, abhängig von finaler Produktversion</p>
         <div class="detail-grid">
           <div class="detail-col">
@@ -555,7 +569,8 @@
           <article class="card on-dark"><h3 data-i18n="warum.c2t">Ressourcen bewusster nutzen</h3><p data-i18n="warum.c2d">Unsere Produkte sollen dabei helfen, Papier, Feuchttücher und andere Einwegprodukte bewusster zu verwenden. Nachhaltigkeit verstehen wir als Entwicklungsziel – transparent und ohne übertriebene Versprechen.</p></article>
           <article class="card on-dark"><h3 data-i18n="warum.c3t">Durchdacht statt kompliziert</h3><p data-i18n="warum.c3d">Klare Funktionen, verständliche Anwendung und modernes Design sollen jedes Pudado-Produkt prägen. EcoBum macht diesen Anspruch erstmals sichtbar.</p></article>
         </div>
-        <figure class="media-band lifestyle"><img src="assets/lifestyle-bathroom.jpg" alt="Modernes helles Badezimmer mit sauberer Atmosphäre" width="1100" height="1374" loading="lazy" decoding="async" onerror="this.remove()" /></figure>
+        <figure class="media-band lifestyle"><img src="assets/lifestyle-bathroom.jpg" alt="Modernes helles Badezimmer mit sauberer Atmosphäre" width="1100" height="1374" loading="lazy" decoding="async" onerror="var f=this.closest('figure'),n=f.nextElementSibling;if(n&amp;&amp;n.classList.contains('media-note'))n.remove();f.remove();" /></figure>
+        <p class="media-note" data-i18n="media.mood">Moodbild – dient der Atmosphäre</p>
       </div>
     </section>
 
@@ -640,9 +655,10 @@
           <!-- Honeypot (Spamschutz): für Menschen unsichtbar, von Bots oft ausgefüllt -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="cHp" name="website" tabindex="-1" autocomplete="off" /></label></div>
           <label class="checkbox"><input type="checkbox" id="cConsent" required disabled /><span><span data-i18n="kon.consent">Ich stimme zu, dass Pudado meine Angaben zur Bearbeitung meiner Anfrage verarbeitet. Weitere Informationen finde ich in der</span> <a href="datenschutz.html" data-i18n="kon.consent_link">Datenschutzerklärung</a>.</span></label>
-          <a href="mailto:kontakt@pudado.de" class="btn btn-primary" data-i18n="kon.btn_mail">E-Mail an kontakt@pudado.de</a>
+          <!-- Betreff vorbelegt, damit Anfragen vor dem Launch ohne Backend sauber zuordenbar bleiben. -->
+          <a href="mailto:info@pudado.de?subject=EcoBum%20Anfrage" class="btn btn-primary" data-i18n="kon.btn_mail">E-Mail an info@pudado.de</a>
           <p class="form-message" id="contactMsg" role="status" hidden></p>
-          <p class="form-fallback"><span data-i18n="kon.fallback">Du erreichst uns auch direkt per E-Mail:</span> <a href="mailto:kontakt@pudado.de">kontakt@pudado.de</a></p>
+          <p class="form-fallback"><span data-i18n="kon.fallback">Du erreichst uns auch direkt per E-Mail:</span> <a href="mailto:info@pudado.de">info@pudado.de</a></p>
         </form>
       </div>
     </section>
@@ -656,16 +672,18 @@
         </div>
         <!-- NEWSLETTER — ohne Backend. TODO: DE/EU Double-Opt-in anschließen (script.js -> initNewsletterForm). -->
         <form class="form newsletter-form" id="newsletterForm" novalidate>
-          <p class="form-notice on-dark" data-i18n="news.notice">Die Newsletter-Anmeldung wird gerade vorbereitet. Sobald sie live ist, kannst du dich offiziell anmelden.</p>
+          <!-- Der Mailto-Link steht bewusst AUSSERHALB des data-i18n-Spans: applyLanguage()
+               setzt textContent und würde einen Link im übersetzten Element entfernen. -->
+          <p class="form-notice on-dark"><span data-i18n="news.notice">Die Newsletter-Anmeldung wird gerade vorbereitet. Für Launch-Updates erreichst du uns vorerst direkt unter</span> <a href="mailto:info@pudado.de?subject=EcoBum%20Launch-Update">info@pudado.de</a>.</p>
           <div class="newsletter-row">
             <input type="text" id="nFirst" name="firstname" data-i18n-ph="news.ph_first" placeholder="Vorname (optional)" aria-label="Vorname (optional)" autocomplete="given-name" disabled />
             <input type="email" id="nEmail" name="email" data-i18n-ph="news.ph_email" placeholder="E-Mail-Adresse" aria-label="E-Mail-Adresse" autocomplete="email" required disabled />
           </div>
           <!-- Honeypot (Spamschutz) -->
           <div class="hp-field" aria-hidden="true"><label>Website (nicht ausfüllen)<input type="text" id="nHp" name="website" tabindex="-1" autocomplete="off" /></label></div>
-          <label class="checkbox on-dark"><input type="checkbox" id="nConsent" required disabled /><span><span data-i18n="news.consent">Ich möchte Updates von Pudado zu EcoBum per E-Mail erhalten und stimme der Verarbeitung meiner Daten gemäß</span> <a href="datenschutz.html" data-i18n="news.consent_link">Datenschutzerklärung</a><span data-i18n="news.consent_end"> zu. Ich kann mich jederzeit abmelden.</span></span></label>
+          <label class="checkbox on-dark"><input type="checkbox" id="nConsent" required disabled /><span><span data-i18n="news.consent">Ich möchte Updates von Pudado zu EcoBum per E-Mail erhalten und stimme der Verarbeitung meiner Daten gemäß</span> <a href="datenschutz.html" data-i18n="news.consent_link">Datenschutzerklärung</a><span data-i18n="news.consent_end"> zu. Für die spätere Newsletter-Anmeldung ist ein Double-Opt-in vorgesehen. Ich kann mich jederzeit abmelden.</span></span></label>
           <button type="button" class="btn btn-light" data-i18n="news.prep" disabled>Anmeldung wird vorbereitet</button>
-          <p class="news-optin on-dark" data-i18n="news.optin_hint">Die Anmeldung erfolgt per Double-Opt-in. Du kannst dich jederzeit wieder abmelden.</p>
+          <p class="news-optin on-dark" data-i18n="news.optin_hint">Für die spätere Newsletter-Anmeldung ist ein Double-Opt-in vorgesehen – mit jederzeitiger Abmeldung.</p>
           <p class="form-message on-dark" id="newsletterMsg" role="status" hidden></p>
         </form>
       </div>
@@ -694,6 +712,7 @@
         <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
         <a href="#" id="openCookieSettings" data-i18n="foot.cookie">Cookie-Einstellungen</a>
         <a href="#kontakt" data-i18n="foot.kontakt">Kontakt</a>
+        <a href="mailto:info@pudado.de?subject=EcoBum%20Anfrage">info@pudado.de</a>
       </nav>
     </div>
     <div class="container footer-bottom"><p>&copy; <span id="year"></span> Pudado. <span data-i18n="foot.rights">Alle Rechte vorbehalten.</span></p></div>
@@ -706,32 +725,34 @@
     <a href="#kontakt" class="primary" data-i18n="sticky.interest">Interesse anmelden</a>
   </nav>
 
-  <!-- ============================ COOKIE-BANNER ============================ -->
-  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie-Hinweis" hidden>
+  <!-- ============================ COOKIE-HINWEIS ============================
+       Prelaunch-Stand: Es sind KEINE Statistik-, Marketing- oder Externe-Medien-
+       Dienste eingebunden (kein Third-Party-Script und kein iframe im Projekt).
+       Der Hinweis nennt deshalb nur die tatsaechlich genutzte lokale Speicherung
+       (Sprachwahl + diese Bestaetigung) und stellt keine optionalen Kategorien
+       zur Wahl, die es gar nicht gibt. Kommen spaeter echte Dienste dazu, gehoeren
+       die Schalter zurueck - Laden erst nach Zustimmung (script.js -> applyConsent). -->
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Hinweis zu Cookies und lokalen Einstellungen" hidden>
     <div class="cookie-inner">
       <div class="cookie-text">
-        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Wir verwenden Cookies</span></h3>
-        <p data-i18n="ck.text">Wir nutzen notwendige Cookies, damit diese Website funktioniert. Mit deiner Zustimmung verwenden wir außerdem optionale Cookies für Statistik, Marketing und externe Medien. Du kannst deine Auswahl jederzeit ändern.</p>
+        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Cookies &amp; lokale Einstellungen</span></h3>
+        <p data-i18n="ck.text">Diese Website nutzt ausschließlich technisch notwendige Speicherung – für deine Sprachwahl und für diesen Hinweis. Es sind keine Statistik-, Marketing- oder Tracking-Dienste eingebunden, und es werden keine Daten an Dritte übertragen.</p>
       </div>
       <div class="cookie-actions">
-        <button class="btn btn-primary" id="acceptAll" data-i18n="ck.all">Alle akzeptieren</button>
-        <button class="btn btn-ghost" id="acceptNecessary" data-i18n="ck.nec">Nur notwendige Cookies</button>
-        <button class="btn btn-link" id="openSettings" data-i18n="ck.settings">Einstellungen</button>
+        <button class="btn btn-primary" id="acceptNecessary" data-i18n="ck.ok">Verstanden</button>
+        <button class="btn btn-link" id="openSettings" data-i18n="ck.settings">Details</button>
       </div>
     </div>
   </div>
 
   <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle" hidden>
     <div class="cookie-modal-card">
-      <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookie-Einstellungen</h3>
-      <p class="modal-intro" data-i18n="ck.modal_intro">Wähle aus, welche Cookies du erlauben möchtest. Notwendige Cookies sind für den Betrieb der Website erforderlich und immer aktiv.</p>
-      <div class="cookie-option"><div><strong id="ckNecessaryLabel" data-i18n="ck.necessary">Notwendige Cookies</strong><p data-i18n="ck.necessary_d">Erforderlich für grundlegende Funktionen der Website. Immer aktiv.</p></div><label class="switch"><input type="checkbox" checked disabled aria-labelledby="ckNecessaryLabel" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong id="ckStatsLabel" data-i18n="ck.stats">Statistik / Analytics</strong><p data-i18n="ck.stats_d">Hilft uns zu verstehen, wie die Website genutzt wird.</p></div><label class="switch"><input type="checkbox" id="ckStats" aria-labelledby="ckStatsLabel" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong id="ckMarketingLabel" data-i18n="ck.marketing">Marketing</strong><p data-i18n="ck.marketing_d">Wird genutzt, um Werbung relevanter zu machen.</p></div><label class="switch"><input type="checkbox" id="ckMarketing" aria-labelledby="ckMarketingLabel" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong id="ckMediaLabel" data-i18n="ck.media">Externe Medien</strong><p data-i18n="ck.media_d">Ermöglicht das Laden externer Inhalte (z. B. Videos, Karten).</p></div><label class="switch"><input type="checkbox" id="ckMedia" aria-labelledby="ckMediaLabel" /><span class="slider"></span></label></div>
+      <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookies &amp; lokale Einstellungen</h3>
+      <p class="modal-intro" data-i18n="ck.modal_intro">Wir setzen keine optionalen Cookies ein: Es gibt auf dieser Website keine Statistik-, Marketing- oder Externe-Medien-Dienste. Deshalb gibt es hier nichts zuzustimmen oder abzulehnen.</p>
+      <div class="cookie-option"><div><strong data-i18n="ck.necessary">Technisch notwendig</strong><p data-i18n="ck.necessary_d">Nur lokal in deinem Browser gespeichert: die gewählte Sprache und die Bestätigung dieses Hinweises. Keine Weitergabe, keine Auswertung.</p></div></div>
+      <div class="cookie-option"><div><strong data-i18n="ck.future">Falls sich das ändert</strong><p data-i18n="ck.future_d">Sollten später optionale Dienste dazukommen, werden sie erst nach deiner ausdrücklichen Zustimmung geladen – und Ablehnen bleibt genauso einfach wie Zustimmen.</p></div></div>
       <div class="cookie-modal-actions">
-        <button class="btn btn-ghost" id="modalNecessary" data-i18n="ck.only_nec">Nur notwendige</button>
-        <button class="btn btn-primary" id="saveSettings" data-i18n="ck.save">Auswahl speichern</button>
+        <button class="btn btn-primary" id="saveSettings" data-i18n="ck.close">Schließen</button>
       </div>
     </div>
   </div>

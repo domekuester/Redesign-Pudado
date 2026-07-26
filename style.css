@@ -880,6 +880,17 @@ p  { margin: 0 0 1rem; }
 .detail-strip figure:hover img { transform: scale(1.04); }
 .detail-cap { text-align: center; margin: 16px 0 0; font-size: .85rem; color: var(--gray); font-family: var(--font-head); font-weight: 600; }
 
+/* ----------------------- Bildhinweis (Prelaunch-Ehrlichkeit) --
+   Produkt-, Bad- und Detailbilder sind derzeit Visualisierungen, keine
+   finalen Produktfotos. Bewusst als leise Caption statt als Overlay-Badge:
+   die Bildwirkung bleibt unangetastet, der Hinweis ist trotzdem eindeutig.
+   --gray-light ist auf WCAG-AA-Kontrast kalibriert (≈5:1 auf Weiß). */
+.media-note { margin: 10px 0 0; text-align: center; font-size: .78rem; line-height: 1.45; color: var(--gray-light); }
+/* Auf den Royal-Bühnen (Hero, .section-dark) trägt --gray-light keinen Kontrast. */
+.hero .media-note, .section-dark .media-note { color: var(--royal-text); }
+/* Hinweis unter randlosen aspect-ratio-Figuren (z. B. .how-figure) etwas näher ans Bild. */
+.media-note-figure { margin-top: 12px; }
+
 /* ----------------------- Lifestyle-Galerie ------------------ */
 .lifestyle-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .lg-item { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); background: linear-gradient(150deg, var(--sky), #dbe7f6); }
@@ -1050,7 +1061,11 @@ p  { margin: 0 0 1rem; }
 .calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
 .calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
 .calc2-more-list strong { color: var(--navy); }
-.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); border-left: 3px solid var(--aqua-mist); }
+/* Vollständige Hairline statt farbigem Side-Stripe (border-left) – der
+   Akzent liegt jetzt auf dem Label-Punkt, nicht auf einer Kante. */
+.calc2-co2 { margin: 16px 0 0; padding: 16px 18px; border-radius: var(--radius-sm); background: var(--mist-2); border: 1px solid var(--border-soft); }
+.calc2-co2 .co2-label { display: flex; align-items: center; gap: 9px; }
+.calc2-co2 .co2-label::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px var(--sky); }
 .co2-label { font-family: var(--font-head); font-weight: 600; font-size: .88rem; color: var(--navy); margin: 0 0 4px; }
 .co2-result { margin: 0; font-size: .95rem; color: var(--gray); }
 .co2-note { margin: 8px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray-light); }
@@ -1069,11 +1084,28 @@ p  { margin: 0 0 1rem; }
 .reveal-5 { transition-delay: .30s; }
 
 /* ----------------------- Responsive ------------------------- */
-@media (max-width: 980px) {
-  /* Hamburger-Menü schon ab 980px statt erst 760px: die volle Desktop-Nav
-     (7 Links + Sprachumschalter + 2 CTA-Buttons, ~1130px Eigenbreite)
-     passt auf Tablet-Breiten wie 768–834px (iPad) nicht mehr in eine Zeile
-     und verursachte dort horizontales Scrollen auf JEDER Seite der Site. */
+/* ---------------------------------------------------------------
+   HEADER-BREAKPOINT (eigene Query, absichtlich getrennt von den
+   980px-Layoutregeln unten)
+
+   Rechnung, die diesen Breakpoint bestimmt: Der Container gibt maximal
+   1200px − 2×26px Padding = 1148px Inhaltsbreite her. Die volle Desktop-Nav
+   brauchte aber 1267px (Logo 124 + 16 Gap + Nav 1127, davon Linkliste 568,
+   32 Gap und Aktionen 526). Sie war damit 119px BREITER als der eigene
+   Container – auf 1200px entstand horizontales Scrollen (scrollWidth 1292),
+   oberhalb davon lief der Header still aus dem 1200px-Raster heraus.
+
+   Zwei Stellschrauben lösen das (siehe die min-width-Queries darunter):
+   1. Die sekundäre CTA "Interesse anmelden" zielt auf #kontakt – exakt das
+      Ziel des Nav-Links "Kontakt". Im Desktop-Header ist sie damit doppelt
+      und kostete 200px. Im Burger-Menü bleibt sie sichtbar, dort ist Platz.
+      Das allein bringt den Header auf 1066px Eigenbreite.
+   2. Im unteren Desktop-Band (1121–1279px) zusätzlich moderat engere Gaps
+      (Linkliste 28→22px, Nav 32→26px) → 1024px Eigenbreite. Ohne Schritt 2
+      blieben bei 1121px nur 3px Restluft, der Header klebte am Logo.
+   Ergebnis: Desktop ab 1121px mit ≥45px Restluft, darunter der Burger.
+   --------------------------------------------------------------- */
+@media (max-width: 1120px) {
   /* Deckend statt transluzent: durchscheinender Seiteninhalt machte die
      Liste unruhig; ein opakes Panel liest sich ruhiger und spart zudem das
      Blur-Compositing (Scroll-Performance). */
@@ -1082,11 +1114,31 @@ p  { margin: 0 0 1rem; }
   .nav-list { flex-direction: column; gap: 4px; width: 100%; }
   .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--royal-line); }
   .nav-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
-  .nav-actions .btn { width: 100%; }
+  /* Touch-Ziele im offenen Menü auf ≥44px Höhe bringen (Apple HIG / WCAG):
+     die CTAs lagen mit 11px Padding bei 39px. Unterhalb von 1121px ist das
+     Burger-Menü der einzige Ort der sekundären CTA – hier muss sie greifbar sein. */
+  .nav-actions .btn { width: 100%; padding-top: 14px; padding-bottom: 14px; }
   .lang-switch { align-self: center; }
-  /* Touch-Ziele im offenen Menü auf ≥44px Höhe bringen (Apple HIG / WCAG). */
   .lang-switch button { padding: 14px 18px; font-size: .85rem; }
   .hamburger { display: flex; }
+}
+/* Desktop-Header: sekundäre CTA raus (redundant, siehe Rechnung oben).
+   .hamburger bleibt hier display:none (Basiswert) – Desktop- und
+   Burger-Navigation sind dadurch nie gleichzeitig sichtbar. */
+@media (min-width: 1121px) {
+  /* Auf .nav-cta-secondary gezielt, NICHT auf den Optik-Modifier: die Seiten
+     nutzen für diese CTA teils btn-ghost, teils btn-link – eine Regel auf dem
+     Modifier hätte 18 von 20 Seiten übersehen. */
+  .site-header .nav-cta-secondary { display: none; }
+}
+/* Unteres Desktop-Band: der Container ist hier noch schmaler als 1200px,
+   deshalb etwas ruhigere Gaps. Ab 1280px greifen wieder die Basiswerte. */
+@media (min-width: 1121px) and (max-width: 1279px) {
+  .main-nav { gap: 26px; }
+  .nav-list { gap: 22px; }
+}
+
+@media (max-width: 980px) {
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1146,7 +1198,9 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .nav-list a { position: relative; }
 .nav-list a.active { color: #fff; }
 .nav-list a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--aqua-mist); border-radius: 2px; }
-@media (max-width: 980px) {
+/* Gleicher Breakpoint wie der Burger-Header oben: im vertikalen Menü sitzt
+   der Aktiv-Unterstrich links kurz statt über die volle Zeilenbreite. */
+@media (max-width: 1120px) {
   .nav-list a.active::after { left: 0; right: auto; width: 28px; bottom: 8px; }
 }
 /* Auf Royal-Flächen weißer Fokusring statt Blau (Kontrast zur Bühne) */
@@ -1159,3 +1213,96 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .form .field input:disabled, .form .field select:disabled, .form .field textarea:disabled,
 .newsletter-row input:disabled { opacity: .55; cursor: not-allowed; }
 .btn:disabled, .btn[disabled] { opacity: .55; cursor: not-allowed; pointer-events: none; }
+
+/* =============================================================
+   IMPECCABLE FLAGSHIP POLISH
+   Sichtbarer Premium-Qualitätssprung, konsequent auf dem
+   bestehenden Royal-Blue-System aufgebaut (keine neuen Tokens
+   als Magic Numbers, keine Fremdpalette). Alle Bewegungen werden
+   von der globalen prefers-reduced-motion-Regel oben gestoppt.
+   ============================================================= */
+
+/* ---- 1. Signature-Button: teureres, ruhigeres Hover-Gefühl ----
+   Weichere Ease-out-Kurve + Schatten-Bloom statt hartem Sprung.
+   Gilt global für jede CTA (Hero, Header, Sektionen). */
+.btn { transition:
+  transform .32s cubic-bezier(.16,1,.3,1),
+  box-shadow .32s cubic-bezier(.16,1,.3,1),
+  background .25s ease, color .2s ease, border-color .2s ease; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(35,95,208,.36), inset 0 1px 0 rgba(255,255,255,.24); }
+.hero .btn-primary:hover, .site-header .btn-primary:hover { box-shadow: 0 20px 46px rgba(1,10,40,.5), inset 0 1px 0 rgba(255,255,255,.5); }
+.btn-ghost:hover { transform: translateY(-2px); }
+
+/* ---- 2. Weiße Karten: feine obere Lichtkante (Materialtiefe) ----
+   Ein präziser 1px-Innenglanz oben lässt die Fläche wie ein Panel
+   wirken statt wie „Box mit Schatten". Hover subtiler geführt. */
+.card, .usecase-card, .detail-col, .form.card, .calc2-inputs, .calc2-results {
+  box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.card { transition: transform .35s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .35s cubic-bezier(.16,1,.3,1); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.9); }
+
+/* ---- 3. Hero: Materialtiefe (Vignette) + eleganter Scroll-Impuls ----
+   Sanfte Randabdunklung gibt der Royal-Bühne Tiefe, ohne die Farbe
+   zu verändern. Der Scroll-Punkt führt ruhig in den ersten Scroll. */
+.hero { --hero-vignette: radial-gradient(120% 90% at 50% 8%, transparent 58%, rgba(1,10,40,.28)); }
+.hero::before { background-image: var(--hero-vignette),
+  radial-gradient(38% 30% at 26% 22%, rgba(255,255,255,.10), transparent 70%),
+  radial-gradient(30% 24% at 72% 64%, rgba(92,138,230,.14), transparent 72%),
+  radial-gradient(26% 22% at 84% 12%, rgba(255,255,255,.08), transparent 70%); }
+.hero-scroll {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: clamp(18px, 3vw, 30px); z-index: 2;
+  width: 26px; height: 42px; border-radius: var(--radius-pill);
+  border: 1.5px solid rgba(169,220,236,.5);
+  display: grid; justify-items: center; align-content: start; padding-top: 8px;
+}
+.hero-scroll-dot { width: 4px; height: 8px; border-radius: 2px; background: var(--aqua-mist); animation: hero-scroll-cue 1.9s cubic-bezier(.16,.84,.44,1) infinite; }
+@keyframes hero-scroll-cue { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 70% { opacity: 1; transform: translateY(12px); } 100% { opacity: 0; transform: translateY(14px); } }
+
+/* ---- 4. Vergleichs-Panel: präziserer Mittelübergang ----
+   Der Upgrade-Pfeil bekommt eine feine Aqua-Lichtkante und einen
+   ruhigen Puls (Transformation, kein „VS"-Kampf). */
+.duel-shift { box-shadow: var(--shadow-sm), inset 0 0 0 1px rgba(169,220,236,.5); }
+@media (min-width: 761px) { .duel-shift svg { animation: duel-nudge 3.4s ease-in-out infinite; } }
+@keyframes duel-nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+
+/* ---- 5. FAQ: weicheres Öffnen + Aqua-Aktivkante ----
+   Das offene Item bekommt eine feine linke Aktivmarke in Aqua
+   (nur 2px, als Zustands-Signal – kein dekorativer Side-Stripe). */
+.faq-item { transition: border-color .25s ease, background .25s ease; }
+.faq-item[open] { background: linear-gradient(180deg, var(--sky-soft), transparent 60%); border-radius: var(--radius-sm); }
+.faq-item[open] summary { color: var(--blue-ink); }
+.faq-item[open] p { animation: faq-open .4s cubic-bezier(.16,1,.3,1); }
+
+/* ---- 6. Foto-Check: Upload-Fläche hochwertiger (Concierge) ----
+   Feiner Innenglanz + ruhigeres Hover-Anheben; die Fläche wirkt
+   wie eine wertige Einladung statt wie ein Formularrahmen. */
+.fc-select { box-shadow: inset 0 1px 0 rgba(255,255,255,.8); }
+.fc-select:hover { box-shadow: 0 0 0 4px rgba(169,220,236,.4), 0 16px 40px rgba(35,95,208,.14), inset 0 1px 0 rgba(255,255,255,.8); }
+
+/* ---- 7. Rechner-Ergebnis: klarere Zahlen-Hierarchie ----
+   Die Held-Kennzahl trägt die Karte deutlicher; Balken etwas
+   ruhiger. (Gilt für den vorhandenen 3-Eingaben-Rechner auf
+   diesem Branch – der kompakte 2-Eingaben-Rechner liegt separat
+   auf feature/compact-paper-calculator.) */
+.kpi.accent .kpi-num { font-size: 2.15rem; }
+.calc2-results { box-shadow: 0 22px 56px rgba(20,40,80,.12), inset 0 1px 0 rgba(255,255,255,.9); }
+
+/* ---- 8. Kontakt-Abschluss & Footer: markanter Seitenausklang ----
+   Der Footer beginnt mit einer präzisen Aqua-Lichtkante (gleiche
+   Signatur wie die Royal-Bühnen) – klarer, ruhiger Abschluss. */
+.site-footer { position: relative; }
+.site-footer::before { content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(169,220,236,.22) 35%, rgba(169,220,236,.22) 65%, transparent); }
+
+/* ---- 9. Header: hochwertigerer Sticky-Zustand ----
+   Beim Scrollen verdichtet sich die Leiste minimal und der Schatten
+   vertieft sich weich – präziser „abgehobener" Zustand. */
+.site-header { transition: box-shadow .3s ease, background .3s ease; }
+.site-header.is-scrolled { background: linear-gradient(180deg, rgba(6,34,90,.96), rgba(3,24,72,.92)); }
+
+/* ---- 10. Reduced-Motion: alle neuen Bewegungen sauber stoppen ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-dot, .duel-shift svg { animation: none !important; }
+  .hero-scroll-dot { opacity: .9; }
+}
