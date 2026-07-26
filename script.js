@@ -26,11 +26,31 @@ document.addEventListener('DOMContentLoaded', () => {
    ------------------------------------------------------------- */
 const LANG_KEY = 'pudado_lang';
 window.PUDADO_LANG = 'de';
-// Ursprünglicher <title> aus index.html (SEO-optimiert). Wird für die
-// Standardsprache (de) beibehalten statt durch die kürzere Marketing-
-// Variante aus translations.js überschrieben; nur bei echtem Wechsel
-// auf en/fr wird ein übersetzter Titel gesetzt.
-const DEFAULT_TITLE = document.title;
+
+/* Seitenkennung + im HTML gerenderte Meta-Werte.
+   Jede Seite trägt ihren Schlüssel selbst (data-page am <body>), die Texte
+   liegen als "meta.title.<key>" / "meta.desc.<key>" in translations.js.
+   Damit gibt es keine Seitenliste im JS: eine neue Seite bringt ihr
+   data-page mit und funktioniert, sobald ihre Schlüssel existieren.
+   Die HTML-Werte sind der Rückfall – fehlt ein Schlüssel, bleibt der
+   handgeschriebene Titel/die Description der Seite stehen. Früher wurde
+   hier pauschal der STARTSEITEN-Titel gesetzt, wodurch Unterseiten beim
+   Sprachwechsel ihren eigenen Titel verloren. */
+const PAGE_KEY = document.body.getAttribute('data-page') || '';
+const META_EL = document.querySelector('meta[name="description"]');
+const HTML_TITLE = document.title;
+const HTML_DESC = META_EL ? META_EL.getAttribute('content') : null;
+
+/* Setzt Titel und Description für die aktuelle Seite in der aktiven Sprache. */
+function applyMeta(dict, lang) {
+  const d = dict[lang] || {};
+  const title = PAGE_KEY && d['meta.title.' + PAGE_KEY];
+  document.title = title || HTML_TITLE;
+
+  if (!META_EL) return;
+  const desc = PAGE_KEY && d['meta.desc.' + PAGE_KEY];
+  if (desc || HTML_DESC != null) META_EL.setAttribute('content', desc || HTML_DESC);
+}
 
 function t(key) {
   const dict = (window.PUDADO_I18N || {});
@@ -44,11 +64,7 @@ function applyLanguage(lang) {
   window.PUDADO_LANG = lang;
 
   document.documentElement.lang = lang;
-  if (lang === 'de') {
-    document.title = DEFAULT_TITLE;
-  } else if (dict[lang]['meta.title']) {
-    document.title = dict[lang]['meta.title'];
-  }
+  applyMeta(dict, lang);
 
   // Textinhalte
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -451,6 +467,10 @@ function initCookieConsent() {
   }
 
   // --- Aktionen ---
+  // Prelaunch: Es sind keine optionalen Dienste eingebunden, deshalb gibt es im
+  // UI auch keine Kategorie-Schalter mehr. Die Buttons "Alle akzeptieren" und
+  // "Nur notwendige" im Modal existieren derzeit nicht – die Handler bleiben
+  // null-sicher, damit sie sofort wieder greifen, wenn die Schalter zurückkommen.
   const all          = { necessary: true, analytics: true, marketing: true, external_media: true };
   const onlyNeeded   = { necessary: true, analytics: false, marketing: false, external_media: false };
 
@@ -474,16 +494,19 @@ function initCookieConsent() {
   });
 
   // Auswahl im Modal speichern
+  // Ohne Kategorie-Schalter ist dieser Button ein reines "Schließen": es bleibt
+  // bei der notwendigen Speicherung. Die Abfragen sind null-sicher, damit die
+  // Logik unverändert weiterläuft, sobald es wieder Schalter gibt.
   btnSaveSettings && btnSaveSettings.addEventListener('click', () => {
     saveConsent({
       necessary: true,
-      analytics: ckStats.checked,
-      marketing: ckMarketing.checked,
-      external_media: ckMedia.checked
+      analytics: ckStats ? ckStats.checked : false,
+      marketing: ckMarketing ? ckMarketing.checked : false,
+      external_media: ckMedia ? ckMedia.checked : false
     });
     hideBanner(banner);
     closeModal(modal);
-    toast(t('ck.toast_saved'));
+    toast(t(ckStats ? 'ck.toast_saved' : 'ck.toast_nec'));
   });
 
   // Modal per Klick auf den Hintergrund schließen

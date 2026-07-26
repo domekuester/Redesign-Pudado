@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
   <link rel="stylesheet" href="../style.css" />
 </head>
-<body>
+<body data-page="blog-hygiene-menstruation">
   <a class="skip-link" href="#main-content" data-i18n="a11y.skip">Zum Inhalt springen</a>
   <header class="site-header" id="top">
     <div class="container header-inner">
@@ -36,7 +36,7 @@
             <button type="button" data-lang="en">EN</button>
             <button type="button" data-lang="fr">FR</button>
           </div>
-          <a href="../index.html#kontakt" class="btn btn-ghost nav-cta" data-i18n="cta.interesse">Interesse anmelden</a>
+          <a href="../index.html#kontakt" class="btn btn-ghost nav-cta nav-cta-secondary" data-i18n="cta.interesse">Interesse anmelden</a>
           <a href="../index.html#produkt" class="btn btn-primary nav-cta" data-i18n="cta.entdecken">EcoBum entdecken</a>
         </div>
       </nav>
@@ -87,38 +87,43 @@
         <a href="../datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
         <a href="#" id="openCookieSettings" data-i18n="foot.cookie">Cookie-Einstellungen</a>
         <a href="../index.html#kontakt" data-i18n="foot.kontakt">Kontakt</a>
+        <a href="mailto:info@pudado.de?subject=EcoBum%20Anfrage">info@pudado.de</a>
       </nav>
     </div>
     <div class="container footer-bottom"><p>&copy; <span id="year"></span> Pudado. <span data-i18n="foot.rights">Alle Rechte vorbehalten.</span></p></div>
   </footer>
-  <!-- ============================ COOKIE-BANNER ============================ -->
-  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie-Hinweis" hidden>
+  <!-- ============================ COOKIE-HINWEIS ============================
+       Prelaunch-Stand: Es sind KEINE Statistik-, Marketing- oder Externe-Medien-
+       Dienste eingebunden (kein Third-Party-Script und kein iframe im Projekt).
+       Der Hinweis nennt deshalb nur die tatsaechlich genutzte lokale Speicherung
+       (Sprachwahl + diese Bestaetigung) und stellt keine optionalen Kategorien
+       zur Wahl, die es gar nicht gibt. Kommen spaeter echte Dienste dazu, gehoeren
+       die Schalter zurueck - Laden erst nach Zustimmung (script.js -> applyConsent). -->
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Hinweis zu Cookies und lokalen Einstellungen" hidden>
     <div class="cookie-inner">
       <div class="cookie-text">
-        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Wir verwenden Cookies</span></h3>
-        <p data-i18n="ck.text">Wir nutzen notwendige Cookies, damit diese Website funktioniert. Mit deiner Zustimmung verwenden wir außerdem optionale Cookies für Statistik, Marketing und externe Medien. Du kannst deine Auswahl jederzeit ändern.</p>
+        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Cookies &amp; lokale Einstellungen</span></h3>
+        <p data-i18n="ck.text">Diese Website nutzt ausschließlich technisch notwendige Speicherung – für deine Sprachwahl und für diesen Hinweis. Es sind keine Statistik-, Marketing- oder Tracking-Dienste eingebunden, und es werden keine Daten an Dritte übertragen.</p>
       </div>
       <div class="cookie-actions">
-        <button class="btn btn-primary" id="acceptAll" data-i18n="ck.all">Alle akzeptieren</button>
-        <button class="btn btn-ghost" id="acceptNecessary" data-i18n="ck.nec">Nur notwendige Cookies</button>
-        <button class="btn btn-link" id="openSettings" data-i18n="ck.settings">Einstellungen</button>
+        <button class="btn btn-primary" id="acceptNecessary" data-i18n="ck.ok">Verstanden</button>
+        <button class="btn btn-link" id="openSettings" data-i18n="ck.settings">Details</button>
       </div>
     </div>
   </div>
+
   <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle" hidden>
     <div class="cookie-modal-card">
-      <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookie-Einstellungen</h3>
-      <p class="modal-intro" data-i18n="ck.modal_intro">Wähle aus, welche Cookies du erlauben möchtest. Notwendige Cookies sind für den Betrieb der Website erforderlich und immer aktiv.</p>
-      <div class="cookie-option"><div><strong data-i18n="ck.necessary">Notwendige Cookies</strong><p data-i18n="ck.necessary_d">Erforderlich für grundlegende Funktionen der Website. Immer aktiv.</p></div><label class="switch"><input type="checkbox" checked disabled /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.stats">Statistik / Analytics</strong><p data-i18n="ck.stats_d">Hilft uns zu verstehen, wie die Website genutzt wird (z. B. Google Analytics).</p></div><label class="switch"><input type="checkbox" id="ckStats" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.marketing">Marketing</strong><p data-i18n="ck.marketing_d">Wird genutzt, um Werbung relevanter zu machen (z. B. Meta Pixel, TikTok Pixel).</p></div><label class="switch"><input type="checkbox" id="ckMarketing" /><span class="slider"></span></label></div>
-      <div class="cookie-option"><div><strong data-i18n="ck.media">Externe Medien</strong><p data-i18n="ck.media_d">Ermöglicht das Laden externer Inhalte (z. B. Videos, Karten).</p></div><label class="switch"><input type="checkbox" id="ckMedia" /><span class="slider"></span></label></div>
+      <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookies &amp; lokale Einstellungen</h3>
+      <p class="modal-intro" data-i18n="ck.modal_intro">Wir setzen keine optionalen Cookies ein: Es gibt auf dieser Website keine Statistik-, Marketing- oder Externe-Medien-Dienste. Deshalb gibt es hier nichts zuzustimmen oder abzulehnen.</p>
+      <div class="cookie-option"><div><strong data-i18n="ck.necessary">Technisch notwendig</strong><p data-i18n="ck.necessary_d">Nur lokal in deinem Browser gespeichert: die gewählte Sprache und die Bestätigung dieses Hinweises. Keine Weitergabe, keine Auswertung.</p></div></div>
+      <div class="cookie-option"><div><strong data-i18n="ck.future">Falls sich das ändert</strong><p data-i18n="ck.future_d">Sollten später optionale Dienste dazukommen, werden sie erst nach deiner ausdrücklichen Zustimmung geladen – und Ablehnen bleibt genauso einfach wie Zustimmen.</p></div></div>
       <div class="cookie-modal-actions">
-        <button class="btn btn-ghost" id="modalNecessary" data-i18n="ck.only_nec">Nur notwendige</button>
-        <button class="btn btn-primary" id="saveSettings" data-i18n="ck.save">Auswahl speichern</button>
+        <button class="btn btn-primary" id="saveSettings" data-i18n="ck.close">Schließen</button>
       </div>
     </div>
   </div>
+
   <script src="../translations.js"></script>
   <script src="../script.js"></script>
 </body>

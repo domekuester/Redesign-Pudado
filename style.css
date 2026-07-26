@@ -880,6 +880,17 @@ p  { margin: 0 0 1rem; }
 .detail-strip figure:hover img { transform: scale(1.04); }
 .detail-cap { text-align: center; margin: 16px 0 0; font-size: .85rem; color: var(--gray); font-family: var(--font-head); font-weight: 600; }
 
+/* ----------------------- Bildhinweis (Prelaunch-Ehrlichkeit) --
+   Produkt-, Bad- und Detailbilder sind derzeit Visualisierungen, keine
+   finalen Produktfotos. Bewusst als leise Caption statt als Overlay-Badge:
+   die Bildwirkung bleibt unangetastet, der Hinweis ist trotzdem eindeutig.
+   --gray-light ist auf WCAG-AA-Kontrast kalibriert (≈5:1 auf Weiß). */
+.media-note { margin: 10px 0 0; text-align: center; font-size: .78rem; line-height: 1.45; color: var(--gray-light); }
+/* Auf den Royal-Bühnen (Hero, .section-dark) trägt --gray-light keinen Kontrast. */
+.hero .media-note, .section-dark .media-note { color: var(--royal-text); }
+/* Hinweis unter randlosen aspect-ratio-Figuren (z. B. .how-figure) etwas näher ans Bild. */
+.media-note-figure { margin-top: 12px; }
+
 /* ----------------------- Lifestyle-Galerie ------------------ */
 .lifestyle-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .lg-item { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); background: linear-gradient(150deg, var(--sky), #dbe7f6); }
@@ -1073,11 +1084,28 @@ p  { margin: 0 0 1rem; }
 .reveal-5 { transition-delay: .30s; }
 
 /* ----------------------- Responsive ------------------------- */
-@media (max-width: 980px) {
-  /* Hamburger-Menü schon ab 980px statt erst 760px: die volle Desktop-Nav
-     (7 Links + Sprachumschalter + 2 CTA-Buttons, ~1130px Eigenbreite)
-     passt auf Tablet-Breiten wie 768–834px (iPad) nicht mehr in eine Zeile
-     und verursachte dort horizontales Scrollen auf JEDER Seite der Site. */
+/* ---------------------------------------------------------------
+   HEADER-BREAKPOINT (eigene Query, absichtlich getrennt von den
+   980px-Layoutregeln unten)
+
+   Rechnung, die diesen Breakpoint bestimmt: Der Container gibt maximal
+   1200px − 2×26px Padding = 1148px Inhaltsbreite her. Die volle Desktop-Nav
+   brauchte aber 1267px (Logo 124 + 16 Gap + Nav 1127, davon Linkliste 568,
+   32 Gap und Aktionen 526). Sie war damit 119px BREITER als der eigene
+   Container – auf 1200px entstand horizontales Scrollen (scrollWidth 1292),
+   oberhalb davon lief der Header still aus dem 1200px-Raster heraus.
+
+   Zwei Stellschrauben lösen das (siehe die min-width-Queries darunter):
+   1. Die sekundäre CTA "Interesse anmelden" zielt auf #kontakt – exakt das
+      Ziel des Nav-Links "Kontakt". Im Desktop-Header ist sie damit doppelt
+      und kostete 200px. Im Burger-Menü bleibt sie sichtbar, dort ist Platz.
+      Das allein bringt den Header auf 1066px Eigenbreite.
+   2. Im unteren Desktop-Band (1121–1279px) zusätzlich moderat engere Gaps
+      (Linkliste 28→22px, Nav 32→26px) → 1024px Eigenbreite. Ohne Schritt 2
+      blieben bei 1121px nur 3px Restluft, der Header klebte am Logo.
+   Ergebnis: Desktop ab 1121px mit ≥45px Restluft, darunter der Burger.
+   --------------------------------------------------------------- */
+@media (max-width: 1120px) {
   /* Deckend statt transluzent: durchscheinender Seiteninhalt machte die
      Liste unruhig; ein opakes Panel liest sich ruhiger und spart zudem das
      Blur-Compositing (Scroll-Performance). */
@@ -1086,11 +1114,31 @@ p  { margin: 0 0 1rem; }
   .nav-list { flex-direction: column; gap: 4px; width: 100%; }
   .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--royal-line); }
   .nav-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
-  .nav-actions .btn { width: 100%; }
+  /* Touch-Ziele im offenen Menü auf ≥44px Höhe bringen (Apple HIG / WCAG):
+     die CTAs lagen mit 11px Padding bei 39px. Unterhalb von 1121px ist das
+     Burger-Menü der einzige Ort der sekundären CTA – hier muss sie greifbar sein. */
+  .nav-actions .btn { width: 100%; padding-top: 14px; padding-bottom: 14px; }
   .lang-switch { align-self: center; }
-  /* Touch-Ziele im offenen Menü auf ≥44px Höhe bringen (Apple HIG / WCAG). */
   .lang-switch button { padding: 14px 18px; font-size: .85rem; }
   .hamburger { display: flex; }
+}
+/* Desktop-Header: sekundäre CTA raus (redundant, siehe Rechnung oben).
+   .hamburger bleibt hier display:none (Basiswert) – Desktop- und
+   Burger-Navigation sind dadurch nie gleichzeitig sichtbar. */
+@media (min-width: 1121px) {
+  /* Auf .nav-cta-secondary gezielt, NICHT auf den Optik-Modifier: die Seiten
+     nutzen für diese CTA teils btn-ghost, teils btn-link – eine Regel auf dem
+     Modifier hätte 18 von 20 Seiten übersehen. */
+  .site-header .nav-cta-secondary { display: none; }
+}
+/* Unteres Desktop-Band: der Container ist hier noch schmaler als 1200px,
+   deshalb etwas ruhigere Gaps. Ab 1280px greifen wieder die Basiswerte. */
+@media (min-width: 1121px) and (max-width: 1279px) {
+  .main-nav { gap: 26px; }
+  .nav-list { gap: 22px; }
+}
+
+@media (max-width: 980px) {
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1150,7 +1198,9 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .nav-list a { position: relative; }
 .nav-list a.active { color: #fff; }
 .nav-list a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--aqua-mist); border-radius: 2px; }
-@media (max-width: 980px) {
+/* Gleicher Breakpoint wie der Burger-Header oben: im vertikalen Menü sitzt
+   der Aktiv-Unterstrich links kurz statt über die volle Zeilenbreite. */
+@media (max-width: 1120px) {
   .nav-list a.active::after { left: 0; right: auto; width: 28px; bottom: 8px; }
 }
 /* Auf Royal-Flächen weißer Fokusring statt Blau (Kontrast zur Bühne) */
