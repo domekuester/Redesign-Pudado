@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initAmbientLoop, initHeaderState,
+   initScrollSpy, initReveal, initHeroVideo, initAmbientLoop, initHeaderState,
    initMobileDisclosures, initFaqAccordion]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
@@ -833,6 +833,61 @@ function initAmbientLoop() {
     });
   }, { threshold: 0.15 });
   obs.observe(video);
+}
+
+/* -------------------------------------------------------------
+   12a. SIGNATURE HERO VIDEO
+   Progressive Enhancement: Das priorisierte Poster ist immer die
+   visuelle Basis. Videoquellen werden nur bei erlaubter Bewegung
+   aktiviert; erst nach erfolgreichem Dekodieren blendet das Video ein.
+   Außerhalb des Viewports und in Hintergrund-Tabs wird pausiert.
+   ------------------------------------------------------------- */
+function initHeroVideo() {
+  const hero = document.getElementById('hero');
+  const video = hero && hero.querySelector('.hero-media-video');
+  if (!video) return;
+  if (video.dataset.videoReady !== 'true') return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const saveData = navigator.connection && navigator.connection.saveData;
+  if (reducedMotion.matches || saveData) {
+    video.removeAttribute('autoplay');
+    video.pause();
+    return;
+  }
+
+  const sources = Array.from(video.querySelectorAll('source[data-src]'));
+  sources.forEach((source) => {
+    source.src = source.dataset.src;
+  });
+
+  let visible = true;
+  const syncPlayback = () => {
+    if (!visible || document.hidden) {
+      video.pause();
+      return;
+    }
+    const playback = video.play();
+    if (playback && playback.catch) playback.catch(() => {});
+  };
+
+  video.addEventListener('canplay', () => {
+    hero.classList.add('hero-video-ready');
+    syncPlayback();
+  }, { once: true });
+  video.addEventListener('error', () => {
+    hero.classList.remove('hero-video-ready');
+  });
+  video.load();
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry && entry.isIntersecting);
+      syncPlayback();
+    }, { threshold: 0.08 });
+    observer.observe(hero);
+  }
+  document.addEventListener('visibilitychange', syncPlayback);
 }
 
 /* -------------------------------------------------------------

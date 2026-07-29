@@ -152,9 +152,8 @@
 
   function initHeroMediaMotion(hero) {
     if (!hero) return;
-    const image = hero.querySelector('.hero-media-image');
-    const pointerLayer = hero.querySelector('.hero-media-pointer-layer');
-    if (!image || !pointerLayer) return;
+    const image = hero.querySelector('.hero-media-poster');
+    if (!image) return;
 
     const createLivingStill = (frames) => {
       const timeline = gsap.timeline({ repeat: -1, defaults: { ease: 'sine.inOut' } });
@@ -190,29 +189,6 @@
     mm.add('(max-width: 430px)', () => {
       gsap.set(image, { x: 0, y: 0, scale: 1.008 });
       return () => gsap.set(image, { clearProps: 'transform' });
-    });
-
-    mm.add('(min-width: 1000px) and (hover: hover) and (pointer: fine)', () => {
-      const moveX = gsap.quickTo(pointerLayer, 'x', { duration: 1.45, ease: 'power2.out' });
-      const moveY = gsap.quickTo(pointerLayer, 'y', { duration: 1.45, ease: 'power2.out' });
-      const reset = () => {
-        moveX(0);
-        moveY(0);
-      };
-      const move = (event) => {
-        const rect = hero.getBoundingClientRect();
-        const nx = gsap.utils.clamp(-1, 1, ((event.clientX - rect.left) / rect.width) * 2 - 1);
-        const ny = gsap.utils.clamp(-1, 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
-        moveX(nx * 4);
-        moveY(ny * 2.5);
-      };
-      hero.addEventListener('pointermove', move, { passive: true });
-      hero.addEventListener('pointerleave', reset, { passive: true });
-      return () => {
-        hero.removeEventListener('pointermove', move);
-        hero.removeEventListener('pointerleave', reset);
-        gsap.set(pointerLayer, { clearProps: 'transform' });
-      };
     });
 
     state.heroMediaObserver = new IntersectionObserver(([entry]) => {

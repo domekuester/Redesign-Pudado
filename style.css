@@ -1675,20 +1675,48 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   pointer-events: none;
   transform-origin: center center;
 }
-.hero-media-pointer-layer,
-.hero-media-image {
+.hero-media-poster,
+.hero-media-video,
+.hero-media-atmosphere {
   display: block;
   width: 100%;
   height: 100%;
 }
-.hero-media-pointer-layer { transform-origin: center center; }
-.hero-media-image {
+.hero-media-poster,
+.hero-media-video,
+.hero-media-atmosphere {
   position: absolute;
   inset: 0;
+}
+.hero-media-poster,
+.hero-media-video {
   max-width: none;
   object-fit: cover;
   object-position: 48% 52%;
   transform-origin: center center;
+}
+.hero-media-poster { z-index: 0; }
+.hero-media-video {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(.22,1,.36,1);
+}
+.hero-video-ready .hero-media-video { opacity: 1; }
+/* Ein einziger, kaum wahrnehmbarer Lichtzug verbindet Poster und späteren
+   Film-Loop. Transform + Opacity bleiben compositor-freundlich. */
+.hero-media-atmosphere {
+  z-index: 2;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  background: radial-gradient(42% 34% at 62% 34%, rgba(255,255,255,.11), transparent 72%);
+  mix-blend-mode: soft-light;
+  opacity: .62;
+  animation: hero-atmosphere-drift 22s ease-in-out infinite alternate;
+}
+@keyframes hero-atmosphere-drift {
+  from { transform: translate3d(-1.2%, .6%, 0) scale(1); opacity: .48; }
+  to { transform: translate3d(1.1%, -.7%, 0) scale(1.025); opacity: .7; }
 }
 /* Lesbarkeit aus dem vorhandenen Motiv heraus, ohne die Wollstruktur
    flächig abzudunkeln: links präziser, rechts nur eine leichte Vignette. */
@@ -1725,7 +1753,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
       linear-gradient(90deg, rgba(5,26,70,.16), transparent 76%);
   }
   .hero-media { inset: -3%; }
-  .hero-media-image { object-position: 50% 52%; }
+  .hero-media-poster,
+  .hero-media-video { object-position: 50% 52%; }
   .hero-grid { gap: 38px; }
   .hero-copy { max-width: 680px; }
   .hero-visual { width: min(560px, 82vw); justify-self: center; }
@@ -1738,7 +1767,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     padding-bottom: 54px;
   }
   .hero-media { inset: -2.5%; }
-  .hero-media-image { object-position: 52% 52%; }
+  .hero-media-poster,
+  .hero-media-video { object-position: 52% 52%; }
   .hero::before {
     background:
       linear-gradient(180deg, rgba(5,26,70,.28), rgba(5,26,70,.14) 48%, rgba(5,26,70,.24)),
@@ -1763,9 +1793,11 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-media,
-  .hero-media-pointer-layer,
-  .hero-media-image,
+  .hero-media-poster,
+  .hero-media-atmosphere,
   .mood-media img { transform: none !important; }
+  .hero-media-video { display: none; }
+  .hero-media-atmosphere { animation: none !important; opacity: .5; }
   .brand-stage-ambient { display: none; }
 }
 

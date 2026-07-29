@@ -42,8 +42,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="preload" as="image" href="assets/Hero-New.png" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=20260729-layout-repair-2" />
+  <link rel="preload" as="image" href="assets/hero-motion/poster/hero-poster.png" fetchpriority="high" />
+  <link rel="stylesheet" href="style.css?v=20260729-hero-motion" />
   <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
@@ -139,10 +139,21 @@
   <main id="main-content">
 <section class="hero" id="hero">
       <div class="hero-media" aria-hidden="true">
-        <picture class="hero-media-pointer-layer">
-          <img class="hero-media-image" src="assets/Hero-New.png" alt="" width="1916" height="821"
-               fetchpriority="high" decoding="async" />
-        </picture>
+        <img class="hero-media-poster"
+             src="assets/hero-motion/poster/hero-poster.png"
+             alt="" width="1916" height="821"
+             fetchpriority="high" decoding="async" />
+        <!-- Die Quellen werden erst durch initHeroVideo() aktiviert. So lädt
+             prefers-reduced-motion ausschließlich das Poster und fehlende
+             Exporte beeinträchtigen weder Layout noch Lesbarkeit. -->
+        <video class="hero-media-video" muted loop playsinline preload="none"
+               data-video-ready="false"
+               poster="assets/hero-motion/poster/hero-poster.png"
+               tabindex="-1">
+          <source data-src="assets/hero-motion/export/hero-loop.webm" type="video/webm" />
+          <source data-src="assets/hero-motion/export/hero-loop.mp4" type="video/mp4" />
+        </video>
+        <span class="hero-media-atmosphere" aria-hidden="true"></span>
       </div>
       <div class="container hero-grid">
         <div class="hero-copy">
@@ -824,10 +835,10 @@
   </div>
 
   <script src="translations.js?v=20260729-layout-repair-2"></script>
-  <script src="script.js?v=20260729-layout-repair-2"></script>
+  <script src="script.js?v=20260729-hero-motion"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/vendor/lenis.min.js"></script>
-  <script src="motion.js?v=20260729-layout-repair-2"></script>
+  <script src="motion.js?v=20260729-hero-motion"></script>
 </body>
 </html>
