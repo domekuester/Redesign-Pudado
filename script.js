@@ -117,6 +117,9 @@ function initNav() {
     burger.classList.toggle('active', isOpen);
     burger.setAttribute('aria-expanded', String(isOpen));
     burger.setAttribute('aria-label', isOpen ? t('a11y.menu_close') : t('a11y.menu_open'));
+    document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
+      detail: { source: 'navigation', locked: isOpen }
+    }));
   };
 
   burger.addEventListener('click', () => toggle());
@@ -555,8 +558,20 @@ function loadScript(src) {
 */
 
 /* --- UI Helpers --- */
-function showBanner(b) { if (b) b.hidden = false; }
-function hideBanner(b) { if (b) b.hidden = true; }
+function showBanner(b) {
+  if (!b) return;
+  b.hidden = false;
+  document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
+    detail: { source: 'cookie-banner', locked: true }
+  }));
+}
+function hideBanner(b) {
+  if (!b) return;
+  b.hidden = true;
+  document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
+    detail: { source: 'cookie-banner', locked: false }
+  }));
+}
 
 /* Kurze Bestätigungsmeldung unten einblenden */
 let _toastTimer;
@@ -585,8 +600,17 @@ function openModal(modal, ckStats, ckMarketing, ckMedia) {
   if (ckMarketing) ckMarketing.checked = saved ? !!saved.marketing      : false;
   if (ckMedia)     ckMedia.checked     = saved ? !!saved.external_media : false;
   modal.hidden = false;
+  document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
+    detail: { source: 'cookie-modal', locked: true }
+  }));
 }
-function closeModal(modal) { if (modal) modal.hidden = true; }
+function closeModal(modal) {
+  if (!modal) return;
+  modal.hidden = true;
+  document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
+    detail: { source: 'cookie-modal', locked: false }
+  }));
+}
 
 /* -------------------------------------------------------------
    6. AKTIVE NAVIGATION (Scroll-Spy)
@@ -628,7 +652,7 @@ function initScrollSpy() {
    ------------------------------------------------------------- */
 function initReveal() {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) return;
+  if (document.body.dataset.page === 'home' || reduce || !('IntersectionObserver' in window)) return;
 
   // Blöcke, die sanft eingeblendet werden (nur Layout-/Optik-Elemente).
   const selector = [
@@ -636,7 +660,7 @@ function initReveal() {
     '.card', '.usecase-card', '.wissen-card', '.situation-card', '.blog-card',
     '.duel', '.step', '.num-list', '.set-list', '.feature-list',
     '.product-visual', '.set-visual', '.how-figure', '.detail-strip figure',
-    '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note', '.leaf-band',
+    '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note', '.mood-section',
     '.media-band', '.calc2-inputs', '.calc2-results',
     '.faq-item', '.install-card', '.article-body p', '.trust-band-inner'
   ].join(',');

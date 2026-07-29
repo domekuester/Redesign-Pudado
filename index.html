@@ -42,7 +42,9 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preload" as="image" href="assets/Header-new.png" fetchpriority="high" />
+  <link rel="stylesheet" href="style.css?v=soft-water-wool-flagship-4" />
+  <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
   <script type="application/ld+json">
@@ -97,6 +99,7 @@
 
   <!-- ============================ HEADER ============================ -->
   <header class="site-header" id="top">
+    <span class="scroll-progress" aria-hidden="true"></span>
     <div class="container header-inner">
       <a href="#top" class="logo" aria-label="EcoBum by Pudado – Startseite">
         <span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
@@ -134,12 +137,18 @@
 
   <main id="main-content">
 <section class="hero" id="hero">
+      <div class="hero-wool" aria-hidden="true">
+        <picture class="hero-wool-plane">
+          <img src="assets/Header-new.png" alt="" width="1916" height="821"
+               fetchpriority="high" decoding="async" />
+        </picture>
+      </div>
       <div class="container hero-grid">
         <div class="hero-copy">
           <!-- Firmen-Wortmarke nach Logo-Referenz (Royal-Blue-Konzept):
                sprachneutraler Markenname, daher bewusst ohne data-i18n. -->
           <p class="hero-wordmark" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
-          <h1><span data-i18n="hero.h1a">Wasser reinigt.</span> <span class="accent" data-i18n="hero.h1b">Papier reibt.</span></h1>
+          <h1><span data-i18n="hero.h1a">Wasser reinigt.</span></h1>
           <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser — frisch, sanft und einfach in deinem Badezimmer.</p>
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
           <div class="hero-actions">
@@ -154,7 +163,7 @@
                  Es ist eine Visualisierung, kein finales Produktfoto – Alt-Text und
                  .media-note benennen das offen (Prelaunch-Ehrlichkeit). -->
             <img src="assets/hero-bild-1-optimized.jpg" alt="Visualisierung des EcoBum Home Sets in einem modernen Badezimmer"
-                 width="1200" height="959" fetchpriority="high" decoding="async"
+                 width="1200" height="959" decoding="async"
                  onerror="this.onerror=null;this.src='assets/ecobum-box.jpg';" />
             <div class="product-badges">
               <span class="pill-badge" data-i18n="badge.plug">Plug-and-Play</span>
@@ -164,11 +173,6 @@
           <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
         </div>
       </div>
-      <!-- Ruhiger Scroll-Impuls: leitet den Blick in den ersten Scroll,
-           dekorativ (aria-hidden), Bewegung wird bei reduced-motion gestoppt. -->
-      <a class="hero-scroll" href="#insight" aria-hidden="true" tabindex="-1">
-        <span class="hero-scroll-dot"></span>
-      </a>
     </section>
 
     <section class="trust-band" aria-label="Vorteile auf einen Blick">
@@ -189,29 +193,41 @@
           <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span></h2>
           <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine — klar, sanft und unkompliziert.</p>
         </div>
-        <!-- Prinzip-Duell: EIN geteiltes Premium-Panel statt zweier Boxen –
-             die Wasser-Seite steht auf der Royal-Bühne, die Hierarchie ist
-             sofort sichtbar. Gleiche Aussage, gleiche i18n-Keys. -->
-        <div class="duel">
-          <div class="duel-side con">
-            <h3 data-i18n="logik.con">Klassische Routine</h3>
-            <ul>
+        <!-- Textile Transition Comparison: zwei Materialzonen in einer
+             gemeinsamen Komposition, verbunden durch einen schmalen Fade. -->
+        <div class="duel comparison">
+          <article class="duel-side con comparison-panel comparison-panel--paper">
+            <picture class="comparison-panel__texture" aria-hidden="true">
+              <source srcset="assets/comparison-wool-champagne.webp" type="image/webp" />
+              <img src="assets/comparison-wool-champagne.png" alt="" width="1536" height="1024"
+                   loading="lazy" decoding="async" />
+            </picture>
+            <div class="comparison-panel__content">
+            <h3 class="comparison-panel__title" data-i18n="logik.con">Klassische Routine</h3>
+            <ul class="comparison-panel__list">
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con1">Trockenes Wischen</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con2">Mehr Reibung</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con3">Höherer Papierverbrauch möglich</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M4.5 8h7"/></svg></span> <span data-i18n="logik.con4">Feuchttücher werden oft zusätzlich genutzt</span></li>
             </ul>
-          </div>
-          <div class="duel-divider" aria-hidden="true"><span class="duel-shift"><svg viewBox="0 0 16 16"><path d="M4 8h7M8.5 5L11.5 8l-3 3"/></svg></span></div>
-          <div class="duel-side pro">
-            <h3 data-i18n="logik.pro">Die EcoBum-Routine</h3>
-            <ul>
+            </div>
+          </article>
+          <article class="duel-side pro comparison-panel comparison-panel--water">
+            <picture class="comparison-panel__texture" aria-hidden="true">
+              <source srcset="assets/comparison-wool-blue.webp" type="image/webp" />
+              <img src="assets/comparison-wool-blue.png" alt="" width="1536" height="1024"
+                   loading="lazy" decoding="async" />
+            </picture>
+            <div class="comparison-panel__content">
+            <h3 class="comparison-panel__title" data-i18n="logik.pro">Die EcoBum-Routine</h3>
+            <ul class="comparison-panel__list">
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro1">Reinigung mit Wasser</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro2">Sanfteres Gefühl</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro3">Papier & Feuchttücher können reduziert werden</span></li>
               <li><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3.2 3.2L12.5 5"/></svg></span> <span data-i18n="logik.pro4">Frischeres Badezimmergefühl</span></li>
             </ul>
-          </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -492,11 +508,16 @@
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
         </div>
-        <!-- Wasser-Motiv statt Blatt-Grün: Öko-Klischee-Bildsprache ist laut Brand-PDO
-             ausgeschlossen; das Wasserbild stützt die Kernbotschaft und bleibt im Blau-System. -->
-        <figure class="leaf-band"><img src="assets/design-1.jpg" alt="Wassertropfen an einer Glasscheibe in warmem Tageslicht" width="1500" height="844" loading="lazy" decoding="async" onerror="var f=this.closest('figure'),n=f.nextElementSibling;if(n&amp;&amp;n.classList.contains('media-note'))n.remove();f.remove();" /></figure>
-        <p class="media-note" data-i18n="media.mood">Moodbild – dient der Atmosphäre</p>
       </div>
+      <!-- Gemeinsame Full-Bleed-Moodfamilie: atmosphärische Pause statt Bildkarte. -->
+      <figure class="mood-section mood-section--primary">
+        <div class="mood-media">
+          <img src="assets/mood-01.png" alt="Helle textile Landschaft aus weichen Wollstrukturen im warmen Tageslicht"
+               width="1916" height="821" loading="lazy" decoding="async"
+               onerror="this.closest('figure').remove();" />
+        </div>
+        <figcaption class="mood-caption" data-i18n="media.mood">Moodbild – dient der Atmosphäre</figcaption>
+      </figure>
     </section>
 
     <section class="section section-alt" id="detail">
@@ -622,13 +643,16 @@
       </div>
     </section>
 
-    <section class="water-banner" aria-label="Pudado – Wasser. Reinheit. Lifestyle.">
-      <img src="assets/water-drop-statement.jpg" alt="Ein einzelner Wassertropfen fällt in stilles, klares Wasser und zieht feine Kreise" width="1600" height="900" loading="lazy" decoding="async" onerror="this.closest('section').remove()" />
-      <div class="water-banner-text">
-        <p class="wb-claim" data-i18n="hero.h1a">Wasser reinigt.</p>
-        <p class="wb-sub" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
+    <!-- Der Claim ist Bestandteil von mood-02.png; kein doppelter HTML-Text. -->
+    <figure class="mood-section mood-section--secondary">
+      <div class="mood-media">
+        <img src="assets/mood-02.png"
+             alt="Textile Wassertropfen über einer weichen blauen Oberfläche. Wasser reinigt. Natürlich. Hygienisch. Lifestyle."
+             width="1916" height="821" loading="lazy" decoding="async"
+             onerror="this.closest('figure').remove();" />
       </div>
-    </section>
+      <figcaption class="mood-caption" data-i18n="media.mood">Moodbild – dient der Atmosphäre</figcaption>
+    </figure>
 
     <section class="section section-alt" id="kontakt">
       <div class="container narrow">
@@ -732,7 +756,7 @@
        (Sprachwahl + diese Bestaetigung) und stellt keine optionalen Kategorien
        zur Wahl, die es gar nicht gibt. Kommen spaeter echte Dienste dazu, gehoeren
        die Schalter zurueck - Laden erst nach Zustimmung (script.js -> applyConsent). -->
-  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Hinweis zu Cookies und lokalen Einstellungen" hidden>
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Hinweis zu Cookies und lokalen Einstellungen" data-lenis-prevent hidden>
     <div class="cookie-inner">
       <div class="cookie-text">
         <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Cookies &amp; lokale Einstellungen</span></h3>
@@ -746,7 +770,7 @@
   </div>
 
   <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle" hidden>
-    <div class="cookie-modal-card">
+    <div class="cookie-modal-card" data-lenis-prevent>
       <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookies &amp; lokale Einstellungen</h3>
       <p class="modal-intro" data-i18n="ck.modal_intro">Wir setzen keine optionalen Cookies ein: Es gibt auf dieser Website keine Statistik-, Marketing- oder Externe-Medien-Dienste. Deshalb gibt es hier nichts zuzustimmen oder abzulehnen.</p>
       <div class="cookie-option"><div><strong data-i18n="ck.necessary">Technisch notwendig</strong><p data-i18n="ck.necessary_d">Nur lokal in deinem Browser gespeichert: die gewählte Sprache und die Bestätigung dieses Hinweises. Keine Weitergabe, keine Auswertung.</p></div></div>
@@ -757,7 +781,11 @@
     </div>
   </div>
 
-  <script src="translations.js"></script>
-  <script src="script.js"></script>
+  <script src="translations.js?v=soft-water-wool-flagship-4"></script>
+  <script src="script.js?v=soft-water-wool-flagship-4"></script>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/lenis.min.js"></script>
+  <script src="motion.js?v=soft-water-wool-flagship-4"></script>
 </body>
 </html>

@@ -4,6 +4,10 @@
 # Playwright-MCP Session-Artefakte (Screenshots/Logs vom Browser-Testen)
 .playwright-mcp/
 
+# Lokal installierte npm-Pakete. Für GitHub Pages werden ausschließlich die
+# kontrolliert kopierten Browser-Builds unter assets/vendor/ veröffentlicht.
+node_modules/
+
 # Lokale, datierte Arbeitskopien vor einzelnen Änderungen. Bewusst nur dieser
 # Ordner: _backup_original/ bleibt versioniert, es ist der Rollback-Stand vor
 # dem Redesign (siehe CLAUDE.md) und gehört ins Repository.
