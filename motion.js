@@ -261,16 +261,7 @@
     }
 
     revealOnce('#how', ['#how .section-head', '#how .how-figure'], { y: 18, stagger: 0.1 });
-    document.querySelectorAll('#how .step').forEach((step) => {
-      state.triggers.push(ScrollTrigger.create({
-        trigger: step,
-        start: 'top 63%',
-        end: '+=80',
-        toggleClass: { targets: step, className: 'is-active' },
-        once: false
-      }));
-    });
-    revealOnce('#how .steps', '#how .step', { y: 14, stagger: 0.09 });
+    revealOnce('#how .steps', '#how .step', { y: 12, stagger: 0.08 });
   }
 
   function initScrollProgress() {
