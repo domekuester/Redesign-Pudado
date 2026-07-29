@@ -36,11 +36,6 @@
     triggers: [],
     locks: new Set(),
     calculatorObserver: null,
-    heroMediaMatchMedia: null,
-    heroMediaAnimations: [],
-    heroMediaObserver: null,
-    heroMediaVisibilityCleanup: null,
-    heroMediaVisible: true,
     destroyed: false
   };
 
@@ -120,7 +115,6 @@
     const actions = document.querySelector('.hero-actions');
     const visual = document.querySelector('.hero-visual');
     const badges = document.querySelector('.hero .product-badges');
-    const media = document.querySelector('.hero-media');
     if (!copy || !visual) return;
 
     gsap.timeline({ defaults: { ease: MOTION.easeEnter } })
@@ -132,8 +126,6 @@
       .from(visual, { y: MOTION.distanceMedium, scale: 0.985, opacity: 0, duration: 0.72, clearProps: 'transform,opacity' }, 0.18)
       .from(badges, { y: 8, opacity: 0, duration: 0.34, clearProps: 'transform,opacity' }, 0.75);
 
-    if (media) initHeroMediaMotion(document.getElementById('hero'));
-
     if (window.innerWidth > 980) {
       state.triggers.push(ScrollTrigger.create({
         trigger: '.hero',
@@ -143,64 +135,6 @@
         animation: gsap.to(visual, { yPercent: 2.5, ease: 'none' })
       }));
     }
-  }
-
-  function setHeroMediaPlayback() {
-    const shouldPlay = state.heroMediaVisible && !document.hidden;
-    state.heroMediaAnimations.forEach((animation) => animation.paused(!shouldPlay));
-  }
-
-  function initHeroMediaMotion(hero) {
-    if (!hero) return;
-    const image = hero.querySelector('.hero-media-poster');
-    if (!image) return;
-
-    const createLivingStill = (frames) => {
-      const timeline = gsap.timeline({ repeat: -1, defaults: { ease: 'sine.inOut' } });
-      gsap.set(image, { x: 0, y: 0, scale: frames.startScale, force3D: true });
-      frames.steps.forEach((step) => timeline.to(image, step));
-      state.heroMediaAnimations.push(timeline);
-      setHeroMediaPlayback();
-      return () => {
-        const index = state.heroMediaAnimations.indexOf(timeline);
-        if (index !== -1) state.heroMediaAnimations.splice(index, 1);
-        timeline.kill();
-      };
-    };
-
-    const mm = gsap.matchMedia();
-    state.heroMediaMatchMedia = mm;
-    mm.add('(min-width: 1000px)', () => createLivingStill({
-      startScale: 1.02,
-      steps: [
-        { x: 5, y: -3, scale: 1.025, duration: 7.2 },
-        { x: -4, y: 3, scale: 1.03, duration: 8.4 },
-        { x: 0, y: 0, scale: 1.02, duration: 7.6 }
-      ]
-    }));
-    mm.add('(min-width: 431px) and (max-width: 999px)', () => createLivingStill({
-      startScale: 1.012,
-      steps: [
-        { x: 2, y: -2, scale: 1.018, duration: 9.2 },
-        { x: -2, y: 1, scale: 1.016, duration: 10.1 },
-        { x: 0, y: 0, scale: 1.012, duration: 9.4 }
-      ]
-    }));
-    mm.add('(max-width: 430px)', () => {
-      gsap.set(image, { x: 0, y: 0, scale: 1.008 });
-      return () => gsap.set(image, { clearProps: 'transform' });
-    });
-
-    state.heroMediaObserver = new IntersectionObserver(([entry]) => {
-      state.heroMediaVisible = Boolean(entry && entry.isIntersecting);
-      setHeroMediaPlayback();
-    }, { threshold: 0.04 });
-    state.heroMediaObserver.observe(hero);
-    const handleVisibility = () => setHeroMediaPlayback();
-    document.addEventListener('visibilitychange', handleVisibility);
-    state.heroMediaVisibilityCleanup = () => {
-      document.removeEventListener('visibilitychange', handleVisibility);
-    };
   }
 
   function revealOnce(trigger, targets, vars = {}) {
@@ -349,14 +283,6 @@
   function cleanup() {
     if (state.destroyed) return;
     state.destroyed = true;
-    if (state.heroMediaMatchMedia) state.heroMediaMatchMedia.revert();
-    state.heroMediaMatchMedia = null;
-    state.heroMediaAnimations.forEach((animation) => animation.kill());
-    state.heroMediaAnimations.length = 0;
-    if (state.heroMediaObserver) state.heroMediaObserver.disconnect();
-    state.heroMediaObserver = null;
-    if (state.heroMediaVisibilityCleanup) state.heroMediaVisibilityCleanup();
-    state.heroMediaVisibilityCleanup = null;
     if (state.calculatorObserver) state.calculatorObserver.disconnect();
     state.triggers.forEach((trigger) => trigger.kill());
     state.triggers.length = 0;

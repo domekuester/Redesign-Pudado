@@ -43,7 +43,7 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/hero-motion/poster/hero-poster.png" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=20260729-hero-motion" />
+  <link rel="stylesheet" href="style.css?v=20260729-wool-motion" />
   <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
@@ -143,6 +143,18 @@
              src="assets/hero-motion/poster/hero-poster.png"
              alt="" width="1916" height="821"
              fetchpriority="high" decoding="async" />
+        <div class="hero-motion-layers" aria-hidden="true">
+          <img class="hero-motion-layer hero-motion-layer--depth"
+               src="assets/hero-motion/poster/hero-poster.png"
+               alt="" width="1916" height="821"
+               decoding="async" />
+          <img class="hero-motion-layer hero-motion-layer--current"
+               src="assets/hero-motion/poster/hero-poster.png"
+               alt="" width="1916" height="821"
+               decoding="async" />
+          <span class="hero-motion-flow hero-motion-flow--light"></span>
+          <span class="hero-motion-flow hero-motion-flow--shade"></span>
+        </div>
         <!-- Die Quellen werden erst durch initHeroVideo() aktiviert. So lädt
              prefers-reduced-motion ausschließlich das Poster und fehlende
              Exporte beeinträchtigen weder Layout noch Lesbarkeit. -->
@@ -835,10 +847,10 @@
   </div>
 
   <script src="translations.js?v=20260729-layout-repair-2"></script>
-  <script src="script.js?v=20260729-hero-motion"></script>
+  <script src="script.js?v=20260729-wool-motion"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/vendor/lenis.min.js"></script>
-  <script src="motion.js?v=20260729-hero-motion"></script>
+  <script src="motion.js?v=20260729-wool-motion"></script>
 </body>
 </html>

@@ -24,3 +24,20 @@ Die Website aktiviert die Videoquellen nur, wenn `prefers-reduced-motion` nicht 
 Nach dem Ablegen und Prüfen beider Exporte muss in `index.html` nur
 `data-video-ready="false"` auf `data-video-ready="true"` gesetzt werden.
 Bis dahin entstehen keine Requests auf noch nicht vorhandene Dateien.
+
+## Premium-Zwischenlösung ohne Video
+
+Solange `data-video-ready="false"` gesetzt ist, erzeugt
+`.hero-motion-layers` die lebendige Wollfläche aus vier getrennten Ebenen:
+
+- maskierte, weichere Tiefenebene für große Wollvolumen
+- maskierte nähere Texturströmung
+- langsam wanderndes Licht
+- gegenläufige, sehr weiche Schattenströmung
+
+Die Zyklen laufen 37–61 Sekunden, sind zeitlich gegeneinander versetzt und
+animieren ausschließlich `transform` und `opacity`. Mobile schaltet die
+teuerste Tiefen- und Schattenebene ab. Außerhalb des Viewports pausieren
+die Animationen; `prefers-reduced-motion` blendet den gesamten Layer-Block
+aus. Sobald ein echtes Video erfolgreich dekodiert wurde, blendet es über
+dem Poster ein und die Pseudo-Video-Layer werden weich ausgeblendet.

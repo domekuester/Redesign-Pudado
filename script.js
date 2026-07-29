@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initHeroVideo, initAmbientLoop, initHeaderState,
+   initScrollSpy, initReveal, initHeroMotionLifecycle, initHeroVideo,
+   initAmbientLoop, initHeaderState,
    initMobileDisclosures, initFaqAccordion]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
@@ -888,6 +889,24 @@ function initHeroVideo() {
     observer.observe(hero);
   }
   document.addEventListener('visibilitychange', syncPlayback);
+}
+
+/* Pausiert ausschließlich die dekorativen Compositor-Animationen, sobald
+   der Hero nicht sichtbar ist. Kein Scroll-Handler, keine RAF-Schleife. */
+function initHeroMotionLifecycle() {
+  const hero = document.getElementById('hero');
+  if (!hero || !('IntersectionObserver' in window)) return;
+
+  const syncVisibility = (visible) => {
+    hero.classList.toggle('hero-motion-paused', !visible || document.hidden);
+  };
+  let heroVisible = true;
+  const observer = new IntersectionObserver(([entry]) => {
+    heroVisible = Boolean(entry && entry.isIntersecting);
+    syncVisibility(heroVisible);
+  }, { threshold: 0.02 });
+  observer.observe(hero);
+  document.addEventListener('visibilitychange', () => syncVisibility(heroVisible));
 }
 
 /* -------------------------------------------------------------
