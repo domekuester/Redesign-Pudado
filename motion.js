@@ -131,38 +131,49 @@
       .from(visual, { y: MOTION.distanceMedium, scale: 0.985, opacity: 0, duration: 0.72, clearProps: 'transform,opacity' }, 0.18)
       .from(badges, { y: 8, opacity: 0, duration: 0.34, clearProps: 'transform,opacity' }, 0.75);
 
-    if (woolImage) {
-      const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const allowHeroPointerMotion = () => finePointer.matches && window.innerWidth >= 900;
+
+    if (woolImage && allowHeroPointerMotion()) {
       state.heroWoolLoop = gsap.to(woolImage, {
-        scale: desktopPointer.matches ? 1.018 : 1.01,
-        x: desktopPointer.matches ? 6 : 0,
-        y: desktopPointer.matches ? 4 : 0,
-        duration: desktopPointer.matches ? 11 : 13,
+        scale: 1.018,
+        x: 5,
+        y: 3,
+        duration: 11,
         ease: 'sine.inOut',
         yoyo: true,
         repeat: -1
       });
 
-      if (desktopPointer.matches && woolPlane) {
+      if (woolPlane) {
         const moveX = gsap.quickTo(woolPlane, 'x', { duration: 1.35, ease: MOTION.easeEnter });
         const moveY = gsap.quickTo(woolPlane, 'y', { duration: 1.35, ease: MOTION.easeEnter });
         const hero = document.getElementById('hero');
         const handlePointerMove = (event) => {
+          if (!allowHeroPointerMotion()) {
+            moveX(0);
+            moveY(0);
+            return;
+          }
           const rect = hero.getBoundingClientRect();
-          const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-          const ny = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-          moveX(nx * 8);
-          moveY(ny * 6);
+          const nx = gsap.utils.clamp(-1, 1, ((event.clientX - rect.left) / rect.width) * 2 - 1);
+          const ny = gsap.utils.clamp(-1, 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
+          moveX(nx * 7);
+          moveY(ny * 5);
         };
         const resetPointer = () => {
           moveX(0);
           moveY(0);
         };
+        const handleResize = () => {
+          if (!allowHeroPointerMotion()) resetPointer();
+        };
         hero.addEventListener('pointermove', handlePointerMove, { passive: true });
         hero.addEventListener('pointerleave', resetPointer, { passive: true });
+        window.addEventListener('resize', handleResize, { passive: true });
         state.heroPointerCleanup = () => {
           hero.removeEventListener('pointermove', handlePointerMove);
           hero.removeEventListener('pointerleave', resetPointer);
+          window.removeEventListener('resize', handleResize);
         };
       }
     }
@@ -181,13 +192,15 @@
       }));
     }
 
-    state.triggers.push(ScrollTrigger.create({
-      trigger: '.hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 0.8,
-      animation: gsap.to(visual, { yPercent: 2.5, ease: 'none' })
-    }));
+    if (window.innerWidth > 980) {
+      state.triggers.push(ScrollTrigger.create({
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.8,
+        animation: gsap.to(visual, { yPercent: 2.5, ease: 'none' })
+      }));
+    }
   }
 
   function revealOnce(trigger, targets, vars = {}) {
@@ -250,7 +263,7 @@
     });
     revealOnce('#produkt .num-list', '#produkt .num-list li', { x: -14, y: 0, stagger: 0.08 });
     const productVisual = document.querySelector('#produkt .product-visual');
-    if (productVisual) {
+    if (productVisual && window.innerWidth > 980) {
       state.triggers.push(ScrollTrigger.create({
         trigger: '#produkt',
         start: 'top bottom',
@@ -261,7 +274,11 @@
     }
 
     revealOnce('#how', ['#how .section-head', '#how .how-figure'], { y: 18, stagger: 0.1 });
-    revealOnce('#how .steps', '#how .step', { y: 12, stagger: 0.08 });
+    if (window.innerWidth > 700) {
+      revealOnce('#how .steps', '#how .step', { y: 12, stagger: 0.08 });
+    } else {
+      revealOnce('#how .steps', '#how .steps', { y: 8, stagger: 0 });
+    }
   }
 
   function initScrollProgress() {

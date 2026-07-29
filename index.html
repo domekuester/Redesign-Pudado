@@ -43,7 +43,7 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/Header-new.png" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=soft-water-wool-flagship-4" />
+  <link rel="stylesheet" href="style.css?v=flagship-final-13" />
   <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
@@ -111,8 +111,9 @@
           <li><a href="#hero" data-i18n="nav.start">Start</a></li>
           <li><a href="#vorteile" data-i18n="nav.vorteile">Vorteile</a></li>
           <li><a href="#produkt" data-i18n="nav.produkt">Produkt</a></li>
+          <li class="mobile-nav-only"><a href="#checker" data-i18n="chk.label">Foto-Check</a></li>
           <li><a href="#rechner" data-i18n="nav.rechner">Rechner</a></li>
-          <li><a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a></li>
+          <li class="mobile-nav-secondary"><a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a></li>
           <!-- Prelaunch: Magazin-Link deaktiviert, bis der Blog final freigegeben ist. Zum Aktivieren die nächste Zeile wieder einkommentieren.
           <li><a href="blog/index.html" data-i18n="nav.magazin">Magazin</a></li>
           -->
@@ -152,8 +153,8 @@
           <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser — frisch, sanft und einfach in deinem Badezimmer.</p>
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
           <div class="hero-actions">
-            <a href="#newsletter" class="btn btn-primary" data-i18n="hero.cta_launch">Launch-Update sichern</a>
-            <a href="#checker" class="btn btn-ghost" data-i18n="ctaA.btn">Foto-Check starten</a>
+            <a href="#produkt" class="btn btn-primary" data-i18n="cta.entdecken">EcoBum entdecken</a>
+            <a href="#checker" class="btn btn-ghost hero-secondary-link" data-i18n="ctaA.btn">Foto-Check starten</a>
           </div>
         </div>
         <div class="hero-visual">
@@ -288,11 +289,16 @@
           <ul class="set-list">
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M5 8h14"/><path d="M5 5v6M19 5v6M9 21h6"/></svg><span data-i18n="set.l7">T-Stück (Anschlüsse 2×3/8″ + 1×1/2″)</span></li>
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h16M7 8h10v8H7z"/><path d="M12 4v4M9 4h6"/></svg><span data-i18n="set.l8">Absperrhahn</span></li>
+          </ul>
+          <details class="mobile-disclosure set-more" open>
+            <summary data-i18n="mobile.components_more">Alle vorgesehenen Komponenten anzeigen</summary>
+            <ul class="set-list">
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5.5 5.8v5.1c0 4.3 2.6 7.9 6.5 10.1 3.9-2.2 6.5-5.8 6.5-10.1V5.8Z"/><path d="M8.5 12h7"/><path d="m13 9.5 2.5 2.5-2.5 2.5"/></svg><span data-i18n="set.l9">Rückflussverhinderer – als Sicherheitsprinzip vorgesehen</span></li>
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4v3M19 17v3"/><path d="M5 7c2 8 12 2 14 10"/><path d="M3.5 4h3M17.5 20h3"/></svg><span data-i18n="set.l10">Flexibler Zulaufschlauch</span></li>
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6.5" ry="3.5"/><path d="M5.5 7v7c0 1.9 2.9 3.5 6.5 3.5s6.5-1.6 6.5-3.5V7"/><ellipse cx="12" cy="7" rx="2.5" ry="1.2"/></svg><span data-i18n="set.l11">PTFE-Band</span></li>
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3.5h9l3 3V20.5H6z"/><path d="M15 3.5v3h3M9 11h6M9 15h6"/></svg><span data-i18n="set.l6">Anleitung</span></li>
-          </ul>
+            </ul>
+          </details>
           <p class="legal-hint" data-i18n="set.disclaimer">Die vorgesehenen Komponenten können sich je nach finaler Produktversion noch leicht ändern.</p>
         </div>
         <div class="set-visual">
@@ -335,10 +341,10 @@
           <p class="media-note media-note-figure" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
           <div>
             <div class="steps">
-              <div class="step"><span class="step-num">01</span><div><h3 data-i18n="how.s1t">Wasser abstellen</h3><p data-i18n="how.s1d">Vor jeder Installation muss das Wasser am Eckventil abgestellt werden.</p></div></div>
-              <div class="step"><span class="step-num">02</span><div><h3 data-i18n="how.s2t">T-Stück einsetzen</h3><p data-i18n="how.s2d">Das T-Stück wird zwischen Eckventil und Zulaufschlauch gesetzt, wenn der vorhandene Anschluss kompatibel ist.</p></div></div>
-              <div class="step"><span class="step-num">03</span><div><h3 data-i18n="how.s3t">Schlauch und Sprayer verbinden</h3><p data-i18n="how.s3d">Der Brauseschlauch verbindet T-Stück und Handbidet-Sprayer.</p></div></div>
-              <div class="step"><span class="step-num">04</span><div><h3 data-i18n="how.s4t">Halterung anbringen</h3><p data-i18n="how.s4d">Die Halterung kann je nach Untergrund geklebt oder geschraubt werden.</p></div></div>
+              <details class="step" open><summary><span class="step-num">01</span><h3 data-i18n="how.s1t">Wasser abstellen</h3></summary><p data-i18n="how.s1d">Vor jeder Installation muss das Wasser am Eckventil abgestellt werden.</p></details>
+              <details class="step" open><summary><span class="step-num">02</span><h3 data-i18n="how.s2t">T-Stück einsetzen</h3></summary><p data-i18n="how.s2d">Das T-Stück wird zwischen Eckventil und Zulaufschlauch gesetzt, wenn der vorhandene Anschluss kompatibel ist.</p></details>
+              <details class="step" open><summary><span class="step-num">03</span><h3 data-i18n="how.s3t">Schlauch und Sprayer verbinden</h3></summary><p data-i18n="how.s3d">Der Brauseschlauch verbindet T-Stück und Handbidet-Sprayer.</p></details>
+              <details class="step" open><summary><span class="step-num">04</span><h3 data-i18n="how.s4t">Halterung anbringen</h3></summary><p data-i18n="how.s4d">Die Halterung kann je nach Untergrund geklebt oder geschraubt werden.</p></details>
             </div>
             <p class="hint-box" data-i18n="how.hint">Hinweis: Die Installation kann je nach vorhandenem Wasseranschluss variieren. Bei Unsicherheit bitte fachkundige Hilfe in Anspruch nehmen.</p>
           </div>
@@ -394,6 +400,9 @@
             <h3 data-i18n="mom.c2_t">Wasserreinigung in sensiblen Phasen.</h3>
             <p data-i18n="mom.c2_d">In sensiblen Lebensphasen kann eine vorsichtige Reinigung mit Wasser als angenehm empfunden werden. Bei Beschwerden bitte fachlichen Rat einholen.</p>
           </article>
+          <details class="mobile-disclosure usecase-more" open>
+            <summary data-i18n="mobile.usecases_more">Weitere Anwendungsfälle</summary>
+            <div class="mobile-disclosure-grid">
           <article class="usecase-card">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="6" r="3"/><path d="M7 21v-4a5 5 0 0110 0v4"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c3_cat">Senioren &amp; eingeschränkte Beweglichkeit</p>
@@ -406,6 +415,8 @@
             <h3 data-i18n="mom.c4_t">Eine moderne Ergänzung für den Alltag.</h3>
             <p data-i18n="mom.c4_d">Für Haushalte, die Reinigung mit Wasser und einen bewussteren Umgang mit Papier verbinden möchten.</p>
           </article>
+            </div>
+          </details>
         </div>
         <p class="legal-hint center" data-i18n="mom.disclaimer">EcoBum ist ein Hygieneprodukt und kein Medizinprodukt. Bei gesundheitlichen Beschwerden wende dich bitte an fachkundige oder ärztliche Beratung.</p>
       </div>
@@ -484,12 +495,15 @@
                 <li><span data-i18n="rc2.m_co2week">CO₂e / Woche (geschätzt)</span>: <strong id="mCo2Week">–</strong></li>
               </ul>
             </details>
+            <details class="mobile-disclosure calc-support-more" open>
+              <summary data-i18n="mobile.calc_more">Weitere Einordnung zur Berechnung</summary>
             <div class="calc2-co2">
               <p class="co2-label" data-i18n="rc2.co2_label">Geschätzter CO₂e-Fußabdruck</p>
               <p class="co2-result" id="co2Result">–</p>
               <p class="co2-note" data-i18n="rc2.co2_note">Vereinfachte Orientierung, keine vollständige Ökobilanz. Der tatsächliche Wert hängt von Papierart, Recyclinganteil, Energie, Verpackung und Transport ab.</p>
             </div>
             <p class="calc2-disclaimer" data-i18n="rc2.disclaimer">Die Ergebnisse sind unverbindliche Modellschätzungen. Der tatsächliche Verbrauch hängt von Produkt, Gewohnheiten und Nutzung ab. EcoBum kann den Papierverbrauch ergänzend reduzieren, eine bestimmte Einsparung wird nicht garantiert.</p>
+            </details>
           </div>
         </div>
       </div>
@@ -534,6 +548,8 @@
           <figure><img src="assets/detail-3.jpg" alt="Visualisierung von T-Stück, Absperrhahn und Brauseschlauch des EcoBum" width="1000" height="1249" loading="lazy" decoding="async" onerror="this.closest('figure').remove()" /></figure>
         </div>
         <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
+        <details class="mobile-disclosure detail-more" open>
+          <summary data-i18n="mobile.detail_more">Technik und Entwicklungsstand ansehen</summary>
         <p class="detail-cap" data-i18n="det.material_cap">Geplante Premium-Materialrichtung, abhängig von finaler Produktversion</p>
         <div class="detail-grid">
           <div class="detail-col">
@@ -561,6 +577,7 @@
           <h4 data-i18n="det.cert_title">Zertifizierungen & Normen</h4>
           <p data-i18n="det.cert_text">Mögliche Standards wie CE, DVGW, WRAS, ACS, EN 1717, REACH oder RoHS sind Ziel der Produktentwicklung und in Prüfung. Welche Zertifizierungen die finale Produktversion trägt, hängt vom finalen Lieferanten und der abschließenden Prüfung ab.</p>
         </div>
+        </details>
       </div>
     </section>
 
@@ -580,8 +597,8 @@
           <!-- Ambient-Loop (Remotion-Render, 442 KB, 5 s, nahtlos): Farbwerte
                identisch zu den --royal-* Tokens, verschmilzt mit dem CSS-
                Verlauf darunter (Fallback bei reduced motion / ohne Video). -->
-          <video class="brand-stage-ambient" muted loop playsinline autoplay preload="metadata" aria-hidden="true">
-            <source src="assets/videos/royal-ambient-loop-v1.0.mp4" type="video/mp4" />
+          <video class="brand-stage-ambient" muted loop playsinline preload="none" aria-hidden="true">
+            <source src="assets/videos/royal-ambient-loop-v1.0.mp4" type="video/mp4" media="(min-width: 701px)" />
           </video>
           <p class="brand-stage-word" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
         </div>
@@ -606,6 +623,9 @@
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c1t">Warum Wasser?</h3><p data-i18n="wi.c1d">Wasser wird überall dort genutzt, wo es wirklich sauber werden soll. Im Bad kann es eine sanfte, gründliche Ergänzung zur Reinigung sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c2t">Papier vs. Wasser</h3><p data-i18n="wi.c2d">Trockenes Papier wischt mit Reibung. Wasser kann Rückstände sanfter lösen – danach genügt oft wenig Papier zum Trocknen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#how"><h3 data-i18n="wi.c3t">EcoBum richtig nutzen</h3><p data-i18n="wi.c3d">Nach dem Toilettengang kurz mit Wasser reinigen, die Wassermenge über den Hebel dosieren und bei Bedarf trockentupfen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <details class="mobile-disclosure wissen-more" open>
+            <summary data-i18n="mobile.knowledge_more">Mehr Wissen entdecken</summary>
+            <div class="mobile-disclosure-grid">
           <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Mit 2–3 Fotos deines Anschlusses gibt der Foto-Check eine erste Orientierung.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="situations/empfindliche-haut.html"><h3 data-i18n="wi.c5t">Sensible Haut</h3><p data-i18n="wi.c5d">Bei empfindlicher Haut kann Wasser eine sanftere Alternative zu wiederholtem trockenem Wischen sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="situations/menstruation.html"><h3 data-i18n="wi.c6t">Menstruation</h3><p data-i18n="wi.c6d">Wasser kann während der Periode für ein zusätzliches Frischegefühl sorgen – ohne Duftstoffe und ohne Feuchttücher.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
@@ -613,6 +633,8 @@
           <a class="wissen-card" href="#nachhaltigkeit"><h3 data-i18n="wi.c8t">Nachhaltigkeit</h3><p data-i18n="wi.c8d">Wer Wasser nutzt, braucht im Alltag oft weniger Papier. Wie viel, hängt von den Gewohnheiten ab.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#faq"><h3 data-i18n="wi.c9t">Reinigung & Pflege</h3><p data-i18n="wi.c9d">Sprühkopf regelmäßig abspülen, Verbindungen gelegentlich auf festen Sitz prüfen und bei Kalk vorsichtig entkalken.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c10t">Bohrfrei & Plug-and-Play</h3><p data-i18n="wi.c10d">Ohne Strom und ohne feste Badrenovierung gedacht, mit Klebehalterung als Option. Der Wasseranschluss muss trotzdem geprüft werden.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -630,6 +652,9 @@
           <details class="faq-item"><summary data-i18n="faq.q11">Passt EcoBum bei Unterputz-Spülkästen?</summary><p data-i18n="faq.a11">Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_rental">Ist EcoBum für Mietwohnungen geeignet?</summary><p data-i18n="faq.a_rental">Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q9">Was mache ich, wenn ich meinen Anschluss nicht kenne?</summary><p data-i18n="faq.a9">Mach 2–3 Fotos deines Anschlusses für den Foto-Check. Im Zweifel hilft ein Blick hinter die Toilette (Eckventil, Schlauch) oder eine fachkundige Person.</p></details>
+          <details class="mobile-disclosure faq-extra" open>
+            <summary data-i18n="mobile.faq_more">Weitere Fragen anzeigen</summary>
+            <div>
           <details class="faq-item"><summary data-i18n="faq.q_setcontent">Was ist im geplanten Set enthalten?</summary><p data-i18n="faq.a_setcontent">Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_safety_parts">Warum sind Absperrhahn und Rückflussverhinderer wichtig?</summary><p data-i18n="faq.a_safety_parts">Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q8">Braucht EcoBum Strom?</summary><p data-i18n="faq.a8">Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom.</p></details>
@@ -638,6 +663,8 @@
           <details class="faq-item"><summary data-i18n="faq.q_cert">Gibt es Zertifizierungen?</summary><p data-i18n="faq.a_cert">Ziel der Produktentwicklung ist es, relevante Anforderungen und Prüfungen zu berücksichtigen. Aktuell liegen noch keine Zertifizierungen vor – sobald sich das ändert, aktualisieren wir diese Angabe.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q10">Gibt es Garantie oder Rückgabe?</summary><p data-i18n="faq.a10">Die genauen Garantie- und Rückgabebedingungen stehen noch nicht fest und werden vor dem Verkaufsstart bekanntgegeben.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q21">Wann ist EcoBum verfügbar?</summary><p data-i18n="faq.a21">EcoBum befindet sich in Vorbereitung. Trage dich für das Launch-Update ein, dann informieren wir dich als Erstes über Verfügbarkeit und Start.</p></details>
+            </div>
+          </details>
         </div>
         <p class="faq-more"><span data-i18n="faq.more">Weitere Fragen? Schreib uns gerne.</span> <a href="#kontakt" data-i18n="faq.more_link">Zum Kontakt</a></p>
       </div>
@@ -695,6 +722,8 @@
           <p class="section-text center" data-i18n="news.text">Trage dich ein und erfahre als Erster, wann EcoBum verfügbar ist. Erhalte Updates, Produktinfos und Launch-News von Pudado.</p>
         </div>
         <!-- NEWSLETTER — ohne Backend. TODO: DE/EU Double-Opt-in anschließen (script.js -> initNewsletterForm). -->
+        <details class="mobile-disclosure newsletter-disclosure" open>
+          <summary data-i18n="mobile.newsletter_more">Information zum Launch-Update</summary>
         <form class="form newsletter-form" id="newsletterForm" novalidate>
           <!-- Der Mailto-Link steht bewusst AUSSERHALB des data-i18n-Spans: applyLanguage()
                setzt textContent und würde einen Link im übersetzten Element entfernen. -->
@@ -710,6 +739,7 @@
           <p class="news-optin on-dark" data-i18n="news.optin_hint">Für die spätere Newsletter-Anmeldung ist ein Double-Opt-in vorgesehen – mit jederzeitiger Abmeldung.</p>
           <p class="form-message on-dark" id="newsletterMsg" role="status" hidden></p>
         </form>
+        </details>
       </div>
     </section>
   </main>
@@ -721,32 +751,47 @@
         <div class="footer-logo"><span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span class="logo-word">Pudado</span></div>
         <p class="footer-claim" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
         <p class="footer-text" data-i18n="foot.text">EcoBum by Pudado — moderne Hygiene mit Wasser.</p>
+        <a class="footer-email-direct" href="mailto:info@pudado.de">info@pudado.de</a>
+        <nav class="footer-legal-direct" aria-label="Rechtliches">
+          <a href="impressum.html" data-i18n="foot.impressum">Impressum</a>
+          <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
+          <a href="#" data-cookie-settings data-i18n="foot.cookie">Cookie-Einstellungen</a>
+        </nav>
       </div>
+      <details class="footer-group" open>
+        <summary class="footer-col-title" data-i18n="foot.col_explore">Entdecken</summary>
       <nav class="footer-links" aria-label="EcoBum entdecken">
-        <p class="footer-col-title" data-i18n="foot.col_explore">Entdecken</p>
         <a href="#produkt" data-i18n="nav.produkt">Produkt</a>
         <a href="#checker" data-i18n="chk.label">Foto-Check</a>
         <a href="#rechner" data-i18n="nav.rechner">Rechner</a>
-        <a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
         <a href="#faq" data-i18n="nav.faq">FAQ</a>
       </nav>
+      </details>
+      <details class="footer-group" open>
+        <summary class="footer-col-title" data-i18n="wi.label">Pudado Wissen</summary>
+        <nav class="footer-links" aria-label="Pudado Wissen">
+          <a href="#wissen" data-i18n="wi.h2">Kurz erklärt: Hygiene mit Wasser.</a>
+          <a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
+          <a href="#warum" data-i18n="warum.label">Warum Pudado?</a>
+        </nav>
+      </details>
+      <details class="footer-group" open>
+        <summary class="footer-col-title" data-i18n="foot.col_legal">Rechtliches</summary>
       <nav class="footer-links" aria-label="Rechtliches und Kontakt">
-        <p class="footer-col-title" data-i18n="foot.col_legal">Rechtliches</p>
         <a href="impressum.html" data-i18n="foot.impressum">Impressum</a>
         <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
         <a href="#" id="openCookieSettings" data-i18n="foot.cookie">Cookie-Einstellungen</a>
         <a href="#kontakt" data-i18n="foot.kontakt">Kontakt</a>
-        <a href="mailto:info@pudado.de?subject=EcoBum%20Anfrage">info@pudado.de</a>
       </nav>
+      </details>
     </div>
     <div class="container footer-bottom"><p>&copy; <span id="year"></span> Pudado. <span data-i18n="foot.rights">Alle Rechte vorbehalten.</span></p></div>
   </footer>
 
   <!-- ============================ STICKY MOBILE CTA ============================ -->
   <nav class="sticky-cta" id="stickyCta" aria-label="Schnellzugriff">
-    <a href="#checker" data-i18n="sticky.check">Foto-Check</a>
-    <a href="#rechner" data-i18n="sticky.calc">Rechner</a>
-    <a href="#kontakt" class="primary" data-i18n="sticky.interest">Interesse anmelden</a>
+    <a href="#checker" class="primary" data-i18n="sticky.check">Foto-Check</a>
+    <a href="#produkt" data-i18n="cta.entdecken">EcoBum entdecken</a>
   </nav>
 
   <!-- ============================ COOKIE-HINWEIS ============================
@@ -781,11 +826,11 @@
     </div>
   </div>
 
-  <script src="translations.js?v=soft-water-wool-flagship-4"></script>
-  <script src="script.js?v=soft-water-wool-flagship-4"></script>
+  <script src="translations.js?v=flagship-final-13"></script>
+  <script src="script.js?v=flagship-final-13"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/vendor/lenis.min.js"></script>
-  <script src="motion.js?v=soft-water-wool-flagship-4"></script>
+  <script src="motion.js?v=flagship-final-13"></script>
 </body>
 </html>

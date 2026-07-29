@@ -841,6 +841,9 @@ p  { margin: 0 0 1rem; }
 .footer-logo .logo-word { color: #fff; }
 .footer-claim { font-family: var(--font-head); font-weight: 600; color: #8fb4e6; margin: 14px 0 8px; }
 .footer-text { font-size: .92rem; color: rgba(255,255,255,.68); max-width: 320px; }
+.footer-email-direct { display: inline-flex; margin-top: 12px; color: #fff; font-weight: 650; text-underline-offset: .22em; }
+.footer-email-direct:hover { color: #d9e8ff; }
+.footer-legal-direct { display: none; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; }
 .footer-links a { color: rgba(255,255,255,.8); font-size: .95rem; }
 .footer-links a:hover { color: #fff; }
@@ -1180,9 +1183,9 @@ p  { margin: 0 0 1rem; }
 .calc2-inputs input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid var(--border-cool); border-radius: 12px; font: inherit; font-size: 1rem; color: var(--navy); background: #fff; box-shadow: inset 0 1px 2px rgba(20,40,80,.04); }
 .calc2-inputs input[type="number"]:focus-visible, .step-btn:focus-visible, #usage:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .stepper { display: inline-flex; align-items: stretch; border: 1px solid var(--border-cool); border-radius: 12px; overflow: hidden; background: #fff; }
-.stepper input { width: 64px; text-align: center; border: none; border-radius: 0; -moz-appearance: textfield; appearance: textfield; }
+.calc2-inputs .stepper input[type="number"] { width: 64px; flex: 0 0 64px; text-align: center; border: none; border-radius: 0; -moz-appearance: textfield; appearance: textfield; }
 .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.step-btn { width: 46px; min-height: 46px; border: none; background: var(--sky); color: var(--blue); font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: background .2s, transform .12s cubic-bezier(.16,.84,.44,1); }
+.step-btn { width: 46px; min-width: 46px; min-height: 46px; flex: 0 0 46px; border: none; background: var(--sky); color: var(--blue); font-size: 1.3rem; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: background .2s, transform .12s cubic-bezier(.16,.84,.44,1); }
 .step-btn:hover { background: #dfeafb; }
 .step-btn:active { transform: scale(.92); }
 .slider-row { display: flex; align-items: center; gap: 14px; }
@@ -1190,7 +1193,7 @@ p  { margin: 0 0 1rem; }
 .slider-val { font-family: var(--font-head); font-weight: 700; color: var(--blue); min-width: 52px; text-align: right; font-size: 1.08rem; font-variant-numeric: tabular-nums; }
 .calc2-assume { margin: 4px 0 12px; padding: 12px 15px; background: var(--sky); border-radius: 12px; font-size: .82rem; line-height: 1.55; color: var(--blue-ink); }
 .calc2-basis { font-size: .86rem; }
-.calc2-basis > summary { cursor: pointer; color: var(--blue); font-weight: 600; font-size: .85rem; padding: 4px 0; }
+.calc2-basis > summary { min-height: 44px; cursor: pointer; color: var(--blue); font-weight: 600; font-size: .85rem; padding: 8px 0; align-content: center; }
 .calc2-basis-list { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; font-size: .84rem; color: var(--gray); }
 .calc2-basis-list strong { color: var(--navy); }
 .calc2-basis-note, .calc2-basis-src { font-size: .78rem; line-height: 1.5; color: var(--gray); margin: 8px 0 0; }
@@ -1226,7 +1229,7 @@ p  { margin: 0 0 1rem; }
 .bar2-fill.eco { background: var(--blue); }
 .bar2-val { font-size: .82rem; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
 .calc2-more { margin-top: 14px; font-size: .86rem; }
-.calc2-more > summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
+.calc2-more > summary { min-height: 44px; cursor: pointer; color: var(--blue); font-weight: 600; padding: 8px 0; align-content: center; }
 .calc2-more-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; color: var(--gray); font-size: .86rem; }
 .calc2-more-list strong { color: var(--navy); }
 /* Vollständige Hairline statt farbigem Side-Stripe (border-left) – der
@@ -1652,7 +1655,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   min-height: min(700px, calc(100svh - 112px));
   background: var(--royal-deep);
   isolation: isolate;
-  overflow: clip;
+  overflow: hidden;
 }
 @media (min-width: 981px) {
   .hero-grid {
@@ -1664,7 +1667,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .hero-wool {
   position: absolute;
   z-index: 0;
-  inset: -2.6%;
+  inset: -3.5%;
   overflow: hidden;
   pointer-events: none;
   transform-origin: center center;
@@ -1715,7 +1718,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
       linear-gradient(180deg, rgba(5,26,70,.16), rgba(5,26,70,.08) 48%, rgba(5,26,70,.18)),
       linear-gradient(90deg, rgba(5,26,70,.16), transparent 76%);
   }
-  .hero-wool { inset: -1.5%; }
+  .hero-wool { inset: -3%; }
   .hero-wool img { object-position: 50% 50%; }
   .hero-grid { gap: 38px; }
   .hero-copy { max-width: 680px; }
@@ -1728,7 +1731,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     padding-top: 76px;
     padding-bottom: 54px;
   }
-  .hero-wool { inset: 0; }
+  .hero-wool { inset: -2.5%; }
   .hero-wool img {
     object-position: 50% 48%;
     transform: none;
@@ -1760,6 +1763,426 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero-wool-plane,
   .hero-wool img { transform: none !important; }
   .brand-stage-ambient { display: none; }
+}
+
+/* =============================================================
+   MOBILE-FIRST FLAGSHIP PASS
+   Eine eigenständige, dichtere Smartphone-Komposition auf derselben
+   semantischen DOM-Basis. Details bleiben nativ und vollständig zugänglich.
+   ============================================================= */
+.mobile-nav-only { display: none; }
+.mobile-disclosure > summary { display: none; }
+.footer-group > summary { display: none; }
+.usecase-more,
+.wissen-more,
+.faq-extra { display: contents; }
+.mobile-disclosure-grid { display: contents; }
+
+#how .step { display: block; }
+#how .step > summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  list-style: none;
+  pointer-events: none;
+}
+#how .step > summary::-webkit-details-marker { display: none; }
+#how .step > summary h3 { margin: 12px 0 0; }
+#how .step > p { margin: -8px 0 0 72px; }
+
+@media (max-width: 700px) {
+  :root {
+    --mobile-section-space-sm: 32px;
+    --mobile-section-space-md: 40px;
+    --mobile-section-space-lg: 52px;
+  }
+
+  html { scroll-padding-top: 68px; }
+  body { line-height: 1.58; }
+  body.nav-open { overflow: hidden; }
+  main { display: flex; flex-direction: column; }
+  main > #hero { order: 1; }
+  main > .trust-band { order: 2; }
+  main > #produkt { order: 3; }
+  main > #checker { order: 4; }
+  main > #vorteile { order: 5; }
+  main > #insight { order: 6; }
+  main > #set { order: 7; }
+  main > #how { order: 8; }
+  main > #lifestyle { order: 9; }
+  main > #rechner { order: 10; }
+  main > #fuer-wen { order: 11; }
+  main > #nachhaltigkeit { order: 12; }
+  main > #detail { order: 13; }
+  main > #warum { order: 14; }
+  main > #wissen { order: 15; }
+  main > #faq { order: 16; }
+  main > .mood-section--secondary { order: 17; }
+  main > #kontakt { order: 18; }
+  main > #newsletter { order: 19; }
+
+  .section,
+  #rechner.section,
+  #produkt.section,
+  #insight.section,
+  #faq.section,
+  #kontakt.section,
+  #detail.section {
+    padding-top: var(--mobile-section-space-md);
+    padding-bottom: var(--mobile-section-space-lg);
+  }
+  .section-head { margin-bottom: 24px; }
+  .section-label { margin-bottom: 12px; font-size: .72rem; letter-spacing: .17em; }
+  h2 { font-size: clamp(1.85rem, 8vw, 2.45rem); line-height: 1.06; }
+  .section-text { font-size: 1rem; line-height: 1.58; }
+
+  /* 68px hoher, safe-area-fester Mobile-Header. */
+  .site-header { min-height: 68px; padding-top: env(safe-area-inset-top); }
+  .header-inner { min-height: 68px; }
+  .logo-product { font-size: 1rem; }
+  .logo-by { font-size: .53rem; }
+  .logo-tile { width: 34px; height: 34px; }
+  .hamburger { min-width: 44px; min-height: 44px; justify-content: center; position: relative; z-index: 3; }
+  .main-nav {
+    top: calc(68px + env(safe-area-inset-top));
+    height: calc(100dvh - 68px - env(safe-area-inset-top));
+    max-height: 0;
+    overflow-y: auto;
+    padding-inline: 20px;
+  }
+  .main-nav.open {
+    max-height: calc(100dvh - 68px - env(safe-area-inset-top));
+    padding: 8px 20px calc(24px + env(safe-area-inset-bottom));
+  }
+  .mobile-nav-only { display: list-item; }
+  .mobile-nav-secondary { display: none; }
+  .nav-list { gap: 0; }
+  .nav-list a { min-height: 46px; padding: 12px 0; }
+  .nav-actions { margin-top: 10px; }
+  .nav-actions .nav-cta-secondary { display: none; }
+  .lang-switch { order: -1; }
+
+  /* Hero: eine Hauptaktion, ein Textlink, kompaktes Produktmotiv. */
+  .hero {
+    min-height: min(720px, calc(100svh - 68px));
+    padding: 34px 0 28px;
+  }
+  .hero-grid { gap: 18px; }
+  .hero-copy { text-align: left; }
+  .hero-wordmark,
+  .hero .trust-line { display: none; }
+  .hero h1 { font-size: clamp(2.8rem, 13vw, 3.8rem); max-width: 8ch; }
+  .hero .lead { max-width: 34ch; margin-top: 12px; font-size: .98rem; line-height: 1.48; }
+  .hero .hero-actions { margin-top: 18px; gap: 6px; align-items: flex-start; }
+  .hero .hero-actions .btn-primary { width: auto; min-height: 48px; padding: 13px 20px; }
+  .hero .hero-secondary-link {
+    width: auto;
+    min-height: 44px;
+    padding: 11px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .hero-visual { width: min(248px, 68vw); }
+  .hero .product-card img { height: 190px; object-fit: cover; }
+  .hero .product-card { border-radius: 20px; }
+  .hero .product-card img,
+  .hero .product-card::after { border-radius: 20px; }
+  .hero .media-note { margin-top: 5px; font-size: .64rem; }
+
+  /* Native Progressive Disclosure */
+  .mobile-disclosure { display: block; width: 100%; }
+  .mobile-disclosure > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    padding: 12px 0;
+    color: var(--blue);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: .92rem;
+    list-style: none;
+    cursor: pointer;
+    border-top: 1px solid var(--border-cool);
+  }
+  .mobile-disclosure > summary::-webkit-details-marker { display: none; }
+  .mobile-disclosure > summary::after {
+    content: "+";
+    flex: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .mobile-disclosure[open] > summary::after { content: "−"; }
+  .mobile-disclosure-grid { display: grid; gap: 12px; }
+
+  /* Produkt früh und bildlich, aber nicht bilddominant. */
+  #produkt .product-grid,
+  #set .set-grid { gap: 24px; }
+  #produkt .product-visual,
+  #set .set-visual { width: min(100%, 310px); justify-self: center; }
+  #produkt .product-card img,
+  #set .product-card img { height: 238px; object-fit: cover; }
+  #produkt .num-list { margin-top: 18px; }
+  #produkt .num-list li { padding: 12px 0; gap: 12px; }
+  #produkt .product-copy .section-text { font-size: .96rem; }
+  #set .set-copy .section-text { font-size: .96rem; }
+  #set .set-list { gap: 11px; margin-bottom: 12px; }
+  #set .set-group-label { margin-top: 16px; }
+  #set .set-more .set-list { margin-top: 10px; }
+  #set .legal-hint { margin-top: 16px; }
+
+  /* Benefits/Karten als native, einhändig bedienbare horizontale Bühnen. */
+  #vorteile .cards-grid,
+  #nachhaltigkeit .cards-grid,
+  #warum .cards-grid,
+  .lifestyle-gallery,
+  .detail-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 20px;
+    overscroll-behavior-inline: contain;
+    padding: 18px 20px 22px;
+    margin-inline: -20px;
+    scrollbar-width: none;
+  }
+  #vorteile .cards-grid::-webkit-scrollbar,
+  #nachhaltigkeit .cards-grid::-webkit-scrollbar,
+  #warum .cards-grid::-webkit-scrollbar,
+  .lifestyle-gallery::-webkit-scrollbar,
+  .detail-strip::-webkit-scrollbar { display: none; }
+  #vorteile .card,
+  #nachhaltigkeit .card,
+  #warum .card {
+    flex: 0 0 min(78vw, 292px);
+    scroll-snap-align: start;
+    padding: 38px 22px 22px;
+    min-height: 205px;
+  }
+  #vorteile .card.glass .icon-tile { top: -10px; left: 20px; }
+  .lifestyle-gallery .lg-item,
+  .detail-strip figure {
+    flex: 0 0 min(64vw, 240px);
+    height: 250px;
+    aspect-ratio: auto;
+    scroll-snap-align: start;
+    border-radius: 14px;
+  }
+  #lifestyle .section-text { display: none; }
+
+  /* Textile Vergleichsmatrix: zwei kompakte, zeilengleiche Spalten. */
+  #insight .section-head { margin-bottom: 24px; }
+  #insight .section-text { display: none; }
+  .duel {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-radius: 10px;
+  }
+  .duel::after { display: block; left: 50%; }
+  .duel-side { padding: 0; }
+  .comparison-panel__texture { height: 62px; z-index: -1; }
+  .comparison-panel::after { background: transparent; }
+  .comparison-panel__content { position: static; }
+  .comparison-panel__title {
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    margin: 0;
+    font-size: .72rem;
+    line-height: 1.25;
+    letter-spacing: .07em;
+  }
+  .duel-side ul { margin: 0; gap: 0; }
+  .duel-side li {
+    min-height: 78px;
+    padding: 12px;
+    border-top: 1px solid currentColor;
+    border-color: rgba(16,44,94,.12);
+    font-size: .82rem;
+    line-height: 1.35;
+    align-items: center;
+  }
+  .comparison-panel--water li { border-color: rgba(255,255,255,.16); }
+  .comparison-panel--paper { background: var(--wool-cream); }
+  .comparison-panel--water { background: var(--wool-blue-deep); }
+  .duel-side .mark { display: none; }
+
+  /* Foto-Check: schnell erreichbar, Einführung und Kartenraum gestrafft. */
+  #checker .section-head { margin-bottom: 20px; }
+  #checker .fotocheck { padding: 22px 20px; }
+  #checker .fc-guide { gap: 12px; }
+  #checker .fc-actions { gap: 8px; }
+  #checker .fc-actions .btn,
+  #checker .fc-select { min-height: 46px; }
+  #checker .hint-box { margin-top: 16px; }
+  #checker .legal-hint { font-size: .76rem; line-height: 1.45; }
+
+  /* Installation: ein geöffnetes natives Step-Akkordeon. */
+  #how .how-figure { aspect-ratio: 16 / 8; border-radius: 14px; }
+  #how .steps { gap: 0; border-top: 1px solid var(--border-cool); }
+  #how .step {
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--border-cool);
+  }
+  #how .step::after { display: none; }
+  #how .step > summary {
+    min-height: 64px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  #how .step > summary::after {
+    content: "+";
+    margin-left: auto;
+    color: var(--blue);
+    font-size: 1.2rem;
+  }
+  #how .step[open] > summary::after { content: "−"; }
+  #how .step > summary h3 { margin: 0; font-size: 1rem; line-height: 1.25; }
+  #how .step-num { width: 42px; height: 42px; border-radius: 10px; font-size: .9rem; }
+  #how .step > p { margin: -2px 30px 14px 54px; font-size: .9rem; }
+  #how .hint-box { margin-top: 16px; padding: 15px 17px; }
+
+  /* Rechner: kompakte Werkzeugansicht. */
+  .calc2-wrap { gap: 12px; }
+  .calc2-inputs,
+  .calc2-results { padding: 20px; border-radius: 14px; }
+  .calc2-field { margin-bottom: 14px; }
+  .calc2-help { font-size: .76rem; }
+  .calc2-assume { padding: 10px 12px; }
+  .calc2-kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi { min-height: 104px; padding: 14px 12px; }
+  .calc2-bars { display: none; }
+  .calc2-co2 { padding: 13px 14px; }
+  .calc2-disclaimer { font-size: .74rem; }
+
+  /* Zwei direkte Anwendungsfälle, weitere nativ aufklappbar. */
+  .usecase-grid { grid-template-columns: 1fr; gap: 12px; }
+  .usecase-card { padding: 20px; }
+  .usecase-card .uc-icon { margin-bottom: 12px; }
+  .usecase-more .mobile-disclosure-grid { margin-top: 10px; }
+
+  /* Mood/Marke: kurze filmische Akzente statt mehrerer Bildschirme. */
+  .mood-section--primary { margin-top: 28px; margin-bottom: calc(var(--mobile-section-space-lg) * -1); }
+  .mood-section--primary .mood-media { height: 210px; }
+  .mood-section--secondary .mood-media { height: 168px; }
+  .mood-caption { padding: 7px 14px 10px; }
+  .brand-stage { min-height: 142px; margin: 22px auto; }
+  #warum .section-text { font-size: .94rem; }
+  #warum .media-band { height: 168px; max-width: none; margin-top: 26px; overflow: hidden; }
+  #warum .media-band img { width: 100%; height: 100%; object-fit: cover; }
+  #warum .card p { font-size: .88rem; }
+
+  /* Wissen/FAQ: drei Themen direkt, Rest und lange Frageliste auf Nachfrage. */
+  .wissen-grid { grid-template-columns: 1fr; gap: 0; }
+  .wissen-card { padding: 16px 0 12px; }
+  .wissen-card p { margin-bottom: 8px; }
+  .wissen-more .mobile-disclosure-grid { gap: 0; }
+  .faq-item summary { min-height: 52px; padding: 14px 34px 14px 0; font-size: .98rem; }
+  .faq-item p { padding-bottom: 14px; font-size: .92rem; }
+  .faq-extra > div { margin-top: 0; }
+  .faq-more { margin-top: 16px; }
+
+  /* Kontakt + Launch-Hinweis als ein kompakter Abschluss. */
+  #contactForm { padding: 22px 20px; }
+  #contactForm .field,
+  #contactForm .checkbox { display: none; }
+  #contactForm .form-notice { margin-bottom: 12px; }
+  #contactForm .btn { min-height: 48px; }
+  #newsletter { padding-top: 36px; padding-bottom: 44px; }
+  #newsletter .brand-mark { display: none; }
+  #newsletter .section-head { margin-bottom: 16px; }
+  #newsletter .section-head h2 { font-size: 1.7rem; }
+  #newsletter .section-text { font-size: .9rem; }
+  .newsletter-disclosure > summary {
+    color: #fff;
+    border-color: var(--royal-line);
+    justify-content: center;
+  }
+
+  /* Kürzerer Footer; E-Mail und Pflichtlinks bleiben direkt erreichbar. */
+  .site-footer { padding: 34px 0 calc(86px + env(safe-area-inset-bottom)); }
+  .footer-grid { display: grid; gap: 22px; }
+  .footer-brand { text-align: left; }
+  .footer-claim { margin-top: 8px; }
+  .footer-text { margin-bottom: 0; }
+  .footer-legal-direct {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-top: 14px;
+  }
+  .footer-legal-direct a {
+    color: rgba(255,255,255,.72);
+    font-size: .78rem;
+    text-underline-offset: .2em;
+  }
+  .footer-group:last-of-type { display: none; }
+  .footer-group { border-top: 1px solid rgba(255,255,255,.12); }
+  .footer-group > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    margin: 0;
+    list-style: none;
+    cursor: pointer;
+  }
+  .footer-group > summary::-webkit-details-marker { display: none; }
+  .footer-group > summary::after { content: "+"; color: #fff; font-size: 1.1rem; }
+  .footer-group[open] > summary::after { content: "−"; }
+  .footer-links { gap: 8px; padding: 2px 0 14px; }
+  .footer-links a { font-size: .9rem; }
+  .footer-bottom { margin-top: 24px; padding-top: 18px; }
+
+  /* Kompakte Einhand-Aktionsleiste; verschwindet vor Kontakt/Footer per JS. */
+  .sticky-cta {
+    left: 10px;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    min-height: 58px;
+    padding: 6px;
+    border-radius: 16px;
+  }
+  .sticky-cta a { min-height: 44px; display: grid; place-items: center; border-radius: 11px; }
+  .sticky-cta a.primary { flex: 1.15; }
+}
+
+@media (max-width: 360px) {
+  .container { padding-inline: 16px; }
+  #vorteile .cards-grid,
+  #nachhaltigkeit .cards-grid,
+  #warum .cards-grid,
+  .lifestyle-gallery,
+  .detail-strip {
+    margin-inline: -16px;
+    padding-inline: 16px;
+    scroll-padding-inline: 16px;
+  }
+  .hero h1 { font-size: clamp(2.5rem, 13vw, 3rem); }
+  .hero .lead { font-size: .92rem; }
+  .hero-visual { width: min(220px, 66vw); }
+  .hero .product-card img { height: 162px; }
+  .comparison-panel__title { padding-inline: 9px; font-size: .66rem; }
+  .duel-side li { padding: 9px; font-size: .75rem; }
+  .calc2-kpis { grid-template-columns: 1fr; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  .hero { min-height: auto; }
+  .hero-grid { grid-template-columns: 1.1fr .9fr; align-items: center; }
+  .hero-visual { width: min(220px, 30vw); }
+  .hero .product-card img { height: 150px; }
 }
 
 /* Druck bleibt funktional und frei von Motion-Transforms/Viewport-Überbreite.

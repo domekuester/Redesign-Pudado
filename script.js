@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initAmbientLoop, initHeaderState]
+   initScrollSpy, initReveal, initAmbientLoop, initHeaderState,
+   initMobileDisclosures, initFaqAccordion]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
 
@@ -120,6 +121,13 @@ function initNav() {
     document.dispatchEvent(new CustomEvent('pudado:scroll-lock', {
       detail: { source: 'navigation', locked: isOpen }
     }));
+    document.body.classList.toggle('nav-open', isOpen);
+    if (isOpen) {
+      const first = nav.querySelector('a, button');
+      if (first) requestAnimationFrame(() => first.focus());
+    } else if (open === false && nav.contains(document.activeElement)) {
+      burger.focus();
+    }
   };
 
   burger.addEventListener('click', () => toggle());
@@ -128,6 +136,68 @@ function initNav() {
   nav.querySelectorAll('a').forEach(link =>
     link.addEventListener('click', () => toggle(false))
   );
+
+  document.addEventListener('keydown', (event) => {
+    if (!nav.classList.contains('open')) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      toggle(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [burger, ...Array.from(nav.querySelectorAll('a[href], button:not([disabled])'))]
+      .filter(el => el.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+}
+
+/* -------------------------------------------------------------
+   Mobile Progressive Disclosure
+   Native <details> keeps every item searchable and keyboard-accessible.
+   Desktop/tablet retain the complete presentation; smartphones start
+   with focused summaries and can reveal every detail on demand.
+   ------------------------------------------------------------- */
+function initMobileDisclosures() {
+  const mobile = window.matchMedia('(max-width: 700px)');
+  const disclosures = Array.from(document.querySelectorAll(
+    '.set-more, .usecase-more, .wissen-more, .faq-extra, .newsletter-disclosure, .calc-support-more, .detail-more, .footer-group'
+  ));
+  const steps = Array.from(document.querySelectorAll('#how .step'));
+
+  const sync = () => {
+    disclosures.forEach(detail => { detail.open = !mobile.matches; });
+    steps.forEach((step, index) => { step.open = !mobile.matches || index === 0; });
+  };
+
+  steps.forEach(step => step.addEventListener('toggle', () => {
+    if (!mobile.matches || !step.open) return;
+    steps.forEach(other => {
+      if (other !== step) other.open = false;
+    });
+  }));
+
+  sync();
+  if (mobile.addEventListener) mobile.addEventListener('change', sync);
+  else mobile.addListener(sync);
+}
+
+function initFaqAccordion() {
+  const items = Array.from(document.querySelectorAll('#faq .faq-item'));
+  items.forEach(item => item.addEventListener('toggle', () => {
+    if (!item.open) return;
+    items.forEach(other => {
+      if (other !== item) other.open = false;
+    });
+  }));
 }
 
 /* -------------------------------------------------------------
@@ -336,12 +406,16 @@ function initStickyCta() {
   const bar = document.getElementById('stickyCta');
   if (!bar) return;
   const hero = document.getElementById('hero');
+  const contact = document.getElementById('kontakt');
   const footer = document.getElementById('footer');
   function update() {
     const y = window.scrollY || window.pageYOffset;
     const past = hero ? y > (hero.offsetTop + hero.offsetHeight - 120) : y > 400;
     const nearFooter = footer ? (y + window.innerHeight) > (footer.offsetTop + 40) : false;
-    bar.classList.toggle('show', past && !nearFooter);
+    const nearContact = contact ? (y + window.innerHeight) > (contact.offsetTop + 80) : false;
+    const interfaceLocked = document.body.classList.contains('nav-open')
+      || !document.getElementById('cookieModal')?.hidden;
+    bar.classList.toggle('show', past && !nearContact && !nearFooter && !interfaceLocked);
   }
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
@@ -454,7 +528,7 @@ function initCookieConsent() {
   const btnOpenSettings    = document.getElementById('openSettings');
   const btnModalNecessary  = document.getElementById('modalNecessary');
   const btnSaveSettings    = document.getElementById('saveSettings');
-  const footerLink         = document.getElementById('openCookieSettings');
+  const footerLinks        = document.querySelectorAll('#openCookieSettings, [data-cookie-settings]');
 
   const ckStats     = document.getElementById('ckStats');
   const ckMarketing = document.getElementById('ckMarketing');
@@ -491,9 +565,11 @@ function initCookieConsent() {
 
   btnOpenSettings && btnOpenSettings.addEventListener('click', () => openModal(modal, ckStats, ckMarketing, ckMedia));
 
-  footerLink && footerLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal(modal, ckStats, ckMarketing, ckMedia);
+  footerLinks.forEach((footerLink) => {
+    footerLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal(modal, ckStats, ckMarketing, ckMedia);
+    });
   });
 
   // Auswahl im Modal speichern
@@ -724,8 +800,8 @@ function initReveal() {
 function initAmbientLoop() {
   const video = document.querySelector('.brand-stage-ambient');
   if (!video) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    video.removeAttribute('autoplay');
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+  if (isMobile || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
     video.pause();
     return;
   }
