@@ -43,7 +43,7 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/Hero-New.png" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=flagship-media-1" />
+  <link rel="stylesheet" href="style.css?v=20260729-layout-repair-2" />
   <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
@@ -400,23 +400,21 @@
             <h3 data-i18n="mom.c2_t">Wasserreinigung in sensiblen Phasen.</h3>
             <p data-i18n="mom.c2_d">In sensiblen Lebensphasen kann eine vorsichtige Reinigung mit Wasser als angenehm empfunden werden. Bei Beschwerden bitte fachlichen Rat einholen.</p>
           </article>
-          <details class="mobile-disclosure usecase-more" open>
-            <summary data-i18n="mobile.usecases_more">Weitere Anwendungsfälle</summary>
-            <div class="mobile-disclosure-grid">
-          <article class="usecase-card">
+          <article class="usecase-card usecase-card--more" id="usecase-more-1" data-mobile-collapsible="usecases">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="6" r="3"/><path d="M7 21v-4a5 5 0 0110 0v4"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c3_cat">Senioren &amp; eingeschränkte Beweglichkeit</p>
             <h3 data-i18n="mom.c3_t">Einfacher erreichen, komfortabler reinigen.</h3>
             <p data-i18n="mom.c3_d">Ein gut erreichbares Handbidet kann die tägliche Reinigung erleichtern. Wichtig sind eine passende Installation und eine sichere Nutzung.</p>
           </article>
-          <article class="usecase-card">
+          <article class="usecase-card usecase-card--more" id="usecase-more-2" data-mobile-collapsible="usecases">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="7" r="2.2"/><circle cx="16" cy="7" r="2.2"/><path d="M4 20v-3a4 4 0 014-4 4 4 0 014 4 4 4 0 014-4 4 4 0 014 4v3"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c4_cat">Familien &amp; Alltag</p>
             <h3 data-i18n="mom.c4_t">Eine moderne Ergänzung für den Alltag.</h3>
             <p data-i18n="mom.c4_d">Für Haushalte, die Reinigung mit Wasser und einen bewussteren Umgang mit Papier verbinden möchten.</p>
           </article>
-            </div>
-          </details>
+          <button class="mobile-grid-toggle" type="button" data-mobile-grid-toggle="usecases"
+                  aria-controls="usecase-more-1 usecase-more-2" aria-expanded="false" hidden
+                  data-i18n="mobile.usecases_more">Weitere Anwendungsfälle</button>
         </div>
         <p class="legal-hint center" data-i18n="mom.disclaimer">EcoBum ist ein Hygieneprodukt und kein Medizinprodukt. Bei gesundheitlichen Beschwerden wende dich bitte an fachkundige oder ärztliche Beratung.</p>
       </div>
@@ -623,18 +621,17 @@
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c1t">Warum Wasser?</h3><p data-i18n="wi.c1d">Wasser wird überall dort genutzt, wo es wirklich sauber werden soll. Im Bad kann es eine sanfte, gründliche Ergänzung zur Reinigung sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c2t">Papier vs. Wasser</h3><p data-i18n="wi.c2d">Trockenes Papier wischt mit Reibung. Wasser kann Rückstände sanfter lösen – danach genügt oft wenig Papier zum Trocknen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
           <a class="wissen-card" href="#how"><h3 data-i18n="wi.c3t">EcoBum richtig nutzen</h3><p data-i18n="wi.c3d">Nach dem Toilettengang kurz mit Wasser reinigen, die Wassermenge über den Hebel dosieren und bei Bedarf trockentupfen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <details class="mobile-disclosure wissen-more" open>
-            <summary data-i18n="mobile.knowledge_more">Mehr Wissen entdecken</summary>
-            <div class="mobile-disclosure-grid">
-          <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Mit 2–3 Fotos deines Anschlusses gibt der Foto-Check eine erste Orientierung.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="situations/empfindliche-haut.html"><h3 data-i18n="wi.c5t">Sensible Haut</h3><p data-i18n="wi.c5d">Bei empfindlicher Haut kann Wasser eine sanftere Alternative zu wiederholtem trockenem Wischen sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="situations/menstruation.html"><h3 data-i18n="wi.c6t">Menstruation</h3><p data-i18n="wi.c6d">Wasser kann während der Periode für ein zusätzliches Frischegefühl sorgen – ohne Duftstoffe und ohne Feuchttücher.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="situations/schwangerschaft.html"><h3 data-i18n="wi.c7t">Schwangerschaft & Wochenbett</h3><p data-i18n="wi.c7d">In einer empfindlichen Zeit kann sanfte Reinigung mit Wasser angenehmer sein. Bei Beschwerden bitte Hebamme oder Ärztin/Arzt fragen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#nachhaltigkeit"><h3 data-i18n="wi.c8t">Nachhaltigkeit</h3><p data-i18n="wi.c8d">Wer Wasser nutzt, braucht im Alltag oft weniger Papier. Wie viel, hängt von den Gewohnheiten ab.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#faq"><h3 data-i18n="wi.c9t">Reinigung & Pflege</h3><p data-i18n="wi.c9d">Sprühkopf regelmäßig abspülen, Verbindungen gelegentlich auf festen Sitz prüfen und bei Kalk vorsichtig entkalken.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#checker"><h3 data-i18n="wi.c10t">Bohrfrei & Plug-and-Play</h3><p data-i18n="wi.c10d">Ohne Strom und ohne feste Badrenovierung gedacht, mit Klebehalterung als Option. Der Wasseranschluss muss trotzdem geprüft werden.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-            </div>
-          </details>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-1" data-mobile-collapsible="knowledge" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Mit 2–3 Fotos deines Anschlusses gibt der Foto-Check eine erste Orientierung.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-2" data-mobile-collapsible="knowledge" href="situations/empfindliche-haut.html"><h3 data-i18n="wi.c5t">Sensible Haut</h3><p data-i18n="wi.c5d">Bei empfindlicher Haut kann Wasser eine sanftere Alternative zu wiederholtem trockenem Wischen sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-3" data-mobile-collapsible="knowledge" href="situations/menstruation.html"><h3 data-i18n="wi.c6t">Menstruation</h3><p data-i18n="wi.c6d">Wasser kann während der Periode für ein zusätzliches Frischegefühl sorgen – ohne Duftstoffe und ohne Feuchttücher.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-4" data-mobile-collapsible="knowledge" href="situations/schwangerschaft.html"><h3 data-i18n="wi.c7t">Schwangerschaft & Wochenbett</h3><p data-i18n="wi.c7d">In einer empfindlichen Zeit kann sanfte Reinigung mit Wasser angenehmer sein. Bei Beschwerden bitte Hebamme oder Ärztin/Arzt fragen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-5" data-mobile-collapsible="knowledge" href="#nachhaltigkeit"><h3 data-i18n="wi.c8t">Nachhaltigkeit</h3><p data-i18n="wi.c8d">Wer Wasser nutzt, braucht im Alltag oft weniger Papier. Wie viel, hängt von den Gewohnheiten ab.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-6" data-mobile-collapsible="knowledge" href="#faq"><h3 data-i18n="wi.c9t">Reinigung & Pflege</h3><p data-i18n="wi.c9d">Sprühkopf regelmäßig abspülen, Verbindungen gelegentlich auf festen Sitz prüfen und bei Kalk vorsichtig entkalken.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <a class="wissen-card wissen-card--more" id="knowledge-more-7" data-mobile-collapsible="knowledge" href="#checker"><h3 data-i18n="wi.c10t">Bohrfrei & Plug-and-Play</h3><p data-i18n="wi.c10d">Ohne Strom und ohne feste Badrenovierung gedacht, mit Klebehalterung als Option. Der Wasseranschluss muss trotzdem geprüft werden.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
+          <button class="mobile-grid-toggle" type="button" data-mobile-grid-toggle="knowledge"
+                  aria-controls="knowledge-more-1 knowledge-more-2 knowledge-more-3 knowledge-more-4 knowledge-more-5 knowledge-more-6 knowledge-more-7"
+                  aria-expanded="false" hidden
+                  data-i18n="mobile.knowledge_more">Mehr Wissen entdecken</button>
         </div>
       </div>
     </section>
@@ -826,11 +823,11 @@
     </div>
   </div>
 
-  <script src="translations.js?v=flagship-media-1"></script>
-  <script src="script.js?v=flagship-media-1"></script>
+  <script src="translations.js?v=20260729-layout-repair-2"></script>
+  <script src="script.js?v=20260729-layout-repair-2"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/vendor/lenis.min.js"></script>
-  <script src="motion.js?v=flagship-media-1"></script>
+  <script src="motion.js?v=20260729-layout-repair-2"></script>
 </body>
 </html>

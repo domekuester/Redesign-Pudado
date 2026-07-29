@@ -552,15 +552,15 @@ p  { margin: 0 0 1rem; }
 .icon-tile svg { width: 27px; height: 27px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
 
 /* ---- Anwendungsfall-Kacheln ---- */
-.usecase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
-.usecase-card { background: linear-gradient(165deg, #fff, var(--sky-soft)); border: 1px solid var(--sky-line); border-radius: var(--radius); padding: 30px 26px; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease; }
+.usecase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 2vw, 32px); max-width: 1100px; margin: 0 auto; align-items: start; }
+.usecase-card { align-self: start; min-height: 0; background: linear-gradient(165deg, #fff, var(--sky-soft)); border: 1px solid var(--sky-line); border-radius: var(--radius); padding: clamp(26px, 2.5vw, 38px); box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease, box-shadow .3s ease; }
 .usecase-card:hover { transform: translateY(-3px); border-color: var(--blue-soft); box-shadow: var(--shadow-md); }
 .uc-icon { width: 48px; height: 48px; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(35,95,208,.08); display: grid; place-items: center; margin-bottom: 20px; }
 .uc-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
 .usecase-card .sc-cat { font-family: var(--font-head); font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
 .usecase-card h3 { font-size: 1.08rem; line-height: 1.28; color: var(--ink); margin: 0 0 12px; }
 .usecase-card p { margin: 0; color: var(--gray); font-size: .95rem; line-height: 1.6; }
-@media (max-width: 980px) { .usecase-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } .usecase-card { padding: 24px 22px; } }
+@media (max-width: 980px) { .usecase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } .usecase-card { padding: 24px 22px; } }
 @media (max-width: 560px) { .usecase-grid { grid-template-columns: 1fr; gap: 16px; } }
 
 /* ----------------------- Benefits & Newsletter (Royal-Bühne) --- */
@@ -1069,19 +1069,22 @@ p  { margin: 0 0 1rem; }
 .lg-item:hover img { transform: scale(1.04); }
 
 /* ----------------------- Pudado Wissen ---------------------- */
-.wissen-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px 22px; }
+.wissen-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 3vw, 48px); row-gap: clamp(34px, 4vw, 56px); align-items: start; }
 /* Bewusst kartenlos: nur eine Trennlinie oben statt Rahmen+Schatten+Weiß
    wie bei den übrigen Grids – wirkt wie eine redaktionelle Themenliste,
    nicht wie ein weiteres Set Produktkacheln. */
 .wissen-card {
-  display: flex; flex-direction: column; background: transparent;
+  display: flex; flex-direction: column; align-self: start; min-height: 0; background: transparent;
   border: none; border-top: 1px solid var(--border); border-radius: 0;
   padding: 22px 2px 4px; color: var(--ink);
   transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease;
 }
 .wissen-card:hover { transform: translateY(-2px); border-color: var(--blue-soft); text-decoration: none; }
 .wissen-card h3 { font-size: 1.04rem; margin-bottom: .45em; }
-.wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; flex: 1; line-height: 1.6; }
+.wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; line-height: 1.6; }
+.wissen-card[hidden],
+.usecase-card[hidden] { display: none; }
+.mobile-grid-toggle { display: none; }
 
 /* ----------------------- Detail-Sektion --------------------- */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 960px; margin: 0 auto; }
@@ -1313,7 +1316,7 @@ p  { margin: 0 0 1rem; }
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  .wissen-grid { grid-template-columns: repeat(3, 1fr); }
+  .wissen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .detail-grid { grid-template-columns: 1fr; }
   .sub-hero-grid { grid-template-columns: 1fr; }
   .sub-hero-visual { order: -1; }
@@ -1327,7 +1330,7 @@ p  { margin: 0 0 1rem; }
 }
 @media (max-width: 760px) {
   h1 { font-size: clamp(2.4rem, 9vw, 3.2rem); }
-  .wissen-grid { grid-template-columns: repeat(2, 1fr); }
+  .wissen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .detail-strip { grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .lifestyle-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 190px; }
   .sticky-cta { display: flex; }
@@ -1774,8 +1777,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .mobile-nav-only { display: none; }
 .mobile-disclosure > summary { display: none; }
 .footer-group > summary { display: none; }
-.usecase-more,
-.wissen-more,
 .faq-extra { display: contents; }
 .mobile-disclosure-grid { display: contents; }
 
@@ -2071,7 +2072,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .usecase-grid { grid-template-columns: 1fr; gap: 12px; }
   .usecase-card { padding: 20px; }
   .usecase-card .uc-icon { margin-bottom: 12px; }
-  .usecase-more .mobile-disclosure-grid { margin-top: 10px; }
 
   /* Mood/Marke: kurze filmische Akzente statt mehrerer Bildschirme. */
   .mood-section--primary { margin-top: 28px; margin-bottom: calc(var(--mobile-section-space-lg) * -1); }
@@ -2088,7 +2088,27 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .wissen-grid { grid-template-columns: 1fr; gap: 0; }
   .wissen-card { padding: 16px 0 12px; }
   .wissen-card p { margin-bottom: 8px; }
-  .wissen-more .mobile-disclosure-grid { gap: 0; }
+  .mobile-grid-toggle {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 0;
+    border: 0;
+    border-top: 1px solid var(--border-cool);
+    background: transparent;
+    color: var(--blue);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: .92rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .mobile-grid-toggle::after { content: "+"; font-size: 1.2rem; font-weight: 500; line-height: 1; }
+  .mobile-grid-toggle[aria-expanded="true"]::after { content: "−"; }
   .faq-item summary { min-height: 52px; padding: 14px 34px 14px 0; font-size: .98rem; }
   .faq-item p { padding-bottom: 14px; font-size: .92rem; }
   .faq-extra > div { margin-top: 0; }

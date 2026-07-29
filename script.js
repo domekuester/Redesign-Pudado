@@ -169,14 +169,30 @@ function initNav() {
 function initMobileDisclosures() {
   const mobile = window.matchMedia('(max-width: 700px)');
   const disclosures = Array.from(document.querySelectorAll(
-    '.set-more, .usecase-more, .wissen-more, .faq-extra, .newsletter-disclosure, .calc-support-more, .detail-more, .footer-group'
+    '.set-more, .faq-extra, .newsletter-disclosure, .calc-support-more, .detail-more, .footer-group'
   ));
   const steps = Array.from(document.querySelectorAll('#how .step'));
+  const gridToggles = Array.from(document.querySelectorAll('[data-mobile-grid-toggle]'));
+
+  const syncGridGroup = (button, expanded = false) => {
+    const group = button.dataset.mobileGridToggle;
+    const items = Array.from(document.querySelectorAll(`[data-mobile-collapsible="${group}"]`));
+    const collapsible = mobile.matches;
+    button.hidden = !collapsible;
+    button.setAttribute('aria-expanded', String(collapsible && expanded));
+    items.forEach(item => { item.hidden = collapsible && !expanded; });
+  };
 
   const sync = () => {
     disclosures.forEach(detail => { detail.open = !mobile.matches; });
     steps.forEach((step, index) => { step.open = !mobile.matches || index === 0; });
+    gridToggles.forEach(button => syncGridGroup(button, false));
   };
+
+  gridToggles.forEach(button => button.addEventListener('click', () => {
+    const expanded = button.getAttribute('aria-expanded') !== 'true';
+    syncGridGroup(button, expanded);
+  }));
 
   steps.forEach(step => step.addEventListener('toggle', () => {
     if (!mobile.matches || !step.open) return;
