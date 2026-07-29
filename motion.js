@@ -36,8 +36,11 @@
     triggers: [],
     locks: new Set(),
     calculatorObserver: null,
-    heroWoolLoop: null,
-    heroPointerCleanup: null,
+    heroMediaMatchMedia: null,
+    heroMediaAnimations: [],
+    heroMediaObserver: null,
+    heroMediaVisibilityCleanup: null,
+    heroMediaVisible: true,
     destroyed: false
   };
 
@@ -117,9 +120,7 @@
     const actions = document.querySelector('.hero-actions');
     const visual = document.querySelector('.hero-visual');
     const badges = document.querySelector('.hero .product-badges');
-    const wool = document.querySelector('.hero-wool');
-    const woolPlane = document.querySelector('.hero-wool-plane');
-    const woolImage = document.querySelector('.hero-wool img');
+    const media = document.querySelector('.hero-media');
     if (!copy || !visual) return;
 
     gsap.timeline({ defaults: { ease: MOTION.easeEnter } })
@@ -131,66 +132,7 @@
       .from(visual, { y: MOTION.distanceMedium, scale: 0.985, opacity: 0, duration: 0.72, clearProps: 'transform,opacity' }, 0.18)
       .from(badges, { y: 8, opacity: 0, duration: 0.34, clearProps: 'transform,opacity' }, 0.75);
 
-    const allowHeroPointerMotion = () => finePointer.matches && window.innerWidth >= 900;
-
-    if (woolImage && allowHeroPointerMotion()) {
-      state.heroWoolLoop = gsap.to(woolImage, {
-        scale: 1.018,
-        x: 5,
-        y: 3,
-        duration: 11,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1
-      });
-
-      if (woolPlane) {
-        const moveX = gsap.quickTo(woolPlane, 'x', { duration: 1.35, ease: MOTION.easeEnter });
-        const moveY = gsap.quickTo(woolPlane, 'y', { duration: 1.35, ease: MOTION.easeEnter });
-        const hero = document.getElementById('hero');
-        const handlePointerMove = (event) => {
-          if (!allowHeroPointerMotion()) {
-            moveX(0);
-            moveY(0);
-            return;
-          }
-          const rect = hero.getBoundingClientRect();
-          const nx = gsap.utils.clamp(-1, 1, ((event.clientX - rect.left) / rect.width) * 2 - 1);
-          const ny = gsap.utils.clamp(-1, 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
-          moveX(nx * 7);
-          moveY(ny * 5);
-        };
-        const resetPointer = () => {
-          moveX(0);
-          moveY(0);
-        };
-        const handleResize = () => {
-          if (!allowHeroPointerMotion()) resetPointer();
-        };
-        hero.addEventListener('pointermove', handlePointerMove, { passive: true });
-        hero.addEventListener('pointerleave', resetPointer, { passive: true });
-        window.addEventListener('resize', handleResize, { passive: true });
-        state.heroPointerCleanup = () => {
-          hero.removeEventListener('pointermove', handlePointerMove);
-          hero.removeEventListener('pointerleave', resetPointer);
-          window.removeEventListener('resize', handleResize);
-        };
-      }
-    }
-
-    if (wool && window.innerWidth > 980) {
-      state.triggers.push(ScrollTrigger.create({
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.8,
-        animation: gsap.fromTo(wool, { yPercent: -0.4, scale: 1.005 }, {
-          yPercent: 1.8,
-          scale: 1.025,
-          ease: 'none'
-        })
-      }));
-    }
+    if (media) initHeroMediaMotion(document.getElementById('hero'));
 
     if (window.innerWidth > 980) {
       state.triggers.push(ScrollTrigger.create({
@@ -201,6 +143,88 @@
         animation: gsap.to(visual, { yPercent: 2.5, ease: 'none' })
       }));
     }
+  }
+
+  function setHeroMediaPlayback() {
+    const shouldPlay = state.heroMediaVisible && !document.hidden;
+    state.heroMediaAnimations.forEach((animation) => animation.paused(!shouldPlay));
+  }
+
+  function initHeroMediaMotion(hero) {
+    if (!hero) return;
+    const image = hero.querySelector('.hero-media-image');
+    const pointerLayer = hero.querySelector('.hero-media-pointer-layer');
+    if (!image || !pointerLayer) return;
+
+    const createLivingStill = (frames) => {
+      const timeline = gsap.timeline({ repeat: -1, defaults: { ease: 'sine.inOut' } });
+      gsap.set(image, { x: 0, y: 0, scale: frames.startScale, force3D: true });
+      frames.steps.forEach((step) => timeline.to(image, step));
+      state.heroMediaAnimations.push(timeline);
+      setHeroMediaPlayback();
+      return () => {
+        const index = state.heroMediaAnimations.indexOf(timeline);
+        if (index !== -1) state.heroMediaAnimations.splice(index, 1);
+        timeline.kill();
+      };
+    };
+
+    const mm = gsap.matchMedia();
+    state.heroMediaMatchMedia = mm;
+    mm.add('(min-width: 1000px)', () => createLivingStill({
+      startScale: 1.02,
+      steps: [
+        { x: 5, y: -3, scale: 1.025, duration: 7.2 },
+        { x: -4, y: 3, scale: 1.03, duration: 8.4 },
+        { x: 0, y: 0, scale: 1.02, duration: 7.6 }
+      ]
+    }));
+    mm.add('(min-width: 431px) and (max-width: 999px)', () => createLivingStill({
+      startScale: 1.012,
+      steps: [
+        { x: 2, y: -2, scale: 1.018, duration: 9.2 },
+        { x: -2, y: 1, scale: 1.016, duration: 10.1 },
+        { x: 0, y: 0, scale: 1.012, duration: 9.4 }
+      ]
+    }));
+    mm.add('(max-width: 430px)', () => {
+      gsap.set(image, { x: 0, y: 0, scale: 1.008 });
+      return () => gsap.set(image, { clearProps: 'transform' });
+    });
+
+    mm.add('(min-width: 1000px) and (hover: hover) and (pointer: fine)', () => {
+      const moveX = gsap.quickTo(pointerLayer, 'x', { duration: 1.45, ease: 'power2.out' });
+      const moveY = gsap.quickTo(pointerLayer, 'y', { duration: 1.45, ease: 'power2.out' });
+      const reset = () => {
+        moveX(0);
+        moveY(0);
+      };
+      const move = (event) => {
+        const rect = hero.getBoundingClientRect();
+        const nx = gsap.utils.clamp(-1, 1, ((event.clientX - rect.left) / rect.width) * 2 - 1);
+        const ny = gsap.utils.clamp(-1, 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
+        moveX(nx * 4);
+        moveY(ny * 2.5);
+      };
+      hero.addEventListener('pointermove', move, { passive: true });
+      hero.addEventListener('pointerleave', reset, { passive: true });
+      return () => {
+        hero.removeEventListener('pointermove', move);
+        hero.removeEventListener('pointerleave', reset);
+        gsap.set(pointerLayer, { clearProps: 'transform' });
+      };
+    });
+
+    state.heroMediaObserver = new IntersectionObserver(([entry]) => {
+      state.heroMediaVisible = Boolean(entry && entry.isIntersecting);
+      setHeroMediaPlayback();
+    }, { threshold: 0.04 });
+    state.heroMediaObserver.observe(hero);
+    const handleVisibility = () => setHeroMediaPlayback();
+    document.addEventListener('visibilitychange', handleVisibility);
+    state.heroMediaVisibilityCleanup = () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }
 
   function revealOnce(trigger, targets, vars = {}) {
@@ -228,7 +252,13 @@
     revealOnce('#checker', ['#checker .section-head', '#checker .fotocheck'], { y: 18, stagger: 0.1 });
     revealOnce('#rechner', ['#rechner .calc2-inputs', '#rechner .calc2-results'], { y: 18, stagger: 0.12 });
     document.querySelectorAll('.mood-section').forEach((section) => {
-      revealOnce(section, section, { y: 14, scale: 1.012, duration: 0.9, stagger: 0 });
+      const isForest = section.classList.contains('mood-section--primary');
+      revealOnce(section, section, {
+        y: isForest ? 12 : 10,
+        scale: isForest ? 1.008 : 1.006,
+        duration: isForest ? 1 : 0.92,
+        stagger: 0
+      });
       if (window.innerWidth > 980) {
         const media = section.querySelector('.mood-media img');
         if (media) {
@@ -236,11 +266,19 @@
             trigger: section,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: 0.9,
-            animation: gsap.fromTo(media, { yPercent: -1.5 }, {
-              yPercent: 1.5,
-              ease: 'none'
-            })
+            scrub: isForest ? 0.6 : 0.5,
+            animation: isForest
+              ? gsap.fromTo(media, { yPercent: -1.15, scale: 1.02 }, {
+                yPercent: 1.15,
+                scale: 1,
+                ease: 'none'
+              })
+              : gsap.fromTo(media, { xPercent: -0.45, yPercent: -0.55, scale: 1.015 }, {
+                xPercent: 0.45,
+                yPercent: 0.65,
+                scale: 1,
+                ease: 'none'
+              })
           }));
         }
       }
@@ -335,10 +373,14 @@
   function cleanup() {
     if (state.destroyed) return;
     state.destroyed = true;
-    if (state.heroWoolLoop) state.heroWoolLoop.kill();
-    state.heroWoolLoop = null;
-    if (state.heroPointerCleanup) state.heroPointerCleanup();
-    state.heroPointerCleanup = null;
+    if (state.heroMediaMatchMedia) state.heroMediaMatchMedia.revert();
+    state.heroMediaMatchMedia = null;
+    state.heroMediaAnimations.forEach((animation) => animation.kill());
+    state.heroMediaAnimations.length = 0;
+    if (state.heroMediaObserver) state.heroMediaObserver.disconnect();
+    state.heroMediaObserver = null;
+    if (state.heroMediaVisibilityCleanup) state.heroMediaVisibilityCleanup();
+    state.heroMediaVisibilityCleanup = null;
     if (state.calculatorObserver) state.calculatorObserver.disconnect();
     state.triggers.forEach((trigger) => trigger.kill());
     state.triggers.length = 0;
