@@ -101,16 +101,6 @@
      als Textfarbe (Kontrast), ersetzt --blue nicht. */
   --aqua-mist:   #A9DCEC;
 
-  /* Soft-Tech-Wollsystem: direkt aus den Vergleichs- und Hero-Assets
-     abgeleitet, innerhalb derselben Royal-/Creme-Markenfamilie. */
-  --wool-blue:          #123A86;
-  --wool-blue-deep:     #0C2E6F;
-  --wool-cream:         #F3EDDF;
-  --wool-champagne:     #E9DECA;
-  --wool-text-dark:     #102C5E;
-  --wool-text-light:    #F7F9FF;
-  --wool-border-light:  rgba(255,255,255,.22);
-  --wool-border-dark:   rgba(16,44,94,.16);
 }
 
 /* ----------------------- Reset / Base ----------------------- */
@@ -385,146 +375,83 @@ p  { margin: 0 0 1rem; }
 }
 .pill-badge.accent { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 6px 16px rgba(35,95,208,.28); }
 
-/* ----------------------- Textiles Prinzip-Duell -------------- */
+/* ----------------------- Royal-Blue-Prinzip-Duell ------------ */
 .duel {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 48fr) minmax(0, 52fr);
-  max-width: 1080px;
-  margin: 0 auto;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--wool-cream);
-  border: 1px solid rgba(12,46,111,.09);
-  box-shadow: 0 18px 50px rgba(12,36,78,.08);
-  isolation: isolate;
-}
-.duel::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  bottom: 0;
-  left: 48%;
-  width: 2px;
-  transform: translateX(-1px);
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(255,255,255,.48), rgba(6,31,83,.20));
-  box-shadow: 0 0 10px rgba(255,255,255,.12);
+  position: relative; display: grid; grid-template-columns: 1fr auto 1fr;
+  max-width: 1000px; margin: 0 auto; border-radius: var(--radius-xl);
+  overflow: hidden; background: #fff; border: 1px solid var(--border-soft);
+  box-shadow: 0 30px 80px rgba(20,40,80,.12);
 }
 .duel-side {
-  position: relative;
   min-width: 0;
-  min-height: 0;
-  padding: clamp(46px, 5vw, 68px) clamp(30px, 3.6vw, 48px);
-  isolation: isolate;
-}
-.comparison-panel__texture,
-.comparison-panel__texture img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.comparison-panel__texture { z-index: -2; overflow: hidden; }
-.comparison-panel__texture img {
-  display: block;
-  object-fit: cover;
-  object-position: center;
-}
-.comparison-panel::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  pointer-events: none;
+  padding: clamp(30px, 4vw, 46px) clamp(26px, 3.5vw, 44px);
 }
 .comparison-panel__content {
   position: relative;
   z-index: 1;
 }
 .duel-side h3 {
-  margin: 0 0 clamp(24px, 2.6vw, 32px);
-  font-family: var(--font-head);
-  font-weight: 600;
-  font-size: clamp(.78rem, .9vw, .9rem);
-  line-height: 1.25;
-  letter-spacing: .15em;
-  text-transform: uppercase;
+  margin: 0 0 22px; font-family: var(--font-head); font-weight: 700;
+  font-size: .78rem; line-height: 1.25; letter-spacing: .22em; text-transform: uppercase;
 }
 .duel-side ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: clamp(17px, 1.7vw, 22px);
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 15px;
 }
 .duel-side li {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  max-width: 31rem;
-  font-size: clamp(1rem, 1.15vw, 1.15rem);
-  font-weight: 500;
-  line-height: 1.38;
-  text-wrap: pretty;
+  display: flex; align-items: flex-start; gap: 13px; max-width: 31rem;
+  font-size: 1rem; font-weight: 500; line-height: 1.45; text-wrap: pretty;
 }
 .duel-side .mark {
-  flex: 0 0 auto;
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  margin-top: .05em;
+  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 9px;
+  display: grid; place-items: center; margin-top: -1px;
 }
 .duel-side .mark svg {
-  width: 12px;
-  height: 12px;
-  fill: none;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 13px; height: 13px; fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
 }
-.comparison-panel--paper { color: var(--wool-text-dark); }
-.comparison-panel--paper::after {
-  background: linear-gradient(145deg, rgba(255,253,247,.20), rgba(233,222,202,.10));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+.comparison-panel--paper {
+  color: var(--gray);
+  background: linear-gradient(180deg, #FBFCFE, var(--mist-2));
 }
-.comparison-panel--paper h3 { color: #29476F; }
-.comparison-panel--paper li { font-weight: 500; }
+.comparison-panel--paper h3 { color: var(--gray-light); }
+.comparison-panel--paper li { font-weight: 400; }
 .comparison-panel--paper .mark {
-  background: rgba(255,255,255,.28);
-  border: 1px solid var(--wool-border-dark);
+  background: transparent;
+  border: 1px solid var(--border-cool);
 }
-.comparison-panel--paper .mark svg { stroke: #34547F; }
+.comparison-panel--paper .mark svg { stroke: var(--gray-light); }
 .comparison-panel--water {
-  color: var(--wool-text-light);
+  color: #fff;
+  background:
+    radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%),
+    linear-gradient(180deg, #0A3480, var(--royal) 60%, var(--royal-deep));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
 }
-.comparison-panel--water::after {
-  background: linear-gradient(145deg, rgba(18,58,134,.02), rgba(5,28,82,.18));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
-}
-.comparison-panel--water h3 { color: #D7E7FB; }
+.comparison-panel--water h3 { color: var(--aqua-mist); }
 .comparison-panel--water .mark {
-  background: rgba(255,255,255,.08);
-  border: 1px solid var(--wool-border-light);
+  background: rgba(255,255,255,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
 }
-.comparison-panel--water .mark svg { stroke: #D7E7FB; }
+.comparison-panel--water .mark svg { stroke: var(--aqua-mist); }
+.duel-divider {
+  position: relative; width: 1px; background: var(--border-soft);
+  display: grid; place-items: center;
+}
+.duel-shift {
+  position: absolute; width: 40px; height: 40px; display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--border-soft); border-radius: 50%;
+  box-shadow: var(--shadow-sm); z-index: 1;
+}
+.duel-shift svg {
+  width: 16px; height: 16px; fill: none; stroke: var(--blue);
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
 
 @media (max-width: 880px) {
   .duel { grid-template-columns: 1fr; }
-  .duel::after { display: none; }
-  .duel-side {
-    min-height: 0;
-    padding: clamp(38px, 7vw, 54px) clamp(26px, 7vw, 48px);
-  }
-  .comparison-panel--water {
-    box-shadow:
-      inset 0 1px rgba(255,255,255,.34),
-      0 -1px rgba(6,31,83,.14);
-  }
-  .comparison-panel__texture { opacity: .9; }
+  .duel-divider { width: auto; height: 1px; }
+  .duel-shift svg { transform: rotate(90deg); }
+  .duel-side { padding: clamp(30px, 7vw, 46px) clamp(24px, 7vw, 44px); }
   .duel-side li { max-width: 36rem; }
 }
 
@@ -984,61 +911,6 @@ p  { margin: 0 0 1rem; }
    randlosen Zustand (Hochformat-Foto in max-height-begrenzter Karte). */
 .product-visual .product-card img { max-height: 580px; width: 100%; object-fit: cover; }
 
-/* ----------------------- Pudado Mood-System ------------------ */
-.mood-section {
-  position: relative;
-  width: 100%;
-  margin: 0;
-  overflow: hidden;
-  background: var(--cream);
-}
-.mood-section--primary {
-  margin-top: clamp(44px, 5.5vw, 76px);
-  margin-bottom: calc(var(--space) * -1.15);
-}
-.mood-media {
-  position: relative;
-  width: 100%;
-  height: clamp(300px, 34vw, 520px);
-  overflow: hidden;
-  background: var(--cream-2);
-}
-.mood-media img {
-  width: 100%;
-  height: 104%;
-  object-fit: cover;
-  object-position: 50% 52%;
-  transform-origin: center;
-}
-.mood-section--secondary .mood-media img { object-position: 50% 50%; }
-.mood-caption {
-  margin: 0;
-  padding: 10px 20px 16px;
-  text-align: center;
-  color: var(--gray-light);
-  background: var(--cream);
-  font-size: .72rem;
-  line-height: 1.35;
-  letter-spacing: .01em;
-}
-#faq.section { padding-bottom: calc(var(--space) * .62); }
-#kontakt.section,
-#detail.section { padding-top: calc(var(--space) * .68); }
-
-@media (max-width: 760px) {
-  .mood-section--primary { margin-top: 40px; }
-  .mood-media { height: clamp(250px, 70vw, 300px); }
-  .mood-section--primary .mood-media img { object-position: 52% 52%; }
-  .mood-section--secondary .mood-media {
-    height: clamp(210px, 56vw, 245px);
-    background: #CBD7E6;
-  }
-  .mood-section--secondary .mood-media img { object-position: 5% 50%; }
-  .mood-caption {
-    padding: 9px 16px 14px;
-    font-size: .68rem;
-  }
-}
 
 /* ----------------------- FAQ "mehr" ------------------------- */
 .faq-more { text-align: center; margin: 24px 0 0; color: var(--gray); font-size: .95rem; }
@@ -1650,269 +1522,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 }
 
 /* =============================================================
-   PUDADO SOFT WATER WOOL
-   Das Markenmotiv bleibt ein echtes Bild-Layer; Text und Produkt
-   liegen darüber. Ohne JavaScript ist die gesamte Komposition sichtbar.
-   ============================================================= */
-.hero {
-  min-height: min(700px, calc(100svh - 112px));
-  background: var(--royal-deep);
-  isolation: isolate;
-  overflow: hidden;
-}
-@media (min-width: 981px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
-    gap: clamp(40px, 4.5vw, 72px);
-  }
-  .hero .product-card { max-width: 440px; }
-}
-.hero-media {
-  position: absolute;
-  z-index: 0;
-  inset: -3.5%;
-  overflow: hidden;
-  pointer-events: none;
-  transform-origin: center center;
-  contain: paint;
-}
-.hero-media-poster,
-.hero-media-video,
-.hero-motion-layers,
-.hero-media-atmosphere {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.hero-media-poster,
-.hero-media-video,
-.hero-motion-layers,
-.hero-media-atmosphere {
-  position: absolute;
-  inset: 0;
-}
-.hero-media-poster,
-.hero-media-video {
-  max-width: none;
-  object-fit: cover;
-  object-position: 48% 52%;
-  transform-origin: center center;
-}
-.hero-media-poster { z-index: 0; }
-.hero-motion-layers {
-  z-index: 1;
-  overflow: hidden;
-  opacity: 1;
-  transition: opacity 1.4s cubic-bezier(.22,1,.36,1);
-}
-.hero-motion-layer,
-.hero-motion-flow {
-  position: absolute;
-  inset: -7%;
-  width: 114%;
-  height: 114%;
-  transform-origin: center;
-  pointer-events: none;
-}
-.hero-motion-layer {
-  max-width: none;
-  object-fit: cover;
-  object-position: 48% 52%;
-  will-change: transform, opacity;
-}
-/* Der weichere Fernbereich bewegt nur große, helle Wollvolumen. Die Maske
-   verhindert Doppelkonturen in der Textzone und hält die Bewegung räumlich. */
-.hero-motion-layer--depth {
-  opacity: .18;
-  filter: blur(1.4px) saturate(.92) brightness(1.04);
-  mix-blend-mode: screen;
-  -webkit-mask-image:
-    radial-gradient(58% 72% at 76% 26%, #000 0 40%, transparent 78%),
-    linear-gradient(90deg, transparent 0 24%, #000 56% 100%);
-  mask-image:
-    radial-gradient(58% 72% at 76% 26%, #000 0 40%, transparent 78%),
-    linear-gradient(90deg, transparent 0 24%, #000 56% 100%);
-  animation: hero-depth-breathe 61s cubic-bezier(.45,.05,.55,.95) infinite alternate;
-}
-/* Die nähere Strömung liegt nur über ausgewählten Faserbögen. Sehr geringe
-   Deckkraft erzeugt Bewegung im Material, ohne ein zweites Bild zu verraten. */
-.hero-motion-layer--current {
-  opacity: .105;
-  filter: contrast(1.04) saturate(1.06);
-  mix-blend-mode: soft-light;
-  -webkit-mask-image:
-    radial-gradient(74% 54% at 42% 72%, #000 0 30%, transparent 72%);
-  mask-image:
-    radial-gradient(74% 54% at 42% 72%, #000 0 30%, transparent 72%);
-  animation: hero-current-drift 47s cubic-bezier(.37,0,.63,1) -13s infinite alternate;
-}
-.hero-motion-flow {
-  will-change: transform, opacity;
-  mix-blend-mode: soft-light;
-}
-.hero-motion-flow--light {
-  background:
-    radial-gradient(34% 46% at 68% 34%, rgba(255,255,255,.18), transparent 74%),
-    radial-gradient(28% 38% at 34% 72%, rgba(169,220,236,.11), transparent 76%);
-  filter: blur(18px);
-  opacity: .52;
-  animation: hero-light-current 37s cubic-bezier(.45,.05,.55,.95) -9s infinite alternate;
-}
-.hero-motion-flow--shade {
-  background: radial-gradient(48% 58% at 32% 58%, rgba(2,23,67,.2), transparent 76%);
-  filter: blur(24px);
-  opacity: .38;
-  animation: hero-shade-current 53s cubic-bezier(.37,0,.63,1) -21s infinite alternate;
-}
-.hero-motion-paused .hero-motion-layer,
-.hero-motion-paused .hero-motion-flow,
-.hero-motion-paused .hero-media-atmosphere {
-  animation-play-state: paused;
-}
-@keyframes hero-depth-breathe {
-  0% { transform: translate3d(-1.1%, -.5%, 0) scale(1.035); opacity: .14; }
-  48% { transform: translate3d(.6%, .7%, 0) scale(1.052); opacity: .2; }
-  100% { transform: translate3d(1.35%, -.35%, 0) scale(1.042); opacity: .16; }
-}
-@keyframes hero-current-drift {
-  0% { transform: translate3d(1.05%, .65%, 0) scale(1.028); opacity: .08; }
-  52% { transform: translate3d(-.75%, -.45%, 0) scale(1.045); opacity: .125; }
-  100% { transform: translate3d(-1.2%, .4%, 0) scale(1.034); opacity: .095; }
-}
-@keyframes hero-light-current {
-  0% { transform: translate3d(-2.2%, .8%, 0) scale(1); opacity: .38; }
-  55% { transform: translate3d(1.1%, -.9%, 0) scale(1.035); opacity: .58; }
-  100% { transform: translate3d(2%, .35%, 0) scale(1.012); opacity: .46; }
-}
-@keyframes hero-shade-current {
-  0% { transform: translate3d(1.4%, -.4%, 0) scale(1.015); opacity: .32; }
-  46% { transform: translate3d(-.8%, .65%, 0) scale(1.04); opacity: .42; }
-  100% { transform: translate3d(-1.5%, -.25%, 0) scale(1.022); opacity: .35; }
-}
-.hero-media-video {
-  z-index: 3;
-  opacity: 0;
-  transition: opacity 1.2s cubic-bezier(.22,1,.36,1);
-}
-.hero-video-ready .hero-media-video { opacity: 1; }
-.hero-video-ready .hero-motion-layers { opacity: 0; }
-/* Ein einziger, kaum wahrnehmbarer Lichtzug verbindet Poster und späteren
-   Film-Loop. Transform + Opacity bleiben compositor-freundlich. */
-.hero-media-atmosphere {
-  z-index: 4;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
-  background: radial-gradient(42% 34% at 62% 34%, rgba(255,255,255,.11), transparent 72%);
-  mix-blend-mode: soft-light;
-  opacity: .62;
-  animation: hero-atmosphere-drift 43s cubic-bezier(.45,.05,.55,.95) -17s infinite alternate;
-}
-@keyframes hero-atmosphere-drift {
-  0% { transform: translate3d(-1.2%, .6%, 0) scale(1); opacity: .42; }
-  53% { transform: translate3d(.35%, -.8%, 0) scale(1.018); opacity: .68; }
-  100% { transform: translate3d(1.1%, -.25%, 0) scale(1.025); opacity: .52; }
-}
-/* Lesbarkeit aus dem vorhandenen Motiv heraus, ohne die Wollstruktur
-   flächig abzudunkeln: links präziser, rechts nur eine leichte Vignette. */
-.hero::before {
-  z-index: 1;
-  inset: 0;
-  filter: none;
-  animation: none;
-  background:
-    linear-gradient(90deg, rgba(5,26,70,.18) 0%, rgba(5,26,70,.12) 38%, rgba(5,26,70,.02) 70%),
-    linear-gradient(180deg, rgba(5,26,70,.03), rgba(5,26,70,.12));
-}
-.hero::after { z-index: 2; }
-.hero > .container { z-index: 2; }
-.hero-copy { text-shadow: 0 2px 22px rgba(1,10,40,.22); }
-.hero .product-card {
-  max-width: 468px;
-  border: 1px solid rgba(255,255,255,.28);
-  box-shadow: 0 34px 84px rgba(1,10,40,.46);
-}
-.hero .product-card::after {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.48), inset 0 0 0 1px rgba(4,28,78,.08);
-}
-.hero .media-note { text-shadow: 0 1px 10px rgba(1,10,40,.55); }
-
-@media (max-width: 980px) {
-  .hero {
-    min-height: auto;
-    padding-top: clamp(84px, 13vw, 112px);
-  }
-  .hero::before {
-    background:
-      linear-gradient(180deg, rgba(5,26,70,.16), rgba(5,26,70,.08) 48%, rgba(5,26,70,.18)),
-      linear-gradient(90deg, rgba(5,26,70,.16), transparent 76%);
-  }
-  .hero-media { inset: -3%; }
-  .hero-media-poster,
-  .hero-media-video,
-  .hero-motion-layer { object-position: 50% 52%; }
-  .hero-grid { gap: 38px; }
-  .hero-copy { max-width: 680px; }
-  .hero-visual { width: min(560px, 82vw); justify-self: center; }
-}
-
-@media (max-width: 760px) {
-  .hero {
-    min-height: auto;
-    padding-top: 76px;
-    padding-bottom: 54px;
-  }
-  .hero-media { inset: -2.5%; }
-  .hero-media-poster,
-  .hero-media-video,
-  .hero-motion-layer { object-position: 52% 52%; }
-  .hero-motion-layer--depth { display: none; }
-  .hero-motion-layer--current {
-    opacity: .08;
-    animation-duration: 59s;
-  }
-  .hero-motion-flow--light {
-    opacity: .38;
-    filter: blur(14px);
-    animation-duration: 49s;
-  }
-  .hero-motion-flow--shade { display: none; }
-  .hero::before {
-    background:
-      linear-gradient(180deg, rgba(5,26,70,.28), rgba(5,26,70,.14) 48%, rgba(5,26,70,.24)),
-      linear-gradient(90deg, rgba(5,26,70,.24), rgba(5,26,70,.04) 82%);
-  }
-  .hero-grid { gap: 28px; }
-  .hero-wordmark { margin-bottom: 28px; }
-  .hero h1 {
-    max-width: none;
-    font-size: clamp(2.7rem, 12.3vw, 3.55rem);
-    line-height: .98;
-  }
-  .hero .lead { margin-top: 14px; font-size: 1.06rem; line-height: 1.48; }
-  .hero .trust-line { margin-top: 12px; font-size: .82rem; line-height: 1.45; }
-  .hero .hero-actions { margin-top: 22px; gap: 10px; }
-  .hero-visual { width: min(310px, 74vw); }
-  .hero .product-card { box-shadow: 0 22px 54px rgba(1,10,40,.42); }
-  .hero .product-badges { left: 10px; right: 10px; bottom: 10px; gap: 5px; }
-  .hero .pill-badge { padding: 6px 10px; font-size: .65rem; }
-  .hero .media-note { font-size: .68rem; margin-top: 8px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-media,
-  .hero-media-poster,
-  .hero-motion-layer,
-  .hero-motion-flow,
-  .hero-media-atmosphere,
-  .mood-media img { transform: none !important; }
-  .hero-motion-layers { display: none; }
-  .hero-media-video { display: none; }
-  .hero-media-atmosphere { animation: none !important; opacity: .5; }
-  .brand-stage-ambient { display: none; }
-}
-
-/* =============================================================
    MOBILE-FIRST FLAGSHIP PASS
    Eine eigenständige, dichtere Smartphone-Komposition auf derselben
    semantischen DOM-Basis. Details bleiben nativ und vollständig zugänglich.
@@ -1962,7 +1571,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   main > #warum { order: 14; }
   main > #wissen { order: 15; }
   main > #faq { order: 16; }
-  main > .mood-section--secondary { order: 17; }
+  main > .water-banner { order: 17; }
   main > #kontakt { order: 18; }
   main > #newsletter { order: 19; }
 
@@ -2122,17 +1731,14 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   }
   #lifestyle .section-text { display: none; }
 
-  /* Textile Vergleichsmatrix: zwei kompakte, zeilengleiche Spalten. */
+  /* Kompakte Royal-Blue-Vergleichsmatrix. */
   #insight .section-head { margin-bottom: 24px; }
   #insight .section-text { display: none; }
   .duel {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     border-radius: 10px;
   }
-  .duel::after { display: block; left: 50%; }
   .duel-side { padding: 0; }
-  .comparison-panel__texture { height: 62px; z-index: -1; }
-  .comparison-panel::after { background: transparent; }
   .comparison-panel__content { position: static; }
   .comparison-panel__title {
     min-height: 62px;
@@ -2155,8 +1761,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     align-items: center;
   }
   .comparison-panel--water li { border-color: rgba(255,255,255,.16); }
-  .comparison-panel--paper { background: var(--wool-cream); }
-  .comparison-panel--water { background: var(--wool-blue-deep); }
+  .comparison-panel--paper { background: #FBFCFE; }
+  .comparison-panel--water { background: var(--royal-deep); }
   .duel-side .mark { display: none; }
 
   /* Foto-Check: schnell erreichbar, Einführung und Kartenraum gestrafft. */
@@ -2217,10 +1823,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .usecase-card .uc-icon { margin-bottom: 12px; }
 
   /* Mood/Marke: kurze filmische Akzente statt mehrerer Bildschirme. */
-  .mood-section--primary { margin-top: 28px; margin-bottom: calc(var(--mobile-section-space-lg) * -1); }
-  .mood-section--primary .mood-media { height: 210px; }
-  .mood-section--secondary .mood-media { height: 168px; }
-  .mood-caption { padding: 7px 14px 10px; }
   .brand-stage { min-height: 142px; margin: 22px auto; }
   #warum .section-text { font-size: .94rem; }
   #warum .media-band { height: 168px; max-width: none; margin-top: 26px; overflow: hidden; }
@@ -2373,8 +1975,63 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   }
   .hero,
   .section,
-  .mood-section,
   .comparison {
     break-inside: avoid;
   }
+}
+
+/* =============================================================
+   ROYAL-BLUE RESTORE
+   Die aktuelle responsive DOM-Struktur bleibt bestehen; ausschließlich die
+   verworfene bildbasierte Hero-Oberfläche wird durch die bestätigte Royal-Bühne
+   aus 57b6fb9 ersetzt.
+   ============================================================= */
+.hero {
+  min-height: auto;
+  padding: clamp(64px, 7.5vw, 108px) 0 clamp(92px, 12vw, 164px);
+  background:
+    radial-gradient(1100px 560px at 50% -18%, var(--royal-high), transparent 62%),
+    linear-gradient(180deg, #0A3480 0%, var(--royal) 46%, var(--royal-deep) 100%);
+}
+.hero::before {
+  z-index: 0;
+  inset: -12%;
+  background:
+    radial-gradient(38% 30% at 26% 22%, rgba(255,255,255,.10), transparent 70%),
+    radial-gradient(30% 24% at 72% 64%, rgba(92,138,230,.14), transparent 72%),
+    radial-gradient(26% 22% at 84% 12%, rgba(255,255,255,.08), transparent 70%);
+  filter: blur(24px);
+}
+.hero::after {
+  z-index: 0;
+  left: 8%;
+  right: 8%;
+  bottom: clamp(30px, 4.5vw, 52px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(169,220,236,.30) 35%, rgba(169,220,236,.30) 65%, transparent);
+}
+.hero > .container { z-index: 1; }
+.hero-copy { text-shadow: none; }
+.hero .product-card {
+  max-width: 440px;
+  border: 0;
+  box-shadow: 0 44px 110px rgba(1,10,40,.55);
+}
+.hero .product-card::after { box-shadow: none; }
+
+@media (max-width: 980px) {
+  .hero {
+    padding-top: clamp(76px, 13vw, 104px);
+    padding-bottom: clamp(58px, 10vw, 92px);
+  }
+}
+
+@media (max-width: 760px) {
+  .hero { padding: 58px 0 54px; }
+  .hero::before {
+    background:
+      radial-gradient(50% 36% at 28% 16%, rgba(255,255,255,.09), transparent 72%),
+      radial-gradient(42% 30% at 78% 62%, rgba(92,138,230,.12), transparent 74%);
+  }
+  .hero-grid { gap: 28px; }
 }

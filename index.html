@@ -42,8 +42,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="preload" as="image" href="assets/hero-motion/poster/hero-poster.png" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=20260729-wool-motion" />
+  <link rel="preload" as="image" href="assets/hero-bild-1-optimized.jpg" fetchpriority="high" />
+  <link rel="stylesheet" href="style.css?v=20260730-royal-blue-restore" />
   <link rel="stylesheet" href="assets/vendor/lenis.css" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
@@ -138,35 +138,6 @@
 
   <main id="main-content">
 <section class="hero" id="hero">
-      <div class="hero-media" aria-hidden="true">
-        <img class="hero-media-poster"
-             src="assets/hero-motion/poster/hero-poster.png"
-             alt="" width="1916" height="821"
-             fetchpriority="high" decoding="async" />
-        <div class="hero-motion-layers" aria-hidden="true">
-          <img class="hero-motion-layer hero-motion-layer--depth"
-               src="assets/hero-motion/poster/hero-poster.png"
-               alt="" width="1916" height="821"
-               decoding="async" />
-          <img class="hero-motion-layer hero-motion-layer--current"
-               src="assets/hero-motion/poster/hero-poster.png"
-               alt="" width="1916" height="821"
-               decoding="async" />
-          <span class="hero-motion-flow hero-motion-flow--light"></span>
-          <span class="hero-motion-flow hero-motion-flow--shade"></span>
-        </div>
-        <!-- Die Quellen werden erst durch initHeroVideo() aktiviert. So lädt
-             prefers-reduced-motion ausschließlich das Poster und fehlende
-             Exporte beeinträchtigen weder Layout noch Lesbarkeit. -->
-        <video class="hero-media-video" muted loop playsinline preload="none"
-               data-video-ready="false"
-               poster="assets/hero-motion/poster/hero-poster.png"
-               tabindex="-1">
-          <source data-src="assets/hero-motion/export/hero-loop.webm" type="video/webm" />
-          <source data-src="assets/hero-motion/export/hero-loop.mp4" type="video/mp4" />
-        </video>
-        <span class="hero-media-atmosphere" aria-hidden="true"></span>
-      </div>
       <div class="container hero-grid">
         <div class="hero-copy">
           <!-- Firmen-Wortmarke nach Logo-Referenz (Royal-Blue-Konzept):
@@ -217,15 +188,9 @@
           <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span></h2>
           <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine — klar, sanft und unkompliziert.</p>
         </div>
-        <!-- Textile Transition Comparison: zwei Materialzonen in einer
-             gemeinsamen Komposition, verbunden durch einen schmalen Fade. -->
+        <!-- Klarer Royal-Blue-Vergleich ohne Materialtexturen. -->
         <div class="duel comparison">
           <article class="duel-side con comparison-panel comparison-panel--paper">
-            <picture class="comparison-panel__texture" aria-hidden="true">
-              <source srcset="assets/comparison-wool-champagne.webp" type="image/webp" />
-              <img src="assets/comparison-wool-champagne.png" alt="" width="1536" height="1024"
-                   loading="lazy" decoding="async" />
-            </picture>
             <div class="comparison-panel__content">
             <h3 class="comparison-panel__title" data-i18n="logik.con">Klassische Routine</h3>
             <ul class="comparison-panel__list">
@@ -236,12 +201,8 @@
             </ul>
             </div>
           </article>
+          <div class="duel-divider" aria-hidden="true"><span class="duel-shift"><svg viewBox="0 0 16 16"><path d="M4 8h7M8.5 5L11.5 8l-3 3"/></svg></span></div>
           <article class="duel-side pro comparison-panel comparison-panel--water">
-            <picture class="comparison-panel__texture" aria-hidden="true">
-              <source srcset="assets/comparison-wool-blue.webp" type="image/webp" />
-              <img src="assets/comparison-wool-blue.png" alt="" width="1536" height="1024"
-                   loading="lazy" decoding="async" />
-            </picture>
             <div class="comparison-panel__content">
             <h3 class="comparison-panel__title" data-i18n="logik.pro">Die EcoBum-Routine</h3>
             <ul class="comparison-panel__list">
@@ -544,15 +505,6 @@
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
         </div>
       </div>
-      <!-- Gemeinsame Full-Bleed-Moodfamilie: atmosphärische Pause statt Bildkarte. -->
-      <figure class="mood-section mood-section--primary">
-        <div class="mood-media">
-          <img src="assets/mood-01.png" alt="Helle textile Landschaft aus weichen Wollstrukturen im warmen Tageslicht"
-               width="1916" height="821" loading="lazy" decoding="async"
-               onerror="this.closest('figure').remove();" />
-        </div>
-        <figcaption class="mood-caption" data-i18n="media.mood">Moodbild – dient der Atmosphäre</figcaption>
-      </figure>
     </section>
 
     <section class="section section-alt" id="detail">
@@ -690,16 +642,13 @@
       </div>
     </section>
 
-    <!-- Der Claim ist Bestandteil von mood-02.png; kein doppelter HTML-Text. -->
-    <figure class="mood-section mood-section--secondary">
-      <div class="mood-media">
-        <img src="assets/mood-02.png"
-             alt="Textile Wassertropfen über einer weichen blauen Oberfläche. Wasser reinigt. Natürlich. Hygienisch. Lifestyle."
-             width="1916" height="821" loading="lazy" decoding="async"
-             onerror="this.closest('figure').remove();" />
+    <section class="water-banner" aria-label="Pudado – Wasser. Reinheit. Lifestyle.">
+      <img src="assets/water-drop-statement.jpg" alt="Ein einzelner Wassertropfen fällt in stilles, klares Wasser und zieht feine Kreise" width="1600" height="900" loading="lazy" decoding="async" onerror="this.closest('section').remove()" />
+      <div class="water-banner-text">
+        <p class="wb-claim" data-i18n="hero.h1a">Wasser reinigt.</p>
+        <p class="wb-sub" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
       </div>
-      <figcaption class="mood-caption" data-i18n="media.mood">Moodbild – dient der Atmosphäre</figcaption>
-    </figure>
+    </section>
 
     <section class="section section-alt" id="kontakt">
       <div class="container narrow">
@@ -847,10 +796,10 @@
   </div>
 
   <script src="translations.js?v=20260729-layout-repair-2"></script>
-  <script src="script.js?v=20260729-wool-motion"></script>
+  <script src="script.js?v=20260730-royal-blue-restore"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
   <script src="assets/vendor/lenis.min.js"></script>
-  <script src="motion.js?v=20260729-wool-motion"></script>
+  <script src="motion.js?v=20260730-royal-blue-restore"></script>
 </body>
 </html>

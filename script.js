@@ -15,8 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initHeroMotionLifecycle, initHeroVideo,
-   initAmbientLoop, initHeaderState,
+   initScrollSpy, initReveal, initAmbientLoop, initHeaderState,
    initMobileDisclosures, initFaqAccordion]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
@@ -753,7 +752,7 @@ function initReveal() {
     '.card', '.usecase-card', '.wissen-card', '.situation-card', '.blog-card',
     '.duel', '.step', '.num-list', '.set-list', '.feature-list',
     '.product-visual', '.set-visual', '.how-figure', '.detail-strip figure',
-    '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note', '.mood-section',
+    '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note',
     '.media-band', '.calc2-inputs', '.calc2-results',
     '.faq-item', '.install-card', '.article-body p', '.trust-band-inner'
   ].join(',');
@@ -834,79 +833,6 @@ function initAmbientLoop() {
     });
   }, { threshold: 0.15 });
   obs.observe(video);
-}
-
-/* -------------------------------------------------------------
-   12a. SIGNATURE HERO VIDEO
-   Progressive Enhancement: Das priorisierte Poster ist immer die
-   visuelle Basis. Videoquellen werden nur bei erlaubter Bewegung
-   aktiviert; erst nach erfolgreichem Dekodieren blendet das Video ein.
-   Außerhalb des Viewports und in Hintergrund-Tabs wird pausiert.
-   ------------------------------------------------------------- */
-function initHeroVideo() {
-  const hero = document.getElementById('hero');
-  const video = hero && hero.querySelector('.hero-media-video');
-  if (!video) return;
-  if (video.dataset.videoReady !== 'true') return;
-
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const saveData = navigator.connection && navigator.connection.saveData;
-  if (reducedMotion.matches || saveData) {
-    video.removeAttribute('autoplay');
-    video.pause();
-    return;
-  }
-
-  const sources = Array.from(video.querySelectorAll('source[data-src]'));
-  sources.forEach((source) => {
-    source.src = source.dataset.src;
-  });
-
-  let visible = true;
-  const syncPlayback = () => {
-    if (!visible || document.hidden) {
-      video.pause();
-      return;
-    }
-    const playback = video.play();
-    if (playback && playback.catch) playback.catch(() => {});
-  };
-
-  video.addEventListener('canplay', () => {
-    hero.classList.add('hero-video-ready');
-    syncPlayback();
-  }, { once: true });
-  video.addEventListener('error', () => {
-    hero.classList.remove('hero-video-ready');
-  });
-  video.load();
-
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = Boolean(entry && entry.isIntersecting);
-      syncPlayback();
-    }, { threshold: 0.08 });
-    observer.observe(hero);
-  }
-  document.addEventListener('visibilitychange', syncPlayback);
-}
-
-/* Pausiert ausschließlich die dekorativen Compositor-Animationen, sobald
-   der Hero nicht sichtbar ist. Kein Scroll-Handler, keine RAF-Schleife. */
-function initHeroMotionLifecycle() {
-  const hero = document.getElementById('hero');
-  if (!hero || !('IntersectionObserver' in window)) return;
-
-  const syncVisibility = (visible) => {
-    hero.classList.toggle('hero-motion-paused', !visible || document.hidden);
-  };
-  let heroVisible = true;
-  const observer = new IntersectionObserver(([entry]) => {
-    heroVisible = Boolean(entry && entry.isIntersecting);
-    syncVisibility(heroVisible);
-  }, { threshold: 0.02 });
-  observer.observe(hero);
-  document.addEventListener('visibilitychange', () => syncVisibility(heroVisible));
 }
 
 /* -------------------------------------------------------------

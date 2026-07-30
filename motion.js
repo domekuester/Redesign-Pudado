@@ -1,5 +1,5 @@
 /* =============================================================
-   Pudado · Soft Water Wool
+   Pudado · Royal Blue Motion
    Zentrale, progressive Motion-Schicht für die Startseite.
    Inhalte und Funktionen bleiben ohne diese Datei vollständig nutzbar.
    ============================================================= */
@@ -161,38 +161,6 @@
     revealOnce('#set', ['#set .set-copy', '#set .set-visual'], { y: 18, stagger: 0.12 });
     revealOnce('#checker', ['#checker .section-head', '#checker .fotocheck'], { y: 18, stagger: 0.1 });
     revealOnce('#rechner', ['#rechner .calc2-inputs', '#rechner .calc2-results'], { y: 18, stagger: 0.12 });
-    document.querySelectorAll('.mood-section').forEach((section) => {
-      const isForest = section.classList.contains('mood-section--primary');
-      revealOnce(section, section, {
-        y: isForest ? 12 : 10,
-        scale: isForest ? 1.008 : 1.006,
-        duration: isForest ? 1 : 0.92,
-        stagger: 0
-      });
-      if (window.innerWidth > 980) {
-        const media = section.querySelector('.mood-media img');
-        if (media) {
-          state.triggers.push(ScrollTrigger.create({
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: isForest ? 0.6 : 0.5,
-            animation: isForest
-              ? gsap.fromTo(media, { yPercent: -1.15, scale: 1.02 }, {
-                yPercent: 1.15,
-                scale: 1,
-                ease: 'none'
-              })
-              : gsap.fromTo(media, { xPercent: -0.45, yPercent: -0.55, scale: 1.015 }, {
-                xPercent: 0.45,
-                yPercent: 0.65,
-                scale: 1,
-                ease: 'none'
-              })
-          }));
-        }
-      }
-    });
     revealOnce('#warum', ['#warum .section-head', '#warum .brand-stage'], { y: 18, stagger: 0.12 });
   }
 
@@ -268,16 +236,6 @@
       document.fonts.ready.then(() => ScrollTrigger.refresh());
     }
     window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
-    const pendingMoodImages = Array.from(document.querySelectorAll('.mood-media img'))
-      .filter((image) => !image.complete);
-    if (pendingMoodImages.length) {
-      Promise.all(pendingMoodImages.map((image) => new Promise((resolve) => {
-        image.addEventListener('load', resolve, { once: true });
-        image.addEventListener('error', resolve, { once: true });
-      }))).then(() => {
-        if (!state.destroyed) ScrollTrigger.refresh();
-      });
-    }
   }
 
   function cleanup() {
