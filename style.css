@@ -1545,10 +1545,17 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 #how .step > p { margin: -8px 0 0 72px; }
 
 @media (max-width: 700px) {
+  /* Mobile Spacing-Skala: eine Leiter statt Einzelwerte. Funktionale
+     Sektionen nutzen md/lg, visuelle Signature-Bereiche eine Stufe mehr. */
   :root {
-    --mobile-section-space-sm: 32px;
-    --mobile-section-space-md: 40px;
-    --mobile-section-space-lg: 52px;
+    --mobile-space-xs: 12px;
+    --mobile-space-sm: 20px;
+    --mobile-space-md: 32px;
+    --mobile-space-lg: 44px;
+    --mobile-section-space-sm: 28px;
+    --mobile-section-space-md: 34px;
+    --mobile-section-space-lg: 44px;
+    --mobile-section-space-xl: 52px;
   }
 
   html { scroll-padding-top: 68px; }
@@ -1575,17 +1582,23 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   main > #kontakt { order: 18; }
   main > #newsletter { order: 19; }
 
+  /* #insight/#rechner/#produkt tragen ID-Basiswerte (siehe oben) und brauchen
+     dieselbe Spezifität; #faq/#kontakt/#detail haben keine – sie laufen über
+     .section mit. */
   .section,
   #rechner.section,
   #produkt.section,
-  #insight.section,
-  #faq.section,
-  #kontakt.section,
-  #detail.section {
+  #insight.section {
     padding-top: var(--mobile-section-space-md);
     padding-bottom: var(--mobile-section-space-lg);
   }
-  .section-head { margin-bottom: 24px; }
+  /* Signature-Flächen (Marke, Mood, Bildstrecken) behalten mehr Luft. */
+  #warum.section,
+  #lifestyle.section,
+  #detail.section {
+    padding-bottom: var(--mobile-section-space-xl);
+  }
+  .section-head { margin-bottom: var(--mobile-space-sm); }
   .section-label { margin-bottom: 12px; font-size: .72rem; letter-spacing: .17em; }
   h2 { font-size: clamp(1.85rem, 8vw, 2.45rem); line-height: 1.06; }
   .section-text { font-size: 1rem; line-height: 1.58; }
@@ -1616,12 +1629,10 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .nav-actions .nav-cta-secondary { display: none; }
   .lang-switch { order: -1; }
 
-  /* Hero: eine Hauptaktion, ein Textlink, kompaktes Produktmotiv. */
-  .hero {
-    min-height: min(720px, calc(100svh - 68px));
-    padding: 34px 0 28px;
-  }
-  .hero-grid { gap: 18px; }
+  /* Hero: eine Hauptaktion, ein Textlink, kompaktes Produktmotiv.
+     Höhe/Padding des Heros liegen bewusst NICHT hier, sondern im
+     Royal-Blue-Block am Dateiende – dort steht die einzige zuständige
+     Regel für alle Breakpoints. */
   .hero-copy { text-align: left; }
   .hero-wordmark,
   .hero .trust-line { display: none; }
@@ -1703,7 +1714,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     scroll-snap-type: x proximity;
     scroll-padding-inline: 20px;
     overscroll-behavior-inline: contain;
-    padding: 18px 20px 22px;
+    /* 14px oben halten den -10px überstehenden .icon-tile frei. */
+    padding: 14px 20px 18px;
     margin-inline: -20px;
     scrollbar-width: none;
   }
@@ -1720,50 +1732,58 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     padding: 38px 22px 22px;
     min-height: 205px;
   }
-  #vorteile .card.glass .icon-tile { top: -10px; left: 20px; }
+  /* 56px Kachel bei -10px reichte bis 46px in die Karte, die Überschrift
+     beginnt aber schon bei 38px – Kachel auf Mobilmaß, Überschrift frei. */
+  #vorteile .card.glass .icon-tile {
+    top: -12px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+  }
+  #vorteile .card.glass .icon-tile svg { width: 22px; height: 22px; }
   .lifestyle-gallery .lg-item,
   .detail-strip figure {
     flex: 0 0 min(64vw, 240px);
-    height: 250px;
+    height: 224px;
     aspect-ratio: auto;
     scroll-snap-align: start;
     border-radius: 14px;
   }
   #lifestyle .section-text { display: none; }
 
-  /* Kompakte Royal-Blue-Vergleichsmatrix. */
-  #insight .section-head { margin-bottom: 24px; }
+  /* Prinzip: eine gemeinsame Komponente, vertikal gelesen (hell -> royal).
+     .duel hat drei Kinder (Papier, Trenner, Wasser); jede mehrspaltige
+     Mobile-Variante würde den Trenner in eine eigene Spalte werfen und das
+     Wasser-Panel in eine zweite Zeile umbrechen. Darum hier bewusst 1 Spalte. */
+  #insight .section-head { margin-bottom: 20px; }
   #insight .section-text { display: none; }
   .duel {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    border-radius: 10px;
+    grid-template-columns: 1fr;
+    border-radius: 16px;
   }
-  .duel-side { padding: 0; }
-  .comparison-panel__content { position: static; }
+  .duel-side { padding: 20px; }
   .comparison-panel__title {
-    min-height: 62px;
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    margin: 0;
-    font-size: .72rem;
+    margin: 0 0 14px;
+    font-size: .7rem;
     line-height: 1.25;
-    letter-spacing: .07em;
+    letter-spacing: .18em;
   }
-  .duel-side ul { margin: 0; gap: 0; }
+  .duel-side ul { gap: 11px; }
   .duel-side li {
-    min-height: 78px;
-    padding: 12px;
-    border-top: 1px solid currentColor;
-    border-color: rgba(16,44,94,.12);
-    font-size: .82rem;
-    line-height: 1.35;
-    align-items: center;
+    max-width: none;
+    gap: 11px;
+    font-size: .95rem;
+    line-height: 1.4;
   }
-  .comparison-panel--water li { border-color: rgba(255,255,255,.16); }
-  .comparison-panel--paper { background: #FBFCFE; }
-  .comparison-panel--water { background: var(--royal-deep); }
-  .duel-side .mark { display: none; }
+  .duel-side .mark { width: 22px; height: 22px; border-radius: 7px; }
+  .duel-side .mark svg { width: 11px; height: 11px; }
+  .comparison-panel--paper { background: linear-gradient(180deg, #FBFCFE, var(--mist-2)); }
+  /* Wasser-Seite trägt die Aussage: etwas mehr Luft, klare Royal-Fläche. */
+  .comparison-panel--water { padding: 22px 20px 24px; }
+  /* Übergangsmarke sitzt auf der Naht, bleibt klein und ruhig. */
+  .duel-shift { width: 32px; height: 32px; }
+  .duel-shift svg { width: 14px; height: 14px; }
 
   /* Foto-Check: schnell erreichbar, Einführung und Kartenraum gestrafft. */
   #checker .section-head { margin-bottom: 20px; }
@@ -1812,6 +1832,9 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .calc2-help { font-size: .76rem; }
   .calc2-assume { padding: 10px 12px; }
   .calc2-kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* Drei Kennzahlen in zwei Spalten ließen die dritte allein mit einer leeren
+     Nachbarzelle stehen – die Differenz-Zahl schließt die Reihe stattdessen ab. */
+  .calc2-kpis .kpi:nth-of-type(3) { grid-column: 1 / -1; min-height: 0; }
   .kpi { min-height: 104px; padding: 14px 12px; }
   .calc2-bars { display: none; }
   .calc2-co2 { padding: 13px 14px; }
@@ -1821,6 +1844,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .usecase-grid { grid-template-columns: 1fr; gap: 12px; }
   .usecase-card { padding: 20px; }
   .usecase-card .uc-icon { margin-bottom: 12px; }
+  .legal-hint { margin-top: var(--mobile-space-sm); margin-bottom: 0; }
 
   /* Mood/Marke: kurze filmische Akzente statt mehrerer Bildschirme. */
   .brand-stage { min-height: 142px; margin: 22px auto; }
@@ -1858,6 +1882,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .faq-item p { padding-bottom: 14px; font-size: .92rem; }
   .faq-extra > div { margin-top: 0; }
   .faq-more { margin-top: 16px; }
+  .faq-more a { display: inline-flex; align-items: center; min-height: 44px; }
 
   /* Kontakt + Launch-Hinweis als ein kompakter Abschluss. */
   #contactForm { padding: 22px 20px; }
@@ -1865,7 +1890,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   #contactForm .checkbox { display: none; }
   #contactForm .form-notice { margin-bottom: 12px; }
   #contactForm .btn { min-height: 48px; }
-  #newsletter { padding-top: 36px; padding-bottom: 44px; }
+  #newsletter { padding-top: var(--mobile-space-md); padding-bottom: 38px; }
   #newsletter .brand-mark { display: none; }
   #newsletter .section-head { margin-bottom: 16px; }
   #newsletter .section-head h2 { font-size: 1.7rem; }
@@ -1876,9 +1901,11 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     justify-content: center;
   }
 
-  /* Kürzerer Footer; E-Mail und Pflichtlinks bleiben direkt erreichbar. */
-  .site-footer { padding: 34px 0 calc(86px + env(safe-area-inset-bottom)); }
-  .footer-grid { display: grid; gap: 22px; }
+  /* Kürzerer Footer; E-Mail und Pflichtlinks bleiben direkt erreichbar.
+     Die Sticky-CTA blendet sich am Footer per JS aus (initStickyCta), darum
+     reicht hier ein normaler Abschluss statt Freiraum für die Leiste. */
+  .site-footer { padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .footer-grid { display: grid; gap: 18px; }
   .footer-brand { text-align: left; }
   .footer-claim { margin-top: 8px; }
   .footer-text { margin-bottom: 0; }
@@ -1888,11 +1915,19 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     gap: 8px 14px;
     margin-top: 14px;
   }
+  /* Pflichtlinks und E-Mail sind eigenständige Ziele, keine Fließtext-Links –
+     daher auf 44px Trefferhöhe (WCAG 2.5.8 / Apple HIG) gebracht. */
   .footer-legal-direct a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: rgba(255,255,255,.72);
     font-size: .78rem;
     text-underline-offset: .2em;
   }
+  .footer-legal-direct { gap: 0 16px; margin-top: 6px; }
+  .footer-email-direct { display: inline-flex; align-items: center; min-height: 44px; }
+  .logo { display: inline-flex; align-items: center; min-height: 44px; }
   .footer-group:last-of-type { display: none; }
   .footer-group { border-top: 1px solid rgba(255,255,255,.12); }
   .footer-group > summary {
@@ -1907,9 +1942,9 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .footer-group > summary::-webkit-details-marker { display: none; }
   .footer-group > summary::after { content: "+"; color: #fff; font-size: 1.1rem; }
   .footer-group[open] > summary::after { content: "−"; }
-  .footer-links { gap: 8px; padding: 2px 0 14px; }
-  .footer-links a { font-size: .9rem; }
-  .footer-bottom { margin-top: 24px; padding-top: 18px; }
+  .footer-links { gap: 0; padding: 2px 0 10px; }
+  .footer-links a { display: flex; align-items: center; min-height: 44px; font-size: .9rem; }
+  .footer-bottom { margin-top: 20px; padding-top: 16px; }
 
   /* Kompakte Einhand-Aktionsleiste; verschwindet vor Kontakt/Footer per JS. */
   .sticky-cta {
@@ -1939,8 +1974,9 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero .lead { font-size: .92rem; }
   .hero-visual { width: min(220px, 66vw); }
   .hero .product-card img { height: 162px; }
-  .comparison-panel__title { padding-inline: 9px; font-size: .66rem; }
-  .duel-side li { padding: 9px; font-size: .75rem; }
+  .duel-side { padding: 17px; }
+  .comparison-panel--water { padding: 19px 17px 21px; }
+  .duel-side li { font-size: .9rem; }
   .calc2-kpis { grid-template-columns: 1fr; }
 }
 
@@ -2027,11 +2063,11 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 }
 
 @media (max-width: 760px) {
-  .hero { padding: 58px 0 54px; }
+  .hero { padding: 46px 0 44px; }
   .hero::before {
     background:
       radial-gradient(50% 36% at 28% 16%, rgba(255,255,255,.09), transparent 72%),
       radial-gradient(42% 30% at 78% 62%, rgba(92,138,230,.12), transparent 74%);
   }
-  .hero-grid { gap: 28px; }
+  .hero-grid { gap: 22px; }
 }
