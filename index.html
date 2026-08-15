@@ -44,7 +44,10 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/hero-bild-1-optimized.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="style.css?v=20260730-royal-blue-restore" />
-  <link rel="stylesheet" href="assets/vendor/lenis.css" />
+  <!-- Lenis-Styles nur dort render-blockierend, wo Lenis überhaupt startet
+       (Zeigergerät ab 981px). Auf Smartphones entfällt damit ein blockierender
+       Request in der kritischen Renderkette. -->
+  <link rel="stylesheet" href="assets/vendor/lenis.css" media="(min-width: 981px)" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
   <script type="application/ld+json">
@@ -85,7 +88,7 @@
       { "@type": "Question", "name": "Was ist im geplanten Set enthalten?", "acceptedAnswer": { "@type": "Answer", "text": "Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern." } },
       { "@type": "Question", "name": "Warum sind Absperrhahn und Rückflussverhinderer wichtig?", "acceptedAnswer": { "@type": "Answer", "text": "Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt." } },
       { "@type": "Question", "name": "Braucht EcoBum Strom?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom." } },
-      { "@type": "Question", "name": "Ersetzt EcoBum Toilettenpapier komplett?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier — zum Beispiel nur noch zum Trocknen." } },
+      { "@type": "Question", "name": "Ersetzt EcoBum Toilettenpapier komplett?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier – zum Beispiel nur noch zum Trocknen." } },
       { "@type": "Question", "name": "Ist EcoBum bei sensibler Haut, Menstruation oder Schwangerschaft geeignet?", "acceptedAnswer": { "@type": "Answer", "text": "Wasser kann in diesen Phasen eine sanftere Ergänzung zu trockenem Papier sein und wird von vielen als angenehm empfunden. Bei medizinischen Beschwerden bitte immer ärztlichen Rat einholen." } },
       { "@type": "Question", "name": "Gibt es Zertifizierungen?", "acceptedAnswer": { "@type": "Answer", "text": "Ziel der Produktentwicklung ist es, relevante Anforderungen und Prüfungen zu berücksichtigen. Aktuell liegen noch keine Zertifizierungen vor – sobald sich das ändert, aktualisieren wir diese Angabe." } },
       { "@type": "Question", "name": "Gibt es Garantie oder Rückgabe?", "acceptedAnswer": { "@type": "Answer", "text": "Die genauen Garantie- und Rückgabebedingungen stehen noch nicht fest und werden vor dem Verkaufsstart bekanntgegeben." } },
@@ -101,9 +104,10 @@
   <header class="site-header" id="top">
     <span class="scroll-progress" aria-hidden="true"></span>
     <div class="container header-inner">
-      <a href="#top" class="logo" aria-label="EcoBum by Pudado – Startseite">
+      <a href="#top" class="logo" aria-label="EcoBum Home by Pudado – zur Startseite">
         <span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
-        <span class="logo-stack"><span class="logo-product">EcoBum Home</span><span class="logo-by" translate="no">by Pudado</span></span>
+        <span class="logo-stack"><span class="logo-product">EcoBum Home</span>
+          <span class="logo-by" translate="no">by Pudado</span></span>
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="Hauptnavigation">
@@ -144,7 +148,7 @@
                sprachneutraler Markenname, daher bewusst ohne data-i18n. -->
           <p class="hero-wordmark" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
           <h1><span data-i18n="hero.h1a">Wasser reinigt.</span></h1>
-          <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser — frisch, sanft und einfach in deinem Badezimmer.</p>
+          <p class="lead" data-i18n="hero.lead">EcoBum von Pudado ist das moderne Plug-and-Play-Handbidet für Reinigung mit Wasser – frisch, sanft und einfach in deinem Badezimmer.</p>
           <p class="trust-line" data-i18n="hero.trust">Kein Strom · Einfache Installation · Reinigung mit Wasser · Für den täglichen Gebrauch</p>
           <div class="hero-actions">
             <a href="#produkt" class="btn btn-primary" data-i18n="cta.entdecken">EcoBum entdecken</a>
@@ -186,7 +190,7 @@
         <div class="section-head center narrow">
           <p class="section-label" data-i18n="logik.label">Das Prinzip</p>
           <h2><span data-i18n="logik.h2a">Trockenes Papier wischt.</span> <span class="accent" data-i18n="logik.h2b">Wasser reinigt.</span></h2>
-          <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine — klar, sanft und unkompliziert.</p>
+          <p class="section-text center" data-i18n="logik.text">Wasser wird überall dort genutzt, wo echte Sauberkeit wichtig ist. EcoBum bringt dieses einfache Prinzip in deine tägliche Routine – klar, sanft und unkompliziert.</p>
         </div>
         <!-- Klarer Royal-Blue-Vergleich ohne Materialtexturen. -->
         <div class="duel comparison">
@@ -262,7 +266,7 @@
         <div class="set-copy">
           <p class="section-label" data-i18n="set.label">Lieferumfang</p>
           <h2><span data-i18n="set.h2a">Das EcoBum</span> <span class="accent" data-i18n="set.h2b">Home Set</span></h2>
-          <p class="section-text" data-i18n="set.text">Diese Komponenten sind für das EcoBum Home Set vorgesehen — sauber zusammengestellt, einfach gedacht und für den täglichen Gebrauch entwickelt.</p>
+          <p class="section-text" data-i18n="set.text">Diese Komponenten sind für das EcoBum Home Set vorgesehen – sauber zusammengestellt, einfach gedacht und für den täglichen Gebrauch entwickelt.</p>
           <p class="set-group-label" data-i18n="set.group1">Kernkomponenten</p>
           <ul class="set-list set-list-single">
             <li><svg class="component-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7.5 5.5h6.2a3.8 3.8 0 0 1 3.8 3.8v1.2H9.2A2.2 2.2 0 0 1 7 8.3V6a.5.5 0 0 1 .5-.5Z"/><path d="m15.5 10.5-1.2 3.2"/><path d="M11.7 14.3v.01M14.8 15.4v.01M17.9 14.3v.01"/><path d="M8.8 10.4 6 20"/></svg><span data-i18n="set.l1">Handbidet-Sprayer</span></li>
@@ -420,6 +424,7 @@
                 <input type="number" id="persons" value="2" min="1" max="10" step="1" inputmode="numeric" aria-labelledby="lblPersons" />
                 <button type="button" class="step-btn" id="persPlus" aria-label="Mehr Personen">+</button>
               </div>
+              <p class="calc2-help" data-i18n="rc2.persons_help">Wird nur für den Wert „Rollen pro Person“ unter „Weitere Ergebnisse“ genutzt – die Hauptzahlen richten sich nach dem Verbrauch des Haushalts.</p>
             </div>
             <div class="calc2-field">
               <label for="rollsWeek" data-i18n="rc2.rolls">Wie viele Rollen verbraucht ihr ungefähr pro Woche?</label>
@@ -496,13 +501,13 @@
         <div class="section-head center narrow">
           <p class="section-label" data-i18n="nach.label">Nachhaltigkeit</p>
           <h2><span data-i18n="nach.h2a">Kleine Veränderung. Weniger Papier.</span> <span class="accent" data-i18n="nach.h2b">Mehr Bewusstsein.</span></h2>
-          <p class="section-text center" data-i18n="nach.text">Nachhaltigkeit beginnt oft nicht mit großen Versprechen, sondern mit kleinen Gewohnheiten. EcoBum kann helfen, den Verbrauch von Toilettenpapier im Alltag zu reduzieren — einfach, angenehm und ohne komplizierte Umstellung.</p>
+          <p class="section-text center" data-i18n="nach.text">Nachhaltigkeit beginnt oft nicht mit großen Versprechen, sondern mit kleinen Gewohnheiten. EcoBum kann helfen, den Verbrauch von Toilettenpapier im Alltag zu reduzieren – einfach, angenehm und ohne komplizierte Umstellung.</p>
         </div>
         <div class="cards-grid four">
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 20C6 20 4 16 4 12c0-3 2-6 4-7 0 3 2 4 4 5s4 2 4 5-2 5-5 5z"/><path d="M8 18c2-2 4-3 6-6"/></svg></span><h3 data-i18n="n1t">Weniger Toilettenpapier</h3><p data-i18n="n1d">Wer Wasser zur Reinigung nutzt, braucht häufig weniger Papier. Die tatsächliche Einsparung hängt von der persönlichen Nutzung ab.</p></article>
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span><h3 data-i18n="n2t">Wasser statt trockenem Wischen</h3><p data-i18n="n2d">Wasser wird weltweit für Reinigung genutzt, weil es naheliegend, sanft und gründlich ist. EcoBum bringt diese Idee ins Badezimmer.</p></article>
           <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><h3 data-i18n="n3t">Kein Strom notwendig</h3><p data-i18n="n3d">EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom. Das reduziert unnötige Komplexität im Alltag.</p></article>
-          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren — wie viel, hängt von der Nutzung ab.</p></article>
+          <article class="card"><span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/></svg></span><h3 data-i18n="n4t">Transparent statt übertrieben</h3><p data-i18n="n4d">Wir machen keine pauschalen Umweltversprechen. Wir sagen klar: EcoBum kann helfen, Papier zu reduzieren – wie viel, hängt von der Nutzung ab.</p></article>
         </div>
       </div>
     </section>
@@ -619,7 +624,7 @@
         </div>
         <div class="faq-list">
           <details class="faq-item"><summary data-i18n="faq.q_what">Was ist EcoBum Home und wie funktioniert es?</summary><p data-i18n="faq.a_what">EcoBum Home ist ein geplantes Plug-and-Play-Handbidet-Set für die Reinigung mit Wasser. Es wird am Wasseranschluss der Toilette angebracht und reinigt mit einem dosierbaren Wasserstrahl – als Ergänzung zu trockenem Papier.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q1">Passt EcoBum in jede Toilette?</summary><p data-i18n="faq.a1">EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab — unser Foto-Check gibt eine erste Einschätzung.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q1">Passt EcoBum in jede Toilette?</summary><p data-i18n="faq.a1">EcoBum ist für gängige Anschlüsse mit Eckventil und flexiblem Zulaufschlauch konzipiert. Ob es zu deiner Toilette passt, hängt vom Anschluss ab – unser Foto-Check gibt eine erste Einschätzung.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q3">Muss ich bohren?</summary><p data-i18n="faq.a3">Nein, nicht zwingend. Die Wandhalterung kann geklebt oder für besonders festen Halt geschraubt werden – je nach Untergrund. Der Wasseranschluss sollte vor der Installation trotzdem geprüft werden; bei Unsicherheit hilft eine Fachperson.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q11">Passt EcoBum bei Unterputz-Spülkästen?</summary><p data-i18n="faq.a11">Nicht immer. Bei Unterputz-Spülkästen ist der Anschluss oft in der Wand verbaut, sodass eine Standard-Plug-and-Play-Montage nicht überall möglich ist. Hier sollte der Anschluss vorher geprüft oder eine Fachperson gefragt werden.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_rental">Ist EcoBum für Mietwohnungen geeignet?</summary><p data-i18n="faq.a_rental">Die klebbare Wandhalterung ist ohne Bohren gedacht und kann für Mietwohnungen interessant sein. Bitte trotzdem vorher mit Vermieterin oder Vermieter klären, ob Installationen am Wasseranschluss erlaubt sind.</p></details>
@@ -630,7 +635,7 @@
           <details class="faq-item"><summary data-i18n="faq.q_setcontent">Was ist im geplanten Set enthalten?</summary><p data-i18n="faq.a_setcontent">Vorgesehen sind unter anderem Handbidet-Sprayer, Wandhalterung, T-Stück, Absperrhahn, Rückflussverhinderer, Brauseschlauch, flexibler Zulaufschlauch, PTFE-Band und Anleitung. Die genaue Zusammenstellung kann sich je nach finaler Produktversion noch leicht ändern.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_safety_parts">Warum sind Absperrhahn und Rückflussverhinderer wichtig?</summary><p data-i18n="faq.a_safety_parts">Der Absperrhahn ermöglicht es, das Wasser gezielt am EcoBum abzustellen, ohne die ganze Wohnung zu betreffen. Der Rückflussverhinderer ist als zentrales Sicherheitsprinzip vorgesehen, damit kein Wasser in die falsche Richtung fließt.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q8">Braucht EcoBum Strom?</summary><p data-i18n="faq.a8">Nein, EcoBum funktioniert mit Wasserdruck und benötigt keinen Strom.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q7">Ersetzt EcoBum Toilettenpapier komplett?</summary><p data-i18n="faq.a7">Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier — zum Beispiel nur noch zum Trocknen.</p></details>
+          <details class="faq-item"><summary data-i18n="faq.q7">Ersetzt EcoBum Toilettenpapier komplett?</summary><p data-i18n="faq.a7">Das hängt von der persönlichen Nutzung ab. Viele Menschen nutzen Wasser zur Reinigung und danach deutlich weniger Papier – zum Beispiel nur noch zum Trocknen.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_situations">Ist EcoBum bei sensibler Haut, Menstruation oder Schwangerschaft geeignet?</summary><p data-i18n="faq.a_situations">Wasser kann in diesen Phasen eine sanftere Ergänzung zu trockenem Papier sein und wird von vielen als angenehm empfunden. Bei medizinischen Beschwerden bitte immer ärztlichen Rat einholen.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q_cert">Gibt es Zertifizierungen?</summary><p data-i18n="faq.a_cert">Ziel der Produktentwicklung ist es, relevante Anforderungen und Prüfungen zu berücksichtigen. Aktuell liegen noch keine Zertifizierungen vor – sobald sich das ändert, aktualisieren wir diese Angabe.</p></details>
           <details class="faq-item"><summary data-i18n="faq.q10">Gibt es Garantie oder Rückgabe?</summary><p data-i18n="faq.a10">Die genauen Garantie- und Rückgabebedingungen stehen noch nicht fest und werden vor dem Verkaufsstart bekanntgegeben.</p></details>
@@ -657,7 +662,7 @@
           <h2><span data-i18n="kon.h2a">Interesse an</span> <span class="accent" data-i18n="kon.h2b">EcoBum?</span></h2>
           <p class="section-text center" data-i18n="kon.text">Wir bereiten den nächsten Schritt vor. Wenn du mehr über EcoBum erfahren möchtest oder Interesse an einer Zusammenarbeit hast, kontaktiere uns gerne.</p>
         </div>
-        <!-- KONTAKTFORMULAR — ohne Backend. TODO: echten Endpoint anschließen (script.js -> initContactForm). -->
+        <!-- KONTAKTFORMULAR – ohne Backend. TODO: echten Endpoint anschließen (script.js -> initContactForm). -->
         <form class="form card" id="contactForm" novalidate>
           <p class="form-notice" data-i18n="kon.notice">Das Kontaktformular ist noch nicht aktiv. Bitte schreib uns direkt per E-Mail – wir melden uns schnellstmöglich.</p>
           <div class="field"><label for="cReason" data-i18n="kon.f_reason">Worum geht es?</label>
@@ -690,7 +695,7 @@
           <h2 data-i18n="news.h2">Sei dabei, wenn EcoBum startet.</h2>
           <p class="section-text center" data-i18n="news.text">Trage dich ein und erfahre als Erster, wann EcoBum verfügbar ist. Erhalte Updates, Produktinfos und Launch-News von Pudado.</p>
         </div>
-        <!-- NEWSLETTER — ohne Backend. TODO: DE/EU Double-Opt-in anschließen (script.js -> initNewsletterForm). -->
+        <!-- NEWSLETTER – ohne Backend. TODO: DE/EU Double-Opt-in anschließen (script.js -> initNewsletterForm). -->
         <details class="mobile-disclosure newsletter-disclosure" open>
           <summary data-i18n="mobile.newsletter_more">Information zum Launch-Update</summary>
         <form class="form newsletter-form" id="newsletterForm" novalidate>
@@ -719,12 +724,12 @@
       <div class="footer-brand">
         <div class="footer-logo"><span class="logo-tile" aria-hidden="true"><svg viewBox="0 0 24 30"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span class="logo-word">Pudado</span></div>
         <p class="footer-claim" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
-        <p class="footer-text" data-i18n="foot.text">EcoBum by Pudado — moderne Hygiene mit Wasser.</p>
+        <p class="footer-text" data-i18n="foot.text">EcoBum by Pudado – moderne Hygiene mit Wasser.</p>
         <a class="footer-email-direct" href="mailto:info@pudado.de">info@pudado.de</a>
         <nav class="footer-legal-direct" aria-label="Rechtliches">
           <a href="impressum.html" data-i18n="foot.impressum">Impressum</a>
           <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
-          <a href="#" data-cookie-settings data-i18n="foot.cookie">Cookie-Einstellungen</a>
+          <button type="button" class="footer-linkbtn" data-cookie-settings data-i18n="foot.cookie">Cookie-Einstellungen</button>
         </nav>
       </div>
       <details class="footer-group" open>
@@ -749,7 +754,7 @@
       <nav class="footer-links" aria-label="Rechtliches und Kontakt">
         <a href="impressum.html" data-i18n="foot.impressum">Impressum</a>
         <a href="datenschutz.html" data-i18n="foot.datenschutz">Datenschutzerklärung</a>
-        <a href="#" id="openCookieSettings" data-i18n="foot.cookie">Cookie-Einstellungen</a>
+        <button type="button" class="footer-linkbtn" id="openCookieSettings" data-cookie-settings data-i18n="foot.cookie">Cookie-Einstellungen</button>
         <a href="#kontakt" data-i18n="foot.kontakt">Kontakt</a>
       </nav>
       </details>
@@ -773,7 +778,7 @@
   <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Hinweis zu Cookies und lokalen Einstellungen" data-lenis-prevent hidden>
     <div class="cookie-inner">
       <div class="cookie-text">
-        <h3><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Cookies &amp; lokale Einstellungen</span></h3>
+        <h2><svg class="cookie-logo" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 3 C9 9.5 5.5 13.5 5.5 18.5 a6.5 6.5 0 0 0 13 0 C18.5 13.5 15 9.5 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span data-i18n="ck.title">Cookies &amp; lokale Einstellungen</span></h2>
         <p data-i18n="ck.text">Diese Website nutzt ausschließlich technisch notwendige Speicherung – für deine Sprachwahl und für diesen Hinweis. Es sind keine Statistik-, Marketing- oder Tracking-Dienste eingebunden, und es werden keine Daten an Dritte übertragen.</p>
       </div>
       <div class="cookie-actions">
@@ -785,7 +790,7 @@
 
   <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle" hidden>
     <div class="cookie-modal-card" data-lenis-prevent>
-      <h3 id="cookieModalTitle" data-i18n="ck.modal_title">Cookies &amp; lokale Einstellungen</h3>
+      <h2 id="cookieModalTitle" data-i18n="ck.modal_title">Cookies &amp; lokale Einstellungen</h2>
       <p class="modal-intro" data-i18n="ck.modal_intro">Wir setzen keine optionalen Cookies ein: Es gibt auf dieser Website keine Statistik-, Marketing- oder Externe-Medien-Dienste. Deshalb gibt es hier nichts zuzustimmen oder abzulehnen.</p>
       <div class="cookie-option"><div><strong data-i18n="ck.necessary">Technisch notwendig</strong><p data-i18n="ck.necessary_d">Nur lokal in deinem Browser gespeichert: die gewählte Sprache und die Bestätigung dieses Hinweises. Keine Weitergabe, keine Auswertung.</p></div></div>
       <div class="cookie-option"><div><strong data-i18n="ck.future">Falls sich das ändert</strong><p data-i18n="ck.future_d">Sollten später optionale Dienste dazukommen, werden sie erst nach deiner ausdrücklichen Zustimmung geladen – und Ablehnen bleibt genauso einfach wie Zustimmen.</p></div></div>
@@ -799,7 +804,21 @@
   <script src="script.js?v=20260730-royal-blue-restore"></script>
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
-  <script src="assets/vendor/lenis.min.js"></script>
+  <!-- Lenis läuft laut motion.js ausschließlich auf Zeigergeräten ab 981px
+       (initLenis prüft hover/pointer + Breite). Auf Smartphones wurden die
+       18 KB bisher geladen, geparst und nie benutzt. Deshalb bedarfsgerecht
+       nachladen; motion.js wartet auf pudado:lenis-ready und kommt ohne Lenis
+       vollständig zurecht. -->
+  <script>
+    (function () {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      if (!window.matchMedia('(min-width: 981px)').matches) return;
+      var s = document.createElement('script');
+      s.src = 'assets/vendor/lenis.min.js';
+      s.onload = function () { window.dispatchEvent(new Event('pudado:lenis-ready')); };
+      document.head.appendChild(s);
+    })();
+  </script>
   <script src="motion.js?v=20260730-royal-blue-restore"></script>
 </body>
 </html>

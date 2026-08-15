@@ -54,7 +54,14 @@
   gsap.registerPlugin(ScrollTrigger);
 
   function initLenis() {
-    if (!window.Lenis || !finePointer.matches || !desktopScroll.matches) return;
+    if (!finePointer.matches || !desktopScroll.matches) return;
+    // Lenis wird nur auf Desktop-Zeigergeräten nachgeladen (siehe index.html)
+    // und ist beim ersten Durchlauf ggf. noch nicht da.
+    if (!window.Lenis) {
+      window.addEventListener('pudado:lenis-ready', initLenis, { once: true });
+      return;
+    }
+    if (state.lenis || state.destroyed) return;
     state.lenis = new window.Lenis(SCROLL_CONFIG);
     state.lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(lenisRaf);

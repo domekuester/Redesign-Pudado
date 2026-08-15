@@ -28,6 +28,31 @@
 @font-face { font-family:"Inter"; src:url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight:600; font-display:swap; }
 @font-face { font-family:"Inter"; src:url("assets/fonts/Inter-700.woff2") format("woff2"); font-weight:700; font-display:swap; }
 
+/* Metrisch angeglichene Fallbacks gegen Layout-Shift beim Font-Swap.
+   Messung (Referenztext bei 100px, Chromium): Cabinet Grotesk Bold ist 92,33 %
+   der Breite von Arial Bold, Inter 400 ist 105,57 % von Arial; Ober-/Unterlaenge
+   liegen bei 87/28 bzw. 97/24 gegenueber 91/21 bei Arial. Ohne diesen Ausgleich
+   sprang der Hero beim Nachladen der Schrift um CLS 0,21 – sichtbar allerdings
+   erst auf schnellen Verbindungen, auf denen der Swap noch im Messfenster liegt.
+   Die Override-Werte sind auf die per size-adjust skalierte Em-Box bezogen
+   (z. B. 87 / 0,9233 = 94,23). Bewusst kein <link rel=preload> – siehe CLAUDE.md. */
+@font-face {
+  font-family: "Cabinet Grotesk Fallback";
+  src: local("Arial Bold"), local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto");
+  size-adjust: 92.33%;
+  ascent-override: 94.23%;
+  descent-override: 30.33%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto");
+  size-adjust: 105.57%;
+  ascent-override: 91.88%;
+  descent-override: 22.73%;
+  line-gap-override: 0%;
+}
+
 /* ----------------------- Design Tokens ---------------------- */
 :root {
   --blue:        #235FD0;   /* Signature Blue – klarer, frischer Marken-Akzent */
@@ -48,8 +73,6 @@
   --ink:         #1B2A4A;   /* Überschriften */
   --gray:        #566173;   /* Fließtext */
   --gray-light:  #64707F;   /* dunkler als zuvor (#8b94a3) für WCAG-AA-Kontrast (≈5:1) auf Weiß bei Legal-Hints */
-
-  --white:       #ffffff;
   --border:      #E7ECF4;   /* neutrale, kühle Linien */
   --border-cool: #E4EBF6;
   --border-soft: #E9EEF6;
@@ -73,14 +96,10 @@
   --space:       clamp(64px, 8.5vw, 132px);
 
   /* Cabinet Grotesk/Inter zuerst (lokal selbst gehostet, s.o.) – sonst Apple-/System-Stack */
-  --font-head: "Cabinet Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-head: "Cabinet Grotesk", "Cabinet Grotesk Fallback", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* zurückkompatible Aliase (falls noch irgendwo referenziert) */
-  --ice:         #EAF2FE;
-  --cream:       #F6F9FE;
-  --cream-2:     #EFF4FC;
-
   /* Reserviert als semantische Status-Farbe (grün = positiv/bestanden) –
      bewusst KEIN zweiter Marken-Akzent. Die Marke selbst bleibt
      konsequent einfarbig Blau. */
@@ -318,7 +337,11 @@ p  { margin: 0 0 1rem; }
   font-size: clamp(1.06rem, 1.6vw, 1.3rem); letter-spacing: .52em;
   color: #fff; margin: 0 0 40px; line-height: 1;
 }
-/* Spiegelung wird von Hero-Wortmarke UND Firmenlogo-Bühne genutzt */
+/* Spiegelung wird von Hero-Wortmarke UND Firmenlogo-Bühne genutzt.
+   Im Hero steht sie unter kleiner, weit gesperrter Typo und liest sich dort als
+   unscharfe Dublette statt als Reflexion – deshalb nur auf der großen
+   Marken-Bühne (#warum) aktiv. */
+.hero .wordmark-mirror { display: none; }
 .wordmark-mirror {
   position: absolute; left: 0; top: calc(100% + 3px); line-height: 1;
   transform: scaleY(-1); opacity: .16; pointer-events: none; user-select: none;
@@ -342,6 +365,9 @@ p  { margin: 0 0 1rem; }
 .trust-line {
   display: block; font-size: .95rem; color: var(--gray); font-weight: 500;
   margin-top: 14px; max-width: 540px; letter-spacing: -.01em; line-height: 1.6;
+  /* Vier Punkte umbrachen zu "… Für den täglichen" / "Gebrauch" – balance
+     verteilt die Zeilen, statt ein Einzelwort stehen zu lassen. */
+  text-wrap: balance;
 }
 .hero .trust-line { color: rgba(255,255,255,.62); margin-top: 18px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
@@ -774,6 +800,21 @@ p  { margin: 0 0 1rem; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; }
 .footer-links a { color: rgba(255,255,255,.8); font-size: .95rem; }
 .footer-links a:hover { color: #fff; }
+/* Cookie-Einstellungen öffnen einen Dialog und sind damit ein Button, kein Link
+   (href="#" war weder per Leertaste bedienbar noch korrekt angekündigt).
+   Optik bleibt bewusst identisch zu den Nachbarlinks. */
+.footer-linkbtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+.footer-links .footer-linkbtn { color: rgba(255,255,255,.8); font-size: .95rem; }
+.footer-links .footer-linkbtn:hover { color: #fff; }
 .footer-col-title { font-family: var(--font-head); font-weight: 600; font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.62); margin: 0 0 6px; }
 .footer-bottom { margin-top: 46px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: .85rem; color: rgba(255,255,255,.55); }
 
@@ -783,7 +824,11 @@ p  { margin: 0 0 1rem; }
 @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .cookie-inner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; max-width: var(--container); margin: 0 auto; }
 .cookie-text { flex: 1 1 360px; }
-.cookie-text h3 { display: flex; align-items: center; gap: 8px; margin-bottom: .3em; }
+/* Banner- und Modal-Titel sind semantisch h2 (sonst Sprung h1 -> h3 auf Seiten
+   ohne h2), behalten aber bewusst die kleinere h3-Optik. */
+.cookie-text h2,
+#cookieModalTitle { font-size: 1.24rem; font-weight: 700; letter-spacing: -.015em; }
+.cookie-text h2 { display: flex; align-items: center; gap: 8px; margin-bottom: .3em; }
 .cookie-text p { color: var(--gray); margin: 0; font-size: .92rem; }
 .cookie-logo { width: 22px; height: 22px; color: var(--blue); }
 .cookie-actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -1044,7 +1089,7 @@ p  { margin: 0 0 1rem; }
 .blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%), linear-gradient(160deg, #0A3480, var(--royal) 55%, var(--royal-deep)); }
 .blog-card figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .blog-card-body { padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1; }
-.blog-card-body h3 { margin-bottom: .4em; }
+.blog-card-body h2, .blog-card-body h3 { margin-bottom: .4em; }
 .blog-card-body p { color: var(--gray); font-size: .95rem; margin: 0 0 16px; flex: 1; }
 
 /* ===================== Rechner v2 (kompakt, 3 Eingaben) ===================== */
@@ -1259,6 +1304,15 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 .lang-switch button:focus-visible { outline-color: var(--aqua-mist); }
 .form-notice { margin: 0 0 16px; padding: 13px 15px; border-radius: 12px; background: var(--sky); color: var(--blue-ink); font-size: .9rem; line-height: 1.5; border: 1px solid var(--sky-line); }
 .form-notice.on-dark { background: var(--sky); color: var(--blue-ink); border-color: var(--sky-line); }
+/* Links im Hinweistext lagen farblich fast auf dem Fließtext (1,29:1) und waren
+   nur über die Farbe erkennbar – Unterstreichung erfüllt WCAG 1.4.1. */
+.form-notice a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  text-decoration-thickness: from-font;
+}
+.form-notice a:hover { color: var(--blue); }
 .form .field input:disabled, .form .field select:disabled, .form .field textarea:disabled,
 .newsletter-row input:disabled { opacity: .55; cursor: not-allowed; }
 .btn:disabled, .btn[disabled] { opacity: .55; cursor: not-allowed; pointer-events: none; }
@@ -1528,7 +1582,16 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
    ============================================================= */
 .mobile-nav-only { display: none; }
 .mobile-disclosure > summary { display: none; }
-.footer-group > summary { display: none; }
+/* Auf Desktop sind die Footer-Gruppen keine Akkordeons, sondern Spalten – das
+   summary bleibt sichtbar und trägt die Spaltenüberschrift (zuvor display:none,
+   dadurch standen drei Linkspalten ohne Beschriftung nebeneinander). */
+.footer-group > summary {
+  display: block;
+  list-style: none;
+  cursor: default;
+}
+.footer-group > summary::-webkit-details-marker { display: none; }
+.footer-group > summary::marker { content: ""; }
 .faq-extra { display: contents; }
 .mobile-disclosure-grid { display: contents; }
 
@@ -1636,9 +1699,20 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero-copy { text-align: left; }
   .hero-wordmark,
   .hero .trust-line { display: none; }
-  .hero h1 { font-size: clamp(2.8rem, 13vw, 3.8rem); max-width: 8ch; }
+  /* ch/max-width sind schriftabhängig: mit dem System-Fallback ergaben 8ch
+     208px, mit Cabinet Grotesk 266px. Feste ch-Maße hier vermeiden, damit der
+     Font-Swap den Umbruch nicht verändert. */
+  .hero h1 { font-size: clamp(2.8rem, 13vw, 3.8rem); max-width: 9ch; }
   .hero .lead { max-width: 34ch; margin-top: 12px; font-size: .98rem; line-height: 1.48; }
-  .hero .hero-actions { margin-top: 18px; gap: 6px; align-items: flex-start; }
+  /* Zuvor lagen Button und Textlink vor dem Font-Swap nebeneinander und danach
+     untereinander – ein 50px-Sprung, der den gesamten Rest der Seite verschob
+     (CLS 0,21). Die Spaltenrichtung ist der Zielzustand und schriftunabhängig. */
+  .hero .hero-actions {
+    margin-top: 18px;
+    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
   .hero .hero-actions .btn-primary { width: auto; min-height: 48px; padding: 13px 20px; }
   .hero .hero-secondary-link {
     width: auto;
@@ -1652,6 +1726,11 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
     text-underline-offset: 4px;
   }
   .hero-visual { width: min(248px, 68vw); }
+  /* Beide Chips zusammen (224px) sprengten die 212px Innenbreite der Karte und
+     brachen um – einer lag danach auf dem Bild, einer darunter. Kompaktere
+     Chips halten die Reihe einzeilig im Bild. */
+  .hero .product-badges { left: 12px; right: 12px; bottom: 12px; gap: 6px; flex-wrap: nowrap; }
+  .hero .pill-badge { font-size: .68rem; padding: 6px 10px; }
   .hero .product-card img { height: 190px; object-fit: cover; }
   .hero .product-card { border-radius: 20px; }
   .hero .product-card img,
@@ -1917,13 +1996,15 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   }
   /* Pflichtlinks und E-Mail sind eigenständige Ziele, keine Fließtext-Links –
      daher auf 44px Trefferhöhe (WCAG 2.5.8 / Apple HIG) gebracht. */
-  .footer-legal-direct a {
+  .footer-legal-direct a,
+  .footer-legal-direct .footer-linkbtn {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
     color: rgba(255,255,255,.72);
     font-size: .78rem;
     text-underline-offset: .2em;
+    text-decoration: underline;
   }
   .footer-legal-direct { gap: 0 16px; margin-top: 6px; }
   .footer-email-direct { display: inline-flex; align-items: center; min-height: 44px; }
@@ -1943,7 +2024,12 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .footer-group > summary::after { content: "+"; color: #fff; font-size: 1.1rem; }
   .footer-group[open] > summary::after { content: "−"; }
   .footer-links { gap: 0; padding: 2px 0 10px; }
-  .footer-links a { display: flex; align-items: center; min-height: 44px; font-size: .9rem; }
+  .footer-links a,
+  .footer-links .footer-linkbtn { display: flex; align-items: center; min-height: 44px; font-size: .9rem; }
+  /* Mobil sind die Formularfelder ausgeblendet; übrig blieben Hinweistext,
+     Mail-Button und Nachsatz – dieselbe Adresse dreimal in einer Karte.
+     Der Button trägt die Adresse bereits sichtbar. */
+  #contactForm .form-fallback { display: none; }
   .footer-bottom { margin-top: 20px; padding-top: 16px; }
 
   /* Kompakte Einhand-Aktionsleiste; verschwindet vor Kontakt/Footer per JS. */
@@ -1980,11 +2066,17 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .calc2-kpis { grid-template-columns: 1fr; }
 }
 
+/* Smartphone quer: der Hero war 1,7x so hoch wie der Viewport, die primäre
+   Aktion lag dadurch unter der Falz. Gestrafft, bis der CTA sichtbar bleibt. */
 @media (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
-  .hero { min-height: auto; }
-  .hero-grid { grid-template-columns: 1.1fr .9fr; align-items: center; }
-  .hero-visual { width: min(220px, 30vw); }
-  .hero .product-card img { height: 150px; }
+  .hero { min-height: auto; padding: 22px 0 26px; }
+  .hero-grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 18px; }
+  .hero h1 { font-size: clamp(1.9rem, 6vw, 2.4rem); margin-bottom: .24em; }
+  .hero .lead { margin-top: 8px; font-size: .88rem; }
+  .hero .hero-actions { margin-top: 12px; }
+  .hero-visual { width: min(200px, 28vw); }
+  .hero .product-card img { height: 132px; }
+  .hero .media-note { display: none; }
 }
 
 /* Druck bleibt funktional und frei von Motion-Transforms/Viewport-Überbreite.
