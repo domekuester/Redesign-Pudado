@@ -43,11 +43,11 @@
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preload" as="image" href="assets/hero-bild-1-optimized.jpg" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=20260730-royal-blue-restore" />
+  <link rel="stylesheet" href="style.css?v=4ee8d8c0" />
   <!-- Lenis-Styles nur dort render-blockierend, wo Lenis überhaupt startet
        (Zeigergerät ab 981px). Auf Smartphones entfällt damit ein blockierender
        Request in der kritischen Renderkette. -->
-  <link rel="stylesheet" href="assets/vendor/lenis.css" media="(min-width: 981px)" />
+  <link rel="stylesheet" href="assets/vendor/lenis.css?v=599bcc02" media="(min-width: 981px)" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
   <script type="application/ld+json">
@@ -800,10 +800,10 @@
     </div>
   </div>
 
-  <script src="translations.js?v=20260729-layout-repair-2"></script>
-  <script src="script.js?v=20260730-royal-blue-restore"></script>
-  <script src="assets/vendor/gsap.min.js"></script>
-  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="translations.js?v=e0b919cc"></script>
+  <script src="script.js?v=86fc965d"></script>
+  <script src="assets/vendor/gsap.min.js?v=8e52f4ac"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js?v=34923d8a"></script>
   <!-- Lenis läuft laut motion.js ausschließlich auf Zeigergeräten ab 981px
        (initLenis prüft hover/pointer + Breite). Auf Smartphones wurden die
        18 KB bisher geladen, geparst und nie benutzt. Deshalb bedarfsgerecht
@@ -814,11 +814,11 @@
       if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
       if (!window.matchMedia('(min-width: 981px)').matches) return;
       var s = document.createElement('script');
-      s.src = 'assets/vendor/lenis.min.js';
+      s.src = 'assets/vendor/lenis.min.js?v=fcd60395';
       s.onload = function () { window.dispatchEvent(new Event('pudado:lenis-ready')); };
       document.head.appendChild(s);
     })();
   </script>
-  <script src="motion.js?v=20260730-royal-blue-restore"></script>
+  <script src="motion.js?v=f43cb8a0"></script>
 </body>
 </html>
