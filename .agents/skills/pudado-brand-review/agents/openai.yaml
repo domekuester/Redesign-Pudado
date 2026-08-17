@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado Brand Review"
+  short_description: "Review Pudado visual brand consistency"
+  default_prompt: "Use $pudado-brand-review to assess the rendered Pudado interface against its brand system."

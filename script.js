@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
    initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initAmbientLoop, initHeaderState,
+   initScrollSpy, initReveal, initBrandVideos, initHeaderState,
    initMobileDisclosures, initFaqAccordion]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
@@ -749,7 +749,7 @@ function initReveal() {
   // Blöcke, die sanft eingeblendet werden (nur Layout-/Optik-Elemente).
   const selector = [
     '.section-head', '.hero-copy', '.hero-visual',
-    '.card', '.usecase-card', '.wissen-card', '.situation-card', '.blog-card',
+    '.card', '.usecase-card', '.situation-card', '.blog-card',
     '.duel', '.step', '.num-list', '.set-list', '.feature-list',
     '.product-visual', '.set-visual', '.how-figure', '.detail-strip figure',
     '.lifestyle-gallery .lg-item', '.detail-col', '.cert-note',
@@ -807,32 +807,85 @@ function initReveal() {
    ------------------------------------------------------------- */
 
 /* -------------------------------------------------------------
-   12. AMBIENT-LOOP (Brand-Bühne, dekorativ)
-   Remotion-gerenderter 5-s-Royal-Loop. CSS blendet ihn bei
-   prefers-reduced-motion aus; hier zusätzlich: Autoplay entfernen
-   (kein unnötiger Download) und außerhalb des Viewports pausieren
-   (Akku). play() kann abgelehnt werden -> Promise-Fehler ignorieren.
+   12. MARKENVIDEOS
+   Ein gemeinsamer Observer steuert Ambient- und Ad-Videos. Filme laufen
+   höchstens einmal weiter, werden außerhalb des Viewports pausiert und bei
+   reduzierter Bewegung nicht automatisch gestartet.
    ------------------------------------------------------------- */
-function initAmbientLoop() {
-  const video = document.querySelector('.brand-stage-ambient');
-  if (!video) return;
+function initBrandVideos() {
+  const videos = Array.from(document.querySelectorAll('.brand-stage-ambient, [data-brand-video]'));
+  if (!videos.length) return;
+  const updateControl = video => {
+    const button = video.parentElement && video.parentElement.querySelector('[data-video-toggle]');
+    const label = button && button.querySelector('[data-i18n]');
+    if (!label) return;
+    const key = video.paused ? 'video.play' : 'video.pause';
+    label.setAttribute('data-i18n', key);
+    label.textContent = t(key);
+  };
+  videos.forEach(video => {
+    const button = video.parentElement && video.parentElement.querySelector('[data-video-toggle]');
+    if (button) {
+      button.addEventListener('click', () => {
+        if (!video.paused) {
+          video.dataset.userPaused = 'true';
+          video.pause();
+          return;
+        }
+        delete video.dataset.userPaused;
+        if (video.ended) video.currentTime = 0;
+        const p = video.play();
+        if (p && p.catch) p.catch(() => {});
+      });
+      video.addEventListener('play', () => updateControl(video));
+      video.addEventListener('pause', () => updateControl(video));
+      video.addEventListener('ended', () => updateControl(video));
+      updateControl(video);
+    }
+  });
   const isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
-  if (isMobile || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    video.pause();
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduceMotion && reduceMotion.matches) {
+    videos.forEach(video => {
+      video.removeAttribute('autoplay');
+      video.pause();
+    });
     return;
   }
   if (!('IntersectionObserver' in window)) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
-        const p = video.play();
+        if (e.target.ended || e.target.dataset.userPaused === 'true') return;
+        const p = e.target.play();
         if (p && p.catch) p.catch(() => {});
       } else {
-        video.pause();
+        e.target.pause();
       }
     });
   }, { threshold: 0.15 });
-  obs.observe(video);
+  videos.forEach(video => {
+    if (isMobile && video.classList.contains('brand-stage-ambient')) {
+      video.pause();
+      return;
+    }
+    obs.observe(video);
+  });
+  if (reduceMotion && reduceMotion.addEventListener) {
+    reduceMotion.addEventListener('change', event => {
+      videos.forEach(video => {
+        if (event.matches) {
+          video.pause();
+          return;
+        }
+        const rect = video.getBoundingClientRect();
+        if (!video.ended && video.dataset.userPaused !== 'true' && rect.bottom > 0 && rect.top < window.innerHeight) {
+          const p = video.play();
+          if (p && p.catch) p.catch(() => {});
+        }
+      });
+    });
+  }
 }
 
 /* -------------------------------------------------------------

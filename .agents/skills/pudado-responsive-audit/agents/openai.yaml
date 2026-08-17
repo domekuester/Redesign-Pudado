@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado Responsive Audit"
+  short_description: "Audit Pudado at required breakpoints"
+  default_prompt: "Use $pudado-responsive-audit to test Pudado at every required responsive viewport."

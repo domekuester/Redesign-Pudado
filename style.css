@@ -109,11 +109,14 @@
      aus der Pudado-Logo-Referenz gesampelt (PUDADO-Wortmarke auf tiefem
      Royal-Verlauf mit Wasser-Spiegelung). Dieselbe Blau-Familie wie
      --blue – kein zweiter Akzent, sondern die dunkle Marken-Bühne. */
+  --royal-edge:  #0A3480;   /* Verlaufsanfang der Royal-Flächen (bisher 6× als Rohwert im CSS) */
   --royal-high:  #0E3D8F;   /* Lichtkante oben (Referenz oben-mitte) */
   --royal:       #08307A;   /* Kern-Bühnenton */
   --royal-deep:  #021D52;   /* Verlaufsende, Footer (Referenz unten) */
   --royal-text:  #C9D6F0;   /* Fließtext auf Royal (Kontrast ≈ 8:1) */
   --royal-line:  rgba(255,255,255,.16);
+  --video-control-bg: rgba(5,26,70,.68);
+  --video-control-hover: rgba(5,26,70,.82);
   /* Aqua Mist – einzige sanfte Zusatz-Akzentfarbe des Royal-Konzepts
      (vom Nutzer freigegeben): Wasser-Licht für feine Linien und
      Status-Icons AUF Royal-Flächen. Nie großflächig, nie auf Weiß
@@ -380,7 +383,8 @@ p  { margin: 0 0 1rem; }
 /* Randlose Produkt-Bühne: das Foto IST die Fläche, Badges liegen als
    Glas-Chips im Bild – Objektinszenierung statt Bild-in-Box. */
 .hero .product-card { padding: 0; background: transparent; border: none; box-shadow: 0 44px 110px rgba(1,10,40,.55); }
-.hero .product-card img { border-radius: var(--radius-xl); }
+.hero .product-card img,
+.hero .product-card video { display: block; width: 100%; border-radius: var(--radius-xl); }
 .hero .product-badges { position: absolute; left: 18px; right: 18px; bottom: 18px; margin: 0; justify-content: flex-start; }
 .hero .pill-badge { background: rgba(5,26,70,.55); color: #fff; border-color: rgba(255,255,255,.24); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .hero .pill-badge.accent { background: rgba(255,255,255,.94); color: var(--royal-deep); border-color: transparent; box-shadow: none; }
@@ -513,6 +517,9 @@ p  { margin: 0 0 1rem; }
 .usecase-card .sc-cat { font-family: var(--font-head); font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin: 0 0 8px; }
 .usecase-card h3 { font-size: 1.08rem; line-height: 1.28; color: var(--ink); margin: 0 0 12px; }
 .usecase-card p { margin: 0; color: var(--gray); font-size: .95rem; line-height: 1.6; }
+.usecase-links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 18px; }
+.usecase-links a { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-head); font-size: .82rem; font-weight: 600; color: var(--blue); text-decoration: underline; text-decoration-color: var(--blue-soft); text-underline-offset: 4px; }
+.usecase-links a:hover { text-decoration-color: currentColor; }
 @media (max-width: 980px) { .usecase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } .usecase-card { padding: 24px 22px; } }
 @media (max-width: 560px) { .usecase-grid { grid-template-columns: 1fr; gap: 16px; } }
 
@@ -612,20 +619,32 @@ p  { margin: 0 0 1rem; }
 .how-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .how-grid > .media-note-figure { grid-area: 2 / 1 / 3 / 2; margin-top: 0; }
 .how-grid > div:last-child { grid-area: 1 / 2 / 3 / 3; }
-.steps { display: grid; gap: 20px; }
-.step { position: relative; display: flex; gap: 20px; align-items: flex-start; }
+.steps { --step-gap: 20px; display: grid; gap: var(--step-gap); }
+.step {
+  /* Die Verbindungslinie leitet ihre Position aus diesen drei Werten ab.
+     Wer Polster, Kachelgröße oder Abstand ändert, ändert sie hier – die
+     Linie folgt, statt separat nachjustiert werden zu müssen. */
+  --step-num-size: 52px;
+  --step-pad-x: 0px;
+  --step-pad-y: 0px;
+  position: relative; display: flex; gap: 20px; align-items: flex-start;
+}
 .step:not(:last-child)::after {
   content: "";
   position: absolute;
-  left: 25.5px;
-  top: 52px;
-  bottom: -20px;
+  /* Absolut positionierte Kinder beziehen sich auf die PADDING-Box, nicht auf
+     die Content-Box. Das Polster muss deshalb in jeden Offset eingerechnet
+     werden – sonst sitzt die Linie um genau padding-left neben der Mitte der
+     Nummernkachel und läuft sichtbar durch sie hindurch. */
+  left: calc(var(--step-pad-x) + var(--step-num-size) / 2 - .5px);
+  top: calc(var(--step-pad-y) + var(--step-num-size));
+  bottom: calc(var(--step-pad-y) - var(--step-gap));
   width: 1px;
   background: rgba(35,95,208,.16);
 }
 .step-num {
   position: relative; z-index: 1;
-  flex: 0 0 auto; width: 52px; height: 52px; border-radius: 12px;
+  flex: 0 0 auto; width: var(--step-num-size); height: var(--step-num-size); border-radius: 12px;
   background: rgba(35,95,208,.06); color: var(--blue);
   border: 1px solid rgba(35,95,208,.16);
   font-family: var(--font-head); font-weight: 700; font-size: 1.08rem; display: grid; place-items: center;
@@ -985,23 +1004,35 @@ p  { margin: 0 0 1rem; }
 .lg-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.16,.84,.44,1); }
 .lg-item:hover img { transform: scale(1.04); }
 
-/* ----------------------- Pudado Wissen ---------------------- */
-.wissen-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 3vw, 48px); row-gap: clamp(34px, 4vw, 56px); align-items: start; }
-/* Bewusst kartenlos: nur eine Trennlinie oben statt Rahmen+Schatten+Weiß
-   wie bei den übrigen Grids – wirkt wie eine redaktionelle Themenliste,
-   nicht wie ein weiteres Set Produktkacheln. */
-.wissen-card {
-  display: flex; flex-direction: column; align-self: start; min-height: 0; background: transparent;
-  border: none; border-top: 1px solid var(--border); border-radius: 0;
-  padding: 22px 2px 4px; color: var(--ink);
-  transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease;
-}
-.wissen-card:hover { transform: translateY(-2px); border-color: var(--blue-soft); text-decoration: none; }
-.wissen-card h3 { font-size: 1.04rem; margin-bottom: .45em; }
-.wissen-card p { color: var(--gray); font-size: .92rem; margin: 0 0 14px; line-height: 1.6; }
-.wissen-card[hidden],
 .usecase-card[hidden] { display: none; }
 .mobile-grid-toggle { display: none; }
+
+/* ----------------------- EcoBum Markenfilm ----------------- */
+.ecobum-ad { overflow: hidden; }
+.ecobum-ad-layout {
+  display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr);
+  gap: clamp(38px, 6vw, 84px); align-items: center;
+}
+.ecobum-ad-copy { max-width: 430px; }
+.ecobum-ad-copy h2 { font-size: clamp(2rem, 4vw, 3.4rem); margin-bottom: .3em; }
+.ecobum-ad-copy .section-text { margin: 0 0 26px; max-width: 38ch; }
+.ecobum-ad-media {
+  position: relative; overflow: hidden; aspect-ratio: 16 / 9;
+  border: 1px solid var(--border-soft); border-radius: var(--radius-lg);
+  background: var(--royal-deep); box-shadow: var(--shadow-md);
+}
+.ecobum-ad-media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ecobum-ad-media--portrait { width: min(100%, 380px); aspect-ratio: 9 / 16; justify-self: center; }
+.video-toggle {
+  position: absolute; z-index: 2; top: 12px; right: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 72px; min-height: 44px; padding: 8px 14px;
+  border: 1px solid var(--royal-line); border-radius: var(--radius-pill);
+  background: var(--video-control-bg); color: var(--paper); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); font: 600 .76rem/1 var(--font-head);
+  cursor: pointer;
+}
+.video-toggle:hover { background: var(--video-control-hover); }
 
 /* ----------------------- Detail-Sektion --------------------- */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 960px; margin: 0 auto; }
@@ -1072,9 +1103,9 @@ p  { margin: 0 0 1rem; }
 
 /* ----------------------- Artikel / Blog --------------------- */
 .article { padding: clamp(44px,6vw,80px) 0; }
-.article h1 { font-size: clamp(2.1rem,4.6vw,3.2rem); margin: .3em 0; }
+.article h1 { font-size: clamp(2rem,4vw,2.8rem); margin: .3em 0; }
 .article .lead { font-size: 1.22rem; color: var(--navy); margin-bottom: 30px; }
-.article-hero { aspect-ratio: 16 / 8; margin: 0 0 40px; }
+.article-hero { aspect-ratio: 16 / 7; max-height: 390px; margin: 0 0 36px; }
 .article-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .article-body h2 { font-size: 1.5rem; margin: 1.7em 0 .4em; }
 .article-body p { color: var(--gray); font-size: 1.08rem; line-height: 1.75; }
@@ -1083,14 +1114,44 @@ p  { margin: 0 0 1rem; }
 .article-cta h3 { margin-bottom: .3em; }
 .article-cta p { color: var(--gray); margin-bottom: 18px; }
 
-.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-.blog-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-xs); transition: transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s; color: var(--ink); }
-.blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); text-decoration: none; }
-.blog-card figure { position: relative; margin: 0; aspect-ratio: 4/3; background: radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%), linear-gradient(160deg, #0A3480, var(--royal) 55%, var(--royal-deep)); }
+body[data-page="blog"] main > .section { padding-top: clamp(44px, 5vw, 68px); }
+body[data-page="blog"] .section-head { margin-bottom: clamp(34px, 4vw, 50px); }
+body[data-page="blog"] .section-head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: .25em; }
+body[data-page="blog"] .section-head .section-text { font-size: 1rem; }
+
+/* Ruhige Editorial-Liste: kleine Bilder begleiten den Inhalt, statt ihn als
+   farbige Magazin-Kacheln zu dominieren. */
+.blog-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(32px, 4vw, 56px); row-gap: 0;
+  align-items: start;
+}
+.blog-card {
+  display: grid; grid-template-columns: clamp(112px, 30%, 148px) minmax(0, 1fr);
+  gap: clamp(18px, 2vw, 26px); align-self: start; min-height: 0;
+  background: transparent; border: none; border-top: 1px solid var(--border);
+  border-radius: 0; box-shadow: none; padding: 24px 0; color: var(--ink);
+  transition: transform .3s cubic-bezier(.16,.84,.44,1), border-color .3s ease;
+}
+.blog-card:hover { transform: translateY(-2px); border-color: var(--blue-soft); text-decoration: none; }
+.blog-card figure {
+  position: relative; margin: 0; aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm); overflow: hidden;
+  background: radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%), linear-gradient(160deg, var(--royal-edge), var(--royal) 55%, var(--royal-deep));
+}
 .blog-card figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.blog-card-body { padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1; }
-.blog-card-body h2, .blog-card-body h3 { margin-bottom: .4em; }
-.blog-card-body p { color: var(--gray); font-size: .95rem; margin: 0 0 16px; flex: 1; }
+.blog-card-body { padding: 0; display: flex; flex-direction: column; flex: 1; }
+/* Eigene, ruhige Größe statt der globalen Sektions-h2-Skala. */
+.blog-card-body h2,
+.blog-card-body h3 {
+  font-size: 1.16rem; line-height: 1.3; letter-spacing: -.015em;
+  margin: 0 0 .5em; overflow-wrap: break-word;
+}
+.blog-card .section-label {
+  font-size: .7rem; letter-spacing: .14em; color: var(--gray-light);
+  margin: 0 0 .7em;
+}
+.blog-card-body p { color: var(--gray); font-size: .92rem; line-height: 1.6; margin: 0 0 14px; flex: 1; }
 
 /* ===================== Rechner v2 (kompakt, 3 Eingaben) ===================== */
 .calc2-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 24px; align-items: start; max-width: 1040px; margin: 0 auto; }
@@ -1232,8 +1293,7 @@ p  { margin: 0 0 1rem; }
 @media (max-width: 980px) {
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: repeat(2, 1fr); }
   .hero-grid { grid-template-columns: 1fr; }
-  .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  .wissen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .blog-grid { grid-template-columns: 1fr; }
   .detail-grid { grid-template-columns: 1fr; }
   .sub-hero-grid { grid-template-columns: 1fr; }
   .sub-hero-visual { order: -1; }
@@ -1247,22 +1307,25 @@ p  { margin: 0 0 1rem; }
 }
 @media (max-width: 760px) {
   h1 { font-size: clamp(2.4rem, 9vw, 3.2rem); }
-  .wissen-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .detail-strip { grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .lifestyle-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 190px; }
   .sticky-cta { display: flex; }
   .newsletter-row { grid-template-columns: 1fr; }
   .cookie-actions { width: 100%; }
   .cookie-actions .btn { flex: 1 1 auto; }
+  .ecobum-ad-layout { grid-template-columns: 1fr; gap: 28px; }
+  .ecobum-ad-copy { max-width: 560px; }
+  .ecobum-ad-media--portrait { width: min(78vw, 320px); }
 }
 @media (max-width: 480px) {
   .cards-grid, .cards-grid.four, .cards-grid.three { grid-template-columns: 1fr; }
   .set-list { grid-template-columns: 1fr; }
-  .blog-grid, .wissen-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
   .logo-word { font-size: .94rem; }
   .logo-product { font-size: 1.12rem; }
   .container { padding: 0 20px; }
   .btn { width: 100%; }
+  .cookie-actions .btn { width: auto; min-width: 0; }
   .hero-actions .btn { width: 100%; }
   .card, .usecase-card { padding: 26px 24px; }
 }
@@ -1466,8 +1529,12 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   box-shadow: 0 30px 70px rgba(20,40,80,.13);
 }
 #how .step {
-  padding: 14px 16px;
-  margin: -14px -16px;
+  /* Vergrößerte Trefferfläche; die negativen Margins heben die Layoutwirkung
+     wieder auf. Die Variablen halten die Verbindungslinie synchron. */
+  --step-pad-x: 16px;
+  --step-pad-y: 14px;
+  padding: var(--step-pad-y) var(--step-pad-x);
+  margin: calc(var(--step-pad-y) * -1) calc(var(--step-pad-x) * -1);
 }
 
 .kpi-num,
@@ -1493,7 +1560,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 
 @media (hover: hover) and (pointer: fine) {
   .btn:hover { transform: translateY(-1px); }
-  .wissen-card:hover .read-more,
   .blog-card:hover .read-more { transform: translateX(3px); }
   .read-more { display: inline-block; transition: transform .25s cubic-bezier(.16,1,.3,1); }
 }
@@ -1511,13 +1577,10 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero-grid { gap: 44px; }
   .hero .hero-actions { margin-top: 30px; }
   #how .step {
-    padding: 12px;
-    margin: -12px;
-  }
-  .step:not(:last-child)::after {
-    left: 25.5px;
-    top: 52px;
-    bottom: -20px;
+    --step-pad-x: 12px;
+    --step-pad-y: 12px;
+    padding: var(--step-pad-y) var(--step-pad-x);
+    margin: calc(var(--step-pad-y) * -1) calc(var(--step-pad-x) * -1);
   }
 }
 
@@ -1635,13 +1698,12 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   main > #how { order: 8; }
   main > #lifestyle { order: 9; }
   main > #rechner { order: 10; }
-  main > #fuer-wen { order: 11; }
+  main > #brand-film { order: 11; }
   main > #nachhaltigkeit { order: 12; }
-  main > #detail { order: 13; }
-  main > #warum { order: 14; }
-  main > #wissen { order: 15; }
+  main > #fuer-wen { order: 13; }
+  main > #detail { order: 14; }
+  main > #warum { order: 15; }
   main > #faq { order: 16; }
-  main > .water-banner { order: 17; }
   main > #kontakt { order: 18; }
   main > #newsletter { order: 19; }
 
@@ -1731,9 +1793,11 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
      Chips halten die Reihe einzeilig im Bild. */
   .hero .product-badges { left: 12px; right: 12px; bottom: 12px; gap: 6px; flex-wrap: nowrap; }
   .hero .pill-badge { font-size: .68rem; padding: 6px 10px; }
-  .hero .product-card img { height: 190px; object-fit: cover; }
+  .hero .product-card img,
+  .hero .product-card video { height: 190px; object-fit: cover; }
   .hero .product-card { border-radius: 20px; }
   .hero .product-card img,
+  .hero .product-card video,
   .hero .product-card::after { border-radius: 20px; }
   .hero .media-note { margin-top: 5px; font-size: .64rem; }
 
@@ -1876,8 +1940,10 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 
   /* Installation: ein geöffnetes natives Step-Akkordeon. */
   #how .how-figure { aspect-ratio: 16 / 8; border-radius: 14px; }
-  #how .steps { gap: 0; border-top: 1px solid var(--border-cool); }
+  #how .steps { --step-gap: 0px; border-top: 1px solid var(--border-cool); }
   #how .step {
+    --step-pad-x: 0px;
+    --step-pad-y: 0px;
     padding: 0;
     margin: 0;
     border-bottom: 1px solid var(--border-cool);
@@ -1899,7 +1965,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   }
   #how .step[open] > summary::after { content: "−"; }
   #how .step > summary h3 { margin: 0; font-size: 1rem; line-height: 1.25; }
-  #how .step-num { width: 42px; height: 42px; border-radius: 10px; font-size: .9rem; }
+  #how .step { --step-num-size: 42px; }
+  #how .step-num { border-radius: 10px; font-size: .9rem; }
   #how .step > p { margin: -2px 30px 14px 54px; font-size: .9rem; }
   #how .hint-box { margin-top: 16px; padding: 15px 17px; }
 
@@ -1932,10 +1999,13 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   #warum .media-band img { width: 100%; height: 100%; object-fit: cover; }
   #warum .card p { font-size: .88rem; }
 
-  /* Wissen/FAQ: drei Themen direkt, Rest und lange Frageliste auf Nachfrage. */
-  .wissen-grid { grid-template-columns: 1fr; gap: 0; }
-  .wissen-card { padding: 16px 0 12px; }
-  .wissen-card p { margin-bottom: 8px; }
+  /* Magazin: eine Spalte statt zwei sehr schmaler – die Einträge sollen auch
+     auf dem Telefon Luft haben, statt gequetscht nebeneinanderzustehen. */
+  .blog-grid { grid-template-columns: 1fr; row-gap: 30px; }
+  .blog-card { padding: 20px 0 4px; }
+  .blog-card figure { margin-bottom: 15px; }
+  .blog-card-body h2,
+  .blog-card-body h3 { font-size: 1.1rem; }
   .mobile-grid-toggle {
     display: flex;
     grid-column: 1 / -1;
@@ -2059,7 +2129,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero h1 { font-size: clamp(2.5rem, 13vw, 3rem); }
   .hero .lead { font-size: .92rem; }
   .hero-visual { width: min(220px, 66vw); }
-  .hero .product-card img { height: 162px; }
+  .hero .product-card img,
+  .hero .product-card video { height: 162px; }
   .duel-side { padding: 17px; }
   .comparison-panel--water { padding: 19px 17px 21px; }
   .duel-side li { font-size: .9rem; }
@@ -2075,7 +2146,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero .lead { margin-top: 8px; font-size: .88rem; }
   .hero .hero-actions { margin-top: 12px; }
   .hero-visual { width: min(200px, 28vw); }
-  .hero .product-card img { height: 132px; }
+  .hero .product-card img,
+  .hero .product-card video { height: 132px; }
   .hero .media-note { display: none; }
 }
 

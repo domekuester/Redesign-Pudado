@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado Release Check"
+  short_description: "Run Pudado release readiness checks"
+  default_prompt: "Use $pudado-release-check to verify the current Pudado changes before release."

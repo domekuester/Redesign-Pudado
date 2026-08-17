@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado SEO Audit"
+  short_description: "Audit Pudado technical and content SEO"
+  default_prompt: "Use $pudado-seo-audit to review Pudado pages for technical SEO and schema quality."

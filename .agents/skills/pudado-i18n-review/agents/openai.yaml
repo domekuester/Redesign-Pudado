@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado I18n Review"
+  short_description: "Review Pudado DE EN FR quality"
+  default_prompt: "Use $pudado-i18n-review to check changed Pudado copy across German, English, and French."

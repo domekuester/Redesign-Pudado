@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pudado Visual QA"
+  short_description: "Inspect Pudado UI across viewports"
+  default_prompt: "Use $visual-qa to inspect the rendered Pudado interface across required viewports."

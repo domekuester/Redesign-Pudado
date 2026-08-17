@@ -42,8 +42,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="preload" as="image" href="assets/hero-bild-1-optimized.jpg" fetchpriority="high" />
-  <link rel="stylesheet" href="style.css?v=4ee8d8c0" />
+  <link rel="preload" as="image" href="assets/media/ads/ecobum-ad-01-poster.jpg" fetchpriority="high" />
+  <link rel="stylesheet" href="style.css?v=a67ac17b" />
   <!-- Lenis-Styles nur dort render-blockierend, wo Lenis überhaupt startet
        (Zeigergerät ab 981px). Auf Smartphones entfällt damit ein blockierender
        Request in der kritischen Renderkette. -->
@@ -156,20 +156,20 @@
           </div>
         </div>
         <div class="hero-visual">
-          <div class="product-card product-card-photo">
-            
-            <!-- HERO-PRODUKTBILD (nicht lazy, priorisiert). Fallback nur falls Datei fehlt.
-                 Es ist eine Visualisierung, kein finales Produktfoto – Alt-Text und
-                 .media-note benennen das offen (Prelaunch-Ehrlichkeit). -->
-            <img src="assets/hero-bild-1-optimized.jpg" alt="Visualisierung des EcoBum Home Sets in einem modernen Badezimmer"
-                 width="1200" height="959" decoding="async"
-                 onerror="this.onerror=null;this.src='assets/ecobum-box.jpg';" />
+          <div class="product-card product-card-video">
+            <video muted playsinline preload="metadata"
+                   poster="assets/media/ads/ecobum-ad-01-poster.jpg"
+                   data-brand-video="hero" aria-hidden="true">
+              <source src="assets/media/ads/ecobum-ad-01.webm" type="video/webm" />
+              <source src="assets/media/ads/ecobum-ad-01.mp4" type="video/mp4" />
+            </video>
+            <button class="video-toggle" type="button" data-video-toggle><span data-i18n="video.pause">Pause</span></button>
             <div class="product-badges">
               <span class="pill-badge" data-i18n="badge.plug">Plug-and-Play</span>
               <span class="pill-badge accent" data-i18n="badge.soon">Bald verfügbar</span>
             </div>
           </div>
-          <p class="media-note" data-i18n="media.viz">Produktvisualisierung – finale Produktfotos folgen</p>
+          <p class="media-note" data-i18n="media.ad01">EcoBum Markenfilm</p>
         </div>
       </div>
     </section>
@@ -177,8 +177,7 @@
     <section class="trust-band" aria-label="Vorteile auf einen Blick">
       <ul class="container trust-band-inner" tabindex="0">
         <li><span data-i18n="tb.1">Kein Strom nötig</span></li>
-        <li><span data-i18n="tb.2">Bohrfreie Option</span></li>
-        <li><span data-i18n="tb.3">Kleben oder Schrauben</span></li>
+        <li><span data-i18n="tb.2">Flexible Montage</span></li>
         <li><span data-i18n="tb.4">Reinigung mit Wasser</span></li>
         <li><span data-i18n="tb.5">Papier & Feuchttücher reduzieren</span></li>
         <li><span data-i18n="tb.6">Sanfteres Gefühl</span></li>
@@ -381,24 +380,38 @@
             <p class="sc-cat" data-i18n="mom.c1_cat">Sensible Haut</p>
             <h3 data-i18n="mom.c1_t">Sanfter reinigen, weniger trocken reiben.</h3>
             <p data-i18n="mom.c1_d">Wasser kann trockenes Reiben reduzieren und die tägliche Reinigung sanft ergänzen.</p>
+            <div class="usecase-links">
+              <a href="situations/empfindliche-haut.html" data-i18n="sit.empfindliche-haut.cat">Empfindliche Haut</a>
+            </div>
           </article>
           <article class="usecase-card">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3 C9 9 5 12 5 17 a7 7 0 0 0 14 0 C19 12 15 9 12 3 Z"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c2_cat">Menstruation, Schwangerschaft &amp; Wochenbett</p>
             <h3 data-i18n="mom.c2_t">Wasserreinigung in sensiblen Phasen.</h3>
             <p data-i18n="mom.c2_d">In sensiblen Lebensphasen kann eine vorsichtige Reinigung mit Wasser als angenehm empfunden werden. Bei Beschwerden bitte fachlichen Rat einholen.</p>
+            <div class="usecase-links">
+              <a href="situations/menstruation.html" data-i18n="sit.menstruation.cat">Menstruation</a>
+              <a href="situations/schwangerschaft.html" data-i18n="sit.schwangerschaft.cat">Schwangerschaft &amp; Wochenbett</a>
+            </div>
           </article>
           <article class="usecase-card usecase-card--more" id="usecase-more-1" data-mobile-collapsible="usecases">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="6" r="3"/><path d="M7 21v-4a5 5 0 0110 0v4"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c3_cat">Senioren &amp; eingeschränkte Beweglichkeit</p>
             <h3 data-i18n="mom.c3_t">Einfacher erreichen, komfortabler reinigen.</h3>
             <p data-i18n="mom.c3_d">Ein gut erreichbares Handbidet kann die tägliche Reinigung erleichtern. Wichtig sind eine passende Installation und eine sichere Nutzung.</p>
+            <div class="usecase-links">
+              <a href="situations/senioren.html" data-i18n="sit.senioren.cat">Senioren</a>
+              <a href="situations/mobilitaet.html" data-i18n="sit.mobilitaet.cat">Eingeschränkte Beweglichkeit</a>
+            </div>
           </article>
           <article class="usecase-card usecase-card--more" id="usecase-more-2" data-mobile-collapsible="usecases">
             <span class="uc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="7" r="2.2"/><circle cx="16" cy="7" r="2.2"/><path d="M4 20v-3a4 4 0 014-4 4 4 0 014 4 4 4 0 014-4 4 4 0 014 4v3"/></svg></span>
             <p class="sc-cat" data-i18n="mom.c4_cat">Familien &amp; Alltag</p>
             <h3 data-i18n="mom.c4_t">Eine moderne Ergänzung für den Alltag.</h3>
             <p data-i18n="mom.c4_d">Für Haushalte, die Reinigung mit Wasser und einen bewussteren Umgang mit Papier verbinden möchten.</p>
+            <div class="usecase-links">
+              <a href="situations/familien.html" data-i18n="sit.familien.cat">Familien</a>
+            </div>
           </article>
           <button class="mobile-grid-toggle" type="button" data-mobile-grid-toggle="usecases"
                   aria-controls="usecase-more-1 usecase-more-2" aria-expanded="false" hidden
@@ -492,6 +505,24 @@
             <p class="calc2-disclaimer" data-i18n="rc2.disclaimer">Die Ergebnisse sind unverbindliche Modellschätzungen. Der tatsächliche Verbrauch hängt von Produkt, Gewohnheiten und Nutzung ab. EcoBum kann den Papierverbrauch ergänzend reduzieren, eine bestimmte Einsparung wird nicht garantiert.</p>
             </details>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt ecobum-ad" id="brand-film">
+      <div class="container ecobum-ad-layout">
+        <div class="ecobum-ad-copy">
+          <p class="section-label" data-i18n="wi.label">EcoBum erleben</p>
+          <h2 data-i18n="wi.h2">Weniger Papier. Mehr Wasser.</h2>
+          <p class="section-text" data-i18n="wi.intro">EcoBum kann helfen, Papier im Alltag bewusster zu nutzen – mit Wasser als sanfter Ergänzung.</p>
+        </div>
+        <div class="ecobum-ad-media ecobum-ad-media--portrait">
+          <video muted playsinline preload="metadata" poster="assets/media/ads/ecobum-ad-02-poster.jpg"
+                 data-brand-video="support" aria-hidden="true">
+            <source src="assets/media/ads/ecobum-ad-02.webm" type="video/webm" />
+            <source src="assets/media/ads/ecobum-ad-02.mp4" type="video/mp4" />
+          </video>
+          <button class="video-toggle" type="button" data-video-toggle><span data-i18n="video.pause">Pause</span></button>
         </div>
       </div>
     </section>
@@ -590,32 +621,6 @@
       </div>
     </section>
 
-    <section class="section section-alt" id="wissen">
-      <div class="container">
-        <div class="section-head center narrow">
-          <p class="section-label" data-i18n="wi.label">Pudado Wissen</p>
-          <h2 data-i18n="wi.h2">Kurz erklärt: Hygiene mit Wasser.</h2>
-          <p class="section-text center" data-i18n="wi.intro">Die wichtigsten Themen rund um EcoBum – kompakt und verständlich.</p>
-        </div>
-        <div class="wissen-grid">
-          <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c1t">Warum Wasser?</h3><p data-i18n="wi.c1d">Wasser wird überall dort genutzt, wo es wirklich sauber werden soll. Im Bad kann es eine sanfte, gründliche Ergänzung zur Reinigung sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#insight"><h3 data-i18n="wi.c2t">Papier vs. Wasser</h3><p data-i18n="wi.c2d">Trockenes Papier wischt mit Reibung. Wasser kann Rückstände sanfter lösen – danach genügt oft wenig Papier zum Trocknen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card" href="#how"><h3 data-i18n="wi.c3t">EcoBum richtig nutzen</h3><p data-i18n="wi.c3d">Nach dem Toilettengang kurz mit Wasser reinigen, die Wassermenge über den Hebel dosieren und bei Bedarf trockentupfen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-1" data-mobile-collapsible="knowledge" href="#checker"><h3 data-i18n="wi.c4t">Installation verstehen</h3><p data-i18n="wi.c4d">EcoBum wird am Eckventil über ein T-Stück angeschlossen. Mit 2–3 Fotos deines Anschlusses gibt der Foto-Check eine erste Orientierung.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-2" data-mobile-collapsible="knowledge" href="situations/empfindliche-haut.html"><h3 data-i18n="wi.c5t">Sensible Haut</h3><p data-i18n="wi.c5d">Bei empfindlicher Haut kann Wasser eine sanftere Alternative zu wiederholtem trockenem Wischen sein.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-3" data-mobile-collapsible="knowledge" href="situations/menstruation.html"><h3 data-i18n="wi.c6t">Menstruation</h3><p data-i18n="wi.c6d">Wasser kann während der Periode für ein zusätzliches Frischegefühl sorgen – ohne Duftstoffe und ohne Feuchttücher.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-4" data-mobile-collapsible="knowledge" href="situations/schwangerschaft.html"><h3 data-i18n="wi.c7t">Schwangerschaft & Wochenbett</h3><p data-i18n="wi.c7d">In einer empfindlichen Zeit kann sanfte Reinigung mit Wasser angenehmer sein. Bei Beschwerden bitte Hebamme oder Ärztin/Arzt fragen.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-5" data-mobile-collapsible="knowledge" href="#nachhaltigkeit"><h3 data-i18n="wi.c8t">Nachhaltigkeit</h3><p data-i18n="wi.c8d">Wer Wasser nutzt, braucht im Alltag oft weniger Papier. Wie viel, hängt von den Gewohnheiten ab.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-6" data-mobile-collapsible="knowledge" href="#faq"><h3 data-i18n="wi.c9t">Reinigung & Pflege</h3><p data-i18n="wi.c9d">Sprühkopf regelmäßig abspülen, Verbindungen gelegentlich auf festen Sitz prüfen und bei Kalk vorsichtig entkalken.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <a class="wissen-card wissen-card--more" id="knowledge-more-7" data-mobile-collapsible="knowledge" href="#checker"><h3 data-i18n="wi.c10t">Bohrfrei & Plug-and-Play</h3><p data-i18n="wi.c10d">Ohne Strom und ohne feste Badrenovierung gedacht, mit Klebehalterung als Option. Der Wasseranschluss muss trotzdem geprüft werden.</p><span class="read-more" data-i18n="wi.more">Mehr erfahren →</span></a>
-          <button class="mobile-grid-toggle" type="button" data-mobile-grid-toggle="knowledge"
-                  aria-controls="knowledge-more-1 knowledge-more-2 knowledge-more-3 knowledge-more-4 knowledge-more-5 knowledge-more-6 knowledge-more-7"
-                  aria-expanded="false" hidden
-                  data-i18n="mobile.knowledge_more">Mehr Wissen entdecken</button>
-        </div>
-      </div>
-    </section>
-
     <section class="section" id="faq">
       <div class="container narrow">
         <div class="section-head center">
@@ -644,14 +649,6 @@
           </details>
         </div>
         <p class="faq-more"><span data-i18n="faq.more">Weitere Fragen? Schreib uns gerne.</span> <a href="#kontakt" data-i18n="faq.more_link">Zum Kontakt</a></p>
-      </div>
-    </section>
-
-    <section class="water-banner" aria-label="Pudado – Wasser. Reinheit. Lifestyle.">
-      <img src="assets/water-drop-statement.jpg" alt="Ein einzelner Wassertropfen fällt in stilles, klares Wasser und zieht feine Kreise" width="1600" height="900" loading="lazy" decoding="async" onerror="this.closest('section').remove()" />
-      <div class="water-banner-text">
-        <p class="wb-claim" data-i18n="hero.h1a">Wasser reinigt.</p>
-        <p class="wb-sub" data-i18n="foot.claim">Natürlich. Hygienisch. Lifestyle.</p>
       </div>
     </section>
 
@@ -742,10 +739,10 @@
       </nav>
       </details>
       <details class="footer-group" open>
-        <summary class="footer-col-title" data-i18n="wi.label">Pudado Wissen</summary>
+        <summary class="footer-col-title" data-i18n="nav.magazin">Magazin</summary>
         <nav class="footer-links" aria-label="Pudado Wissen">
-          <a href="#wissen" data-i18n="wi.h2">Kurz erklärt: Hygiene mit Wasser.</a>
-          <a href="#nachhaltigkeit" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
+          <a href="blog/index.html" data-i18n="nav.magazin">Magazin</a>
+          <a href="situations/nachhaltigkeit.html" data-i18n="nav.nachhaltigkeit">Nachhaltigkeit</a>
           <a href="#warum" data-i18n="warum.label">Warum Pudado?</a>
         </nav>
       </details>
@@ -764,8 +761,8 @@
 
   <!-- ============================ STICKY MOBILE CTA ============================ -->
   <nav class="sticky-cta" id="stickyCta" aria-label="Schnellzugriff">
-    <a href="#checker" class="primary" data-i18n="sticky.check">Foto-Check</a>
-    <a href="#produkt" data-i18n="cta.entdecken">EcoBum entdecken</a>
+    <a href="#checker" data-i18n="sticky.check">Foto-Check</a>
+    <a href="#produkt" class="primary" data-i18n="cta.entdecken">EcoBum entdecken</a>
   </nav>
 
   <!-- ============================ COOKIE-HINWEIS ============================
@@ -800,8 +797,8 @@
     </div>
   </div>
 
-  <script src="translations.js?v=e0b919cc"></script>
-  <script src="script.js?v=86fc965d"></script>
+  <script src="translations.js?v=d65cd13e"></script>
+  <script src="script.js?v=5b147b2e"></script>
   <script src="assets/vendor/gsap.min.js?v=8e52f4ac"></script>
   <script src="assets/vendor/ScrollTrigger.min.js?v=34923d8a"></script>
   <!-- Lenis läuft laut motion.js ausschließlich auf Zeigergeräten ab 981px
