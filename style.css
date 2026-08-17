@@ -384,7 +384,7 @@ p  { margin: 0 0 1rem; }
    Glas-Chips im Bild – Objektinszenierung statt Bild-in-Box. */
 .hero .product-card { padding: 0; background: transparent; border: none; box-shadow: 0 44px 110px rgba(1,10,40,.55); }
 .hero .product-card img,
-.hero .product-card video { display: block; width: 100%; border-radius: var(--radius-xl); }
+.hero .product-card video { display: block; width: 100%; height: auto; border-radius: var(--radius-xl); }
 .hero .product-badges { position: absolute; left: 18px; right: 18px; bottom: 18px; margin: 0; justify-content: flex-start; }
 .hero .pill-badge { background: rgba(5,26,70,.55); color: #fff; border-color: rgba(255,255,255,.24); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .hero .pill-badge.accent { background: rgba(255,255,255,.94); color: var(--royal-deep); border-color: transparent; box-shadow: none; }
