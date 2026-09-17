@@ -94,6 +94,7 @@
   /* Straffer als zuvor (76–160px): Premium-Dichte statt Luft ohne
      Aussage – der Rhythmus bleibt großzügig, verliert aber die Leere. */
   --space:       clamp(64px, 8.5vw, 132px);
+  --touch-target: 44px;
 
   /* Cabinet Grotesk/Inter zuerst (lokal selbst gehostet, s.o.) – sonst Apple-/System-Stack */
   --font-head: "Cabinet Grotesk", "Cabinet Grotesk Fallback", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -612,11 +613,10 @@ p  { margin: 0 0 1rem; }
   row-gap: 10px;
   align-items: center;
 }
-/* Vollflächig statt weißem Passepartout: contain + 28px-Innenabstand
-   erzeugten einen "eingekastelten" weißen Rahmen um das Studio-Render;
-   cover lässt das Foto selbst die Fläche sein (randlos, bündig). */
-.how-figure { grid-area: 1 / 1 / 2 / 2; position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 4 / 3.4; box-shadow: var(--shadow-lg); }
-.how-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Das quadratische Produktmotiv vollständig zeigen: Gewinde und Anschlüsse
+   dürfen weder auf Desktop noch auf dem Handy abgeschnitten werden. */
+.how-figure { grid-area: 1 / 1 / 2 / 2; position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 1; box-shadow: var(--shadow-lg); }
+.how-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .how-grid > .media-note-figure { grid-area: 2 / 1 / 3 / 2; margin-top: 0; }
 .how-grid > div:last-child { grid-area: 1 / 2 / 3 / 3; }
 .steps { --step-gap: 20px; display: grid; gap: var(--step-gap); }
@@ -732,6 +732,7 @@ p  { margin: 0 0 1rem; }
   border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg);
   background: linear-gradient(135deg, #e7effc, #cfddf3 60%, #b9cdea); }
 .media-band img { display: block; width: 100%; height: auto; }
+.media-band-water { max-width: 960px; aspect-ratio: 16 / 9; }
 /* Pudado-Firmensignatur ("Warum Pudado?"): statische Logo-Bühne nach der
    Logo-Referenz (ersetzt im Royal-Konzept das Brand-Video). Frei stehend,
    zentriert, mit Lichtkante oben und Wasser-Spiegelung der Wortmarke –
@@ -930,7 +931,9 @@ p  { margin: 0 0 1rem; }
 @keyframes fc-thumb-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .fc-thumb img { width: 96px; height: 96px; object-fit: cover; display: block; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-xs); }
 .fc-thumb figcaption { margin-top: 6px; font-size: .72rem; line-height: 1.4; color: var(--gray-light); word-break: break-word; }
-.fc-thumb-rm { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(27,42,74,.8); color: #fff; cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; }
+.fc-thumb-rm { position: absolute; top: 0; right: 0; width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; color: var(--paper); cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; isolation: isolate; }
+/* Kleine sichtbare Taste, ausreichend große Bedienfläche für den Daumen. */
+.fc-thumb-rm::before { content: ""; position: absolute; inset: 9px; z-index: -1; border-radius: inherit; background: rgba(27,42,74,.8); }
 .fotocheck .hint-box { margin-top: 24px; }
 .fotocheck .legal-hint { margin-top: 14px; }
 
@@ -1262,7 +1265,7 @@ body[data-page="blog"] .section-head .section-text { font-size: 1rem; }
      Liste unruhig; ein opakes Panel liest sich ruhiger und spart zudem das
      Blur-Compositing (Scroll-Performance). */
   .main-nav { position: fixed; top: 76px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--royal-deep); border-bottom: 1px solid var(--royal-line); box-shadow: 0 24px 60px rgba(1,10,40,.45); max-height: 0; overflow: hidden; transition: max-height .35s ease; padding: 0 24px; }
-  .main-nav.open { max-height: 620px; padding: 12px 24px 24px; }
+  .main-nav.open { max-height: min(620px, calc(100dvh - 76px)); overflow-y: auto; overscroll-behavior: contain; padding: 12px 24px 24px; }
   .nav-list { flex-direction: column; gap: 4px; width: 100%; }
   .nav-list a { display: block; padding: 15px 0; border-bottom: 1px solid var(--royal-line); }
   .nav-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
@@ -1687,25 +1690,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   html { scroll-padding-top: 68px; }
   body { line-height: 1.58; }
   body.nav-open { overflow: hidden; }
-  main { display: flex; flex-direction: column; }
-  main > #hero { order: 1; }
-  main > .trust-band { order: 2; }
-  main > #produkt { order: 3; }
-  main > #checker { order: 4; }
-  main > #vorteile { order: 5; }
-  main > #insight { order: 6; }
-  main > #set { order: 7; }
-  main > #how { order: 8; }
-  main > #lifestyle { order: 9; }
-  main > #rechner { order: 10; }
-  main > #brand-film { order: 11; }
-  main > #nachhaltigkeit { order: 12; }
-  main > #fuer-wen { order: 13; }
-  main > #detail { order: 14; }
-  main > #warum { order: 15; }
-  main > #faq { order: 16; }
-  main > #kontakt { order: 18; }
-  main > #newsletter { order: 19; }
 
   /* #insight/#rechner/#produkt tragen ID-Basiswerte (siehe oben) und brauchen
      dieselbe Spezifität; #faq/#kontakt/#detail haben keine – sie laufen über
@@ -1939,7 +1923,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   #checker .legal-hint { font-size: .76rem; line-height: 1.45; }
 
   /* Installation: ein geöffnetes natives Step-Akkordeon. */
-  #how .how-figure { aspect-ratio: 16 / 8; border-radius: 14px; }
+  #how .how-figure { aspect-ratio: 1; border-radius: 14px; }
   #how .steps { --step-gap: 0px; border-top: 1px solid var(--border-cool); }
   #how .step {
     --step-pad-x: 0px;
@@ -1995,8 +1979,8 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   /* Mood/Marke: kurze filmische Akzente statt mehrerer Bildschirme. */
   .brand-stage { min-height: 142px; margin: 22px auto; }
   #warum .section-text { font-size: .94rem; }
-  #warum .media-band { height: 168px; max-width: none; margin-top: 26px; overflow: hidden; }
-  #warum .media-band img { width: 100%; height: 100%; object-fit: cover; }
+  #warum .media-band { height: auto; max-width: none; margin-top: 26px; overflow: hidden; }
+  #warum .media-band img { width: 100%; height: auto; object-fit: contain; }
   #warum .card p { font-size: .88rem; }
 
   /* Magazin: eine Spalte statt zwei sehr schmaler – die Einträge sollen auch
@@ -2234,4 +2218,71 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
       radial-gradient(42% 30% at 78% 62%, rgba(92,138,230,.12), transparent 74%);
   }
   .hero-grid { gap: 22px; }
+}
+
+/* Eight home chapters. Disclosures keep the complete content in native HTML. */
+.home-compact .section,
+.home-compact #insight.section,
+.home-compact #produkt.section,
+.home-compact #rechner.section {
+  padding-block: calc(var(--space) * .6);
+}
+.home-compact .section-head { margin-bottom: calc(var(--space) * .35); }
+.home-compact .chapter-disclosures { padding-bottom: calc(var(--space) * .5); }
+.home-compact .chapter-disclosure {
+  display: block;
+  min-width: 0;
+  border-bottom: 1px solid var(--border-cool);
+}
+.home-compact .chapter-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--space) * .2);
+  min-height: var(--touch-target);
+  padding-block: calc(var(--space) * .16);
+  color: var(--blue-ink);
+  font-family: var(--font-head);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.home-compact .chapter-disclosure > summary::-webkit-details-marker { display: none; }
+.home-compact .chapter-disclosure > summary::after { content: "+"; flex: none; }
+.home-compact .chapter-disclosure[open] > summary::after { content: "−"; }
+.home-compact .chapter-disclosure > summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.home-compact .chapter-disclosure > .section { padding-block: calc(var(--space) * .3); }
+.home-compact .chapter-disclosure > .section > .container { padding-inline: 0; }
+.home-compact .chapter-disclosure > .section-dark > .container { padding-inline: calc(var(--space) * .25); }
+.home-compact .chapter-disclosure .calc2-wrap,
+.home-compact .chapter-disclosure .usecase-grid,
+.home-compact .chapter-disclosure .cards-grid { margin-block: calc(var(--space) * .2); }
+.home-compact #lifestyle .section-text,
+.home-compact #insight .section-text { display: block; }
+.home-compact .product-visual,
+.home-compact .set-visual,
+.home-compact #how .how-figure,
+.home-compact #how .media-note-figure { order: 0; }
+.home-compact #produkt .product-card img,
+.home-compact #set .product-card img,
+.home-compact #how .how-figure img {
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+.home-compact #how .step > summary { pointer-events: auto; cursor: pointer; min-height: var(--touch-target); }
+.home-compact #brand-film { padding-top: 0; }
+.home-compact #warum .brand-stage { margin-block: calc(var(--space) * .3); }
+.home-compact #kontakt .section-text,
+.home-compact #kontakt .legal-hint,
+.home-compact #kontakt .legal-hint a { color: var(--royal-text); }
+.home-compact #kontakt .legal-hint { margin-top: calc(var(--space) * .2); }
+@media (max-width: 700px) {
+  .home-compact .chapter-disclosure > summary { padding-block: var(--mobile-space-sm); }
+  .home-compact #produkt .product-visual { width: 100%; }
+  .home-compact #how .how-grid { display: flex; flex-direction: column; }
+  .home-compact #how .how-figure { width: 100%; }
 }
