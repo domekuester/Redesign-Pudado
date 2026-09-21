@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Jede Funktion einzeln absichern: Ein Fehler in einem Modul darf
   // die anderen (z. B. das Cookie-Banner) nicht blockieren.
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
-  [initI18n, initNav, initYear, initCalculator, initPhotoCheck,
-   initGallery, initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
+  [initI18n, initNav, initYear, initCalculator,
+   initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
    initScrollSpy, initReveal, initBrandVideos, initHeaderState,
    initMobileDisclosures, initFaqAccordion, initDisclosureAnchors]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
@@ -88,7 +88,7 @@ function applyLanguage(lang) {
 
   try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
 
-  // andere Module benachrichtigen (Rechner-Formatierung, Foto-Check-Status)
+  // andere Module benachrichtigen (z. B. Rechner-Formatierung)
   document.dispatchEvent(new CustomEvent('pudado:lang', { detail: { lang } }));
 }
 
@@ -403,75 +403,6 @@ function initCalculator() {
 
   document.addEventListener('pudado:lang', () => { buildFormatters(); render(); });
   render();
-}
-
-/* -------------------------------------------------------------
-   3b. FOTO-CHECK (lokale Auswahl + Vorschau, KEIN Upload)
-   Der Button öffnet die Dateiauswahl; gewählte Bilder werden nur
-   im Browser als Vorschau gezeigt. Object-URLs werden freigegeben.
-   TODO BACKEND: Später echten Upload an Support-/Kontakt-Backend anbinden.
-   ------------------------------------------------------------- */
-function initPhotoCheck() {
-  const input = document.getElementById('fcFile');
-  const btn = document.getElementById('fcBtn');
-  const previews = document.getElementById('fcPreviews');
-  const status = document.getElementById('fcStatus');
-  if (!input || !btn || !previews) return;
-
-  const urls = [];
-  const fmtSize = (bytes) => bytes >= 1048576
-    ? (bytes / 1048576).toFixed(1) + ' MB'
-    : Math.max(1, Math.round(bytes / 1024)) + ' KB';
-
-  const updateStatus = () => {
-    if (!status) return;
-    const n = previews.querySelectorAll('figure').length;
-    status.hidden = n === 0;
-    status.textContent = n ? n + ' ' + t(n === 1 ? 'chk.sel_one' : 'chk.sel_many') : '';
-  };
-
-  btn.addEventListener('click', () => input.click());
-
-  input.addEventListener('change', () => {
-    urls.splice(0).forEach(u => URL.revokeObjectURL(u));
-    previews.innerHTML = '';
-    Array.from(input.files || []).filter(f => f.type.startsWith('image/')).forEach(file => {
-      const url = URL.createObjectURL(file);
-      urls.push(url);
-      const fig = document.createElement('figure');
-      fig.className = 'fc-thumb';
-      const img = document.createElement('img');
-      img.src = url; img.alt = file.name;
-      const cap = document.createElement('figcaption');
-      cap.textContent = file.name + ' · ' + fmtSize(file.size);
-      const rm = document.createElement('button');
-      rm.type = 'button'; rm.className = 'fc-thumb-rm';
-      rm.setAttribute('aria-label', t('a11y.remove')); rm.textContent = '×';
-      rm.addEventListener('click', () => { URL.revokeObjectURL(url); fig.remove(); updateStatus(); });
-      fig.appendChild(img); fig.appendChild(cap); fig.appendChild(rm);
-      previews.appendChild(fig);
-    });
-    input.value = '';
-    updateStatus();
-  });
-
-  // Statuszeile bei Sprachwechsel neu formatieren
-  document.addEventListener('pudado:lang', updateStatus);
-}
-
-/* -------------------------------------------------------------
-   3e. LIFESTYLE-GALERIE
-   Blendet die ganze Sektion aus, falls keine echten Fotos vorhanden
-   sind (alle <figure> wurden per onerror entfernt). So bleibt die Seite
-   sauber, solange noch keine assets/bath-*.jpg abgelegt wurden.
-   ------------------------------------------------------------- */
-function initGallery() {
-  const grid = document.getElementById('lifestyleGallery');
-  if (!grid) return;
-  const section = document.getElementById('lifestyle');
-  const check = () => { if (section && grid.querySelectorAll('figure').length === 0) section.hidden = true; };
-  window.addEventListener('load', () => setTimeout(check, 100));
-  setTimeout(check, 1800); // Fallback, falls 'load' bereits vorbei ist
 }
 
 /* -------------------------------------------------------------

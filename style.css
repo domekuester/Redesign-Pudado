@@ -95,6 +95,13 @@
      Aussage – der Rhythmus bleibt großzügig, verliert aber die Leere. */
   --space:       clamp(64px, 8.5vw, 132px);
   --touch-target: 44px;
+  --header-wordmark-size: .72rem;
+  --brand-wordmark-tracking: .5em;
+  --brand-reflection-gap: .0681818em;
+  --brand-surface: radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%), linear-gradient(180deg, #0A3480, var(--royal) 45%, var(--royal-deep));
+  --header-wordmark-gap: .5rem;
+  --header-reflection-space: .65rem;
+  --supplier-copy-width: 680px;
 
   /* Cabinet Grotesk/Inter zuerst (lokal selbst gehostet, s.o.) – sonst Apple-/System-Stack */
   --font-head: "Cabinet Grotesk", "Cabinet Grotesk Fallback", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -220,13 +227,10 @@ p  { margin: 0 0 1rem; }
 .skip-link:focus { left: 0; }
 
 /* ----------------------- Header (Royal-Leiste) --------------- */
-/* Feiner Vertikal-Verlauf + weicher Abwurfschatten: Glas-Leiste mit
-   Materialtiefe statt flacher Farbfläche. */
+/* Deckende Markenfläche: unabhängig vom darunter scrollenden Inhalt. */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: linear-gradient(180deg, rgba(7,40,102,.94), rgba(4,30,84,.86));
-  backdrop-filter: saturate(150%) blur(20px);
-  -webkit-backdrop-filter: saturate(150%) blur(20px);
+  background: var(--brand-surface);
   border-bottom: 1px solid var(--royal-line);
   box-shadow: 0 6px 24px rgba(1,10,40,.14);
   transition: box-shadow .3s ease;
@@ -254,6 +258,22 @@ p  { margin: 0 0 1rem; }
 .logo-stack { display: flex; flex-direction: column; gap: 4px; }
 .logo-product { font-family: var(--font-head); font-weight: 700; font-size: 1.24rem; letter-spacing: -.015em; line-height: 1; color: #fff; white-space: nowrap; }
 .logo-by { font-family: var(--font-body); font-weight: 400; font-size: .58rem; letter-spacing: .34em; text-transform: uppercase; line-height: 1; color: rgba(255,255,255,.6); white-space: nowrap; }
+.site-header .logo-by {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--header-wordmark-gap);
+  padding-bottom: var(--header-reflection-space);
+  color: var(--royal-text);
+}
+.logo-pudado {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: var(--header-wordmark-size);
+  font-weight: 400;
+  letter-spacing: var(--brand-wordmark-tracking);
+  line-height: 1;
+  color: var(--paper);
+}
 
 .main-nav { display: flex; align-items: center; gap: 32px; }
 .nav-list { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; }
@@ -351,6 +371,11 @@ p  { margin: 0 0 1rem; }
   transform: scaleY(-1); opacity: .16; pointer-events: none; user-select: none;
   -webkit-mask-image: linear-gradient(180deg, transparent 18%, #000 90%);
   mask-image: linear-gradient(180deg, transparent 18%, #000 90%);
+}
+/* Gleiche Signatur in beiden Größen; auch der Reflexionsabstand skaliert. */
+.logo-pudado > .wordmark-mirror,
+.brand-stage-word > .wordmark-mirror {
+  top: calc(100% + var(--brand-reflection-gap));
 }
 /* Heroischere Skala nur im Hero (globale h1 auf Unterseiten unverändert) */
 .hero h1 {
@@ -741,9 +766,7 @@ p  { margin: 0 0 1rem; }
   position: relative; max-width: 880px;
   margin: clamp(56px, 8vw, 96px) auto clamp(56px, 8vw, 96px);
   border-radius: var(--radius-xl); overflow: hidden;
-  background:
-    radial-gradient(120% 100% at 50% -20%, var(--royal-high), transparent 58%),
-    linear-gradient(180deg, #0A3480, var(--royal) 45%, var(--royal-deep));
+  background: var(--brand-surface);
   box-shadow: 0 44px 96px rgba(2,20,60,.34), inset 0 1px 0 rgba(255,255,255,.16);
   display: grid; place-items: center;
   padding: clamp(72px, 11vw, 136px) 24px clamp(84px, 12vw, 152px);
@@ -755,7 +778,7 @@ p  { margin: 0 0 1rem; }
 .brand-stage-word {
   position: relative; z-index: 1; margin: 0 0 0 .5em; /* gleicht das Nachlauf-Tracking optisch aus */
   font-family: var(--font-body); font-weight: 400;
-  font-size: clamp(1.6rem, 3.4vw, 2.75rem); letter-spacing: .5em;
+  font-size: clamp(1.6rem, 3.4vw, 2.75rem); letter-spacing: var(--brand-wordmark-tracking);
   line-height: 1; color: #fff;
 }
 
@@ -888,54 +911,6 @@ p  { margin: 0 0 1rem; }
 }
 .lang-switch button:hover { color: #fff; }
 .lang-switch button.active { background: #fff; color: var(--royal-deep); box-shadow: 0 4px 12px rgba(1,10,40,.35); }
-
-/* ----------------------- Foto-Check ------------------------- */
-.fotocheck { padding: 38px; }
-.fc-guide { list-style: none; margin: 0 0 26px; padding: 0; display: grid; gap: 13px; }
-.fc-guide li { display: flex; align-items: flex-start; gap: 12px; color: var(--gray); line-height: 1.55; }
-.fc-num { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--sky); color: var(--blue); display: inline-grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: .82rem; margin-top: 1px; }
-.fc-actions { display: flex; flex-wrap: wrap; gap: 14px; }
-/* Concierge-Auswahlfläche: eine ruhige, große Einladung statt eines
-   Formular-Buttons. Öffnet weiterhin nur die lokale Dateiauswahl. */
-.fc-select {
-  display: grid; place-items: center; gap: 12px; width: 100%;
-  padding: clamp(30px, 4vw, 44px) 20px;
-  font-family: var(--font-body); font-weight: 600; font-size: 1.02rem;
-  color: var(--blue); letter-spacing: -.01em;
-  background: linear-gradient(180deg, #FBFDFF, var(--sky-soft));
-  border: 1.5px dashed var(--sky-line); border-radius: var(--radius);
-  cursor: pointer;
-  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease, transform .22s cubic-bezier(.16,.84,.44,1);
-}
-.fc-select::before {
-  content: ""; width: 44px; height: 44px; border-radius: 50%;
-  background:
-    linear-gradient(var(--blue), var(--blue)) center / 16px 2px no-repeat,
-    linear-gradient(var(--blue), var(--blue)) center / 2px 16px no-repeat,
-    var(--sky);
-  box-shadow: inset 0 0 0 1px rgba(35,95,208,.1);
-}
-.fc-select:hover {
-  border-color: transparent;
-  background: linear-gradient(180deg, #F8FCFF, var(--sky-soft));
-  box-shadow: 0 0 0 4px rgba(169,220,236,.4), 0 14px 36px rgba(35,95,208,.12);
-  transform: translateY(-1px);
-}
-.fc-select:active { transform: scale(.995); }
-.fc-status { margin: 16px 0 0; font-family: var(--font-head); font-weight: 600; font-size: .92rem; color: var(--navy); }
-.fc-previews { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
-.fc-previews:empty { display: none; }
-/* Sanfte Einblendung neuer Vorschauen: der Service-Moment fühlt sich
-   wertig an (globale reduced-motion-Regel kürzt die Animation auf 0). */
-.fc-thumb { position: relative; margin: 0; width: 96px; animation: fc-thumb-in .45s cubic-bezier(.16,.84,.44,1); }
-@keyframes fc-thumb-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.fc-thumb img { width: 96px; height: 96px; object-fit: cover; display: block; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-xs); }
-.fc-thumb figcaption { margin-top: 6px; font-size: .72rem; line-height: 1.4; color: var(--gray-light); word-break: break-word; }
-.fc-thumb-rm { position: absolute; top: 0; right: 0; width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; color: var(--paper); cursor: pointer; line-height: 1; font-size: 15px; display: grid; place-items: center; isolation: isolate; }
-/* Kleine sichtbare Taste, ausreichend große Bedienfläche für den Daumen. */
-.fc-thumb-rm::before { content: ""; position: absolute; inset: 9px; z-index: -1; border-radius: inherit; background: rgba(27,42,74,.8); }
-.fotocheck .hint-box { margin-top: 24px; }
-.fotocheck .legal-hint { margin-top: 14px; }
 
 /* ----------------------- Vertrauensband (→ hell) ------------ */
 .trust-band { background: var(--mist); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -1430,8 +1405,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 /* ---- 6. Foto-Check: Upload-Fläche hochwertiger (Concierge) ----
    Feiner Innenglanz + ruhigeres Hover-Anheben; die Fläche wirkt
    wie eine wertige Einladung statt wie ein Formularrahmen. */
-.fc-select { box-shadow: inset 0 1px 0 rgba(255,255,255,.8); }
-.fc-select:hover { box-shadow: 0 0 0 4px rgba(169,220,236,.4), 0 16px 40px rgba(35,95,208,.14), inset 0 1px 0 rgba(255,255,255,.8); }
 
 /* ---- 7. Rechner-Ergebnis: klarere Zahlen-Hierarchie ----
    Die Held-Kennzahl trägt die Karte deutlicher; Balken etwas
@@ -1450,8 +1423,7 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
 /* ---- 9. Header: hochwertigerer Sticky-Zustand ----
    Beim Scrollen verdichtet sich die Leiste minimal und der Schatten
    vertieft sich weich – präziser „abgehobener" Zustand. */
-.site-header { transition: box-shadow .3s ease, background .3s ease; }
-.site-header.is-scrolled { background: linear-gradient(180deg, rgba(6,34,90,.96), rgba(3,24,72,.92)); }
+.site-header { transition: box-shadow .3s ease; }
 
 /* ---- 10. Reduced-Motion: alle neuen Bewegungen sauber stoppen ---- */
 @media (prefers-reduced-motion: reduce) {
@@ -1912,16 +1884,6 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .duel-shift { width: 32px; height: 32px; }
   .duel-shift svg { width: 14px; height: 14px; }
 
-  /* Foto-Check: schnell erreichbar, Einführung und Kartenraum gestrafft. */
-  #checker .section-head { margin-bottom: 20px; }
-  #checker .fotocheck { padding: 22px 20px; }
-  #checker .fc-guide { gap: 12px; }
-  #checker .fc-actions { gap: 8px; }
-  #checker .fc-actions .btn,
-  #checker .fc-select { min-height: 46px; }
-  #checker .hint-box { margin-top: 16px; }
-  #checker .legal-hint { font-size: .76rem; line-height: 1.45; }
-
   /* Installation: ein geöffnetes natives Step-Akkordeon. */
   #how .how-figure { aspect-ratio: 1; border-radius: 14px; }
   #how .steps { --step-gap: 0px; border-top: 1px solid var(--border-cool); }
@@ -2220,7 +2182,10 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .hero-grid { gap: 22px; }
 }
 
-/* Eight home chapters. Disclosures keep the complete content in native HTML. */
+/* Supplier landing keeps the core story and secondary details in native HTML. */
+.home-supplier .hero-grid,
+.home-supplier .set-grid { grid-template-columns: 1fr; }
+.home-supplier .hero-copy { max-width: var(--supplier-copy-width); margin-inline: auto; }
 .home-compact .section,
 .home-compact #insight.section,
 .home-compact #produkt.section,
