@@ -20,21 +20,8 @@
 
   const isHome = document.body && document.body.dataset.page === 'home';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const desktopScroll = window.matchMedia('(min-width: 981px)');
-  const SCROLL_CONFIG = Object.freeze({
-    lerp: 0.22,
-    wheelMultiplier: 1,
-    smoothWheel: true,
-    syncTouch: false,
-    anchors: false,
-    autoRaf: false,
-    stopInertiaOnNavigate: true
-  });
   const state = {
-    lenis: null,
     triggers: [],
-    locks: new Set(),
     calculatorObserver: null,
     destroyed: false
   };
@@ -53,65 +40,8 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  function initLenis() {
-    if (!finePointer.matches || !desktopScroll.matches) return;
-    // Lenis wird nur auf Desktop-Zeigergeräten nachgeladen (siehe index.html)
-    // und ist beim ersten Durchlauf ggf. noch nicht da.
-    if (!window.Lenis) {
-      window.addEventListener('pudado:lenis-ready', initLenis, { once: true });
-      return;
-    }
-    if (state.lenis || state.destroyed) return;
-    state.lenis = new window.Lenis(SCROLL_CONFIG);
-    state.lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(lenisRaf);
-    gsap.ticker.lagSmoothing(0);
-
-    document.addEventListener('click', handleAnchorClick);
-    document.addEventListener('pudado:scroll-lock', handleScrollLock);
-
-    const banner = document.getElementById('cookieBanner');
-    const modal = document.getElementById('cookieModal');
-    const nav = document.getElementById('mainNav');
-    if (banner && !banner.hidden) state.locks.add('cookie-banner');
-    if (modal && !modal.hidden) state.locks.add('cookie-modal');
-    if (nav && nav.classList.contains('open')) state.locks.add('navigation');
-    if (state.locks.size) state.lenis.stop();
-  }
-
-  function lenisRaf(time) {
-    if (state.lenis) state.lenis.raf(time * 1000);
-  }
-
-  function handleAnchorClick(event) {
-    const link = event.target.closest('a[href^="#"]');
-    if (!link || !state.lenis) return;
-    const href = link.getAttribute('href');
-    if (!href || href === '#') return;
-    const target = document.querySelector(href);
-    if (!target) return;
-    event.preventDefault();
-    state.lenis.scrollTo(target, {
-      // Das globale scroll-padding-top reserviert bereits den Sticky-Header.
-      offset: 0,
-      lerp: 0.22,
-      lock: false,
-      force: true,
-      onComplete: () => {
-        if (history.replaceState) history.replaceState(null, '', href);
-      }
-    });
-  }
-
-  function handleScrollLock(event) {
-    const detail = event.detail || {};
-    const source = detail.source || 'interface';
-    if (detail.locked) state.locks.add(source);
-    else state.locks.delete(source);
-    if (!state.lenis) return;
-    if (state.locks.size) state.lenis.stop();
-    else state.lenis.start();
-  }
+  // Scrolling and anchor navigation stay native: no wheel interception,
+  // synthetic inertia or animation ticker controlling the scroll position.
 
   function initHero() {
     const header = document.querySelector('.site-header');
@@ -251,15 +181,9 @@
     if (state.calculatorObserver) state.calculatorObserver.disconnect();
     state.triggers.forEach((trigger) => trigger.kill());
     state.triggers.length = 0;
-    if (state.lenis) state.lenis.destroy();
-    state.lenis = null;
-    gsap.ticker.remove(lenisRaf);
-    document.removeEventListener('click', handleAnchorClick);
-    document.removeEventListener('pudado:scroll-lock', handleScrollLock);
   }
 
   try {
-    initLenis();
     initHero();
     initSectionReveals();
     initSignatureMoments();
