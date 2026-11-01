@@ -1,6 +1,8 @@
 /* Pudado · EcoBum – translations.js (KONSOLIDIERT, DE/EN/FR) – eine Datei */
 window.PUDADO_I18N = {
  "de": {
+  "experience.cta": "EcoBum in 3D entdecken",
+  "experience.note": "Interaktive Präsentation auf Deutsch. Gestaltungsprototyp – Ausführung und Anschlüsse in Entwicklung.",
   "compact.benefits": "Vorteile im Alltag ansehen",
   "compact.product": "Produkteigenschaften ansehen",
   "compact.set": "Lieferumfang und Komponenten",
@@ -612,6 +614,8 @@ window.PUDADO_I18N = {
   "faq.more_link": "Zum Kontakt"
  },
  "en": {
+  "experience.cta": "EcoBum in 3D (German)",
+  "experience.note": "Interactive presentation in German. Design prototype — the product design and connections are still in development.",
   "compact.benefits": "Explore everyday benefits",
   "compact.product": "Explore product features",
   "compact.set": "Planned set and components",
@@ -1223,6 +1227,8 @@ window.PUDADO_I18N = {
   "faq.more_link": "Contact us"
  },
  "fr": {
+  "experience.cta": "EcoBum en 3D (allemand)",
+  "experience.note": "Présentation interactive en allemand. Prototype de design : le produit et ses raccordements sont encore en développement.",
   "compact.benefits": "Découvrir les avantages au quotidien",
   "compact.product": "Découvrir les caractéristiques",
   "compact.set": "Contenu prévu et composants",

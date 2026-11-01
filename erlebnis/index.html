@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>EcoBum Home Experience – Pudado (Prototyp)</title>
+  <meta name="description" content="EcoBum Home in 3D entdecken: Form, Details und geplantes Set. Gestaltungsprototyp von Pudado – Ausführung und Anschlüsse in Entwicklung.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M28 6 C22 16 14 23 14 33 a14 14 0 0 0 28 0 C42 23 34 16 28 6 Z' fill='none' stroke='%23235FD0' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    } }
+  </script>
+</head>
+<body class="is-opening">
+  <a class="skip-link" href="#panel">Zur Erklärung springen</a>
+
+  <header class="topbar">
+    <a class="brand" href="../index.html#produkt" aria-label="EcoBum Home – zurück zur Website">
+      <span aria-hidden="true">←</span>
+      <svg class="brand__drop" viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+        <path d="M28 6 C22 16 14 23 14 33 a14 14 0 0 0 28 0 C42 23 34 16 28 6 Z" />
+      </svg>
+      <span class="brand__word" translate="no">PUDADO</span>
+      <span class="brand__sep" aria-hidden="true"></span>
+      <h1 class="brand__title"><span translate="no" class="brand__product">EcoBum Home</span> <span>· Zur Website</span></h1>
+    </a>
+    <p class="proto-chip"><span class="proto-chip__dot" aria-hidden="true"></span>Prototyp<span class="hide-narrow"> · in Entwicklung</span></p>
+  </header>
+
+  <nav class="views" aria-label="Ansichten">
+    <div class="views__list" role="tablist" aria-label="Ansichten">
+      <button class="views__tab" role="tab" id="tab-discover" data-view="discover" aria-controls="view-discover" aria-selected="true">
+        <span class="views__n" aria-hidden="true">01</span>Entdecken
+      </button>
+      <button class="views__tab" role="tab" id="tab-set" data-view="set" aria-controls="view-set" aria-selected="false" tabindex="-1">
+        <span class="views__n" aria-hidden="true">02</span>Das Set
+      </button>
+      <button class="views__tab" role="tab" id="tab-connect" data-view="connect" aria-controls="view-connect" aria-selected="false" tabindex="-1">
+        <span class="views__n" aria-hidden="true">03</span>Anschluss verstehen
+      </button>
+    </div>
+  </nav>
+
+  <main class="layout">
+    <section class="stage" id="stage" aria-label="3D-Produktbühne">
+      <!-- Hintergrundplatte aus Blender: letztes Bild der Eröffnung ohne Set-Teile (scharf zur Übergabe, danach weich) -->
+      <div class="stage__plate" id="stagePlate" aria-hidden="true"></div>
+      <canvas class="stage__canvas" id="scene" tabindex="0"
+        aria-label="3D-Ansicht. Ziehen oder Pfeiltasten drehen, Plus und Minus zoomen, Null setzt die Ansicht zurück."></canvas>
+      <div class="stage__labels" id="stageLabels"></div>
+
+      <p class="stage__keys" aria-hidden="true">Pfeiltasten drehen · + / − zoomen · 0 Ausgangsansicht</p>
+      <p class="stage__hint" id="stageHint"><span class="hint-fine">Ziehen zum Drehen · Scrollen zum Zoomen</span><span class="hint-touch">Wischen zum Drehen · mit zwei Fingern zoomen</span></p>
+
+      <!-- Bedienelemente: Desktop frei auf der Bühne, mobil gebündelt am Rand (siehe CSS) -->
+      <div class="stage__controls" id="stageControls">
+        <div class="water" id="waterBox">
+          <button class="water__btn" id="waterBtn" type="button" aria-describedby="waterNotice">
+            <span class="water__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3c-2.4 3.6-5 6.2-5 9.6a5 5 0 0 0 10 0C17 9.2 14.4 6.6 12 3Z" /></svg>
+            </span>
+            <span class="water__text">
+              <span class="water__label">Wasser testen</span>
+              <span class="water__hint">Gedrückt halten<span class="water__hint-sep"> · </span><span class="water__hint-demo">illustrative Demo</span></span>
+            </span>
+          </button>
+          <p class="water__notice" id="waterNotice">Illustrative Demo – kein gemessenes Sprühbild.</p>
+        </div>
+        <div class="stage__tools" role="group" aria-label="Ansicht steuern">
+          <button class="icon-btn" type="button" data-action="zoom-in" aria-label="Heranzoomen" title="Heranzoomen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" /></svg>
+          </button>
+          <button class="icon-btn" type="button" data-action="zoom-out" aria-label="Herauszoomen" title="Herauszoomen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14" /></svg>
+          </button>
+          <button class="icon-btn" type="button" data-action="rotate-left" aria-label="Nach links drehen" title="Nach links drehen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5 4 10l5 5M4 10h10a6 6 0 0 1 0 12h-2" /></svg>
+          </button>
+          <button class="icon-btn" type="button" data-action="rotate-right" aria-label="Nach rechts drehen" title="Nach rechts drehen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 5 5 5-5 5M20 10H10a6 6 0 0 0 0 12h2" /></svg>
+          </button>
+          <span class="stage__tools-sep" aria-hidden="true"></span>
+          <button class="icon-btn stage__reset" id="resetBtn" type="button" aria-label="Ansicht zurücksetzen" title="Ansicht zurücksetzen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" /></svg>
+            <span class="reset-label">Zurücksetzen</span>
+          </button>
+        </div>
+      </div>
+      <p class="stage__badge" id="sprayBadge" hidden aria-hidden="true">Illustrative Demo</p>
+
+      <div class="stage__state" id="stageState" role="status" aria-live="polite">
+        <div class="state-card" id="stateCard">
+          <p class="state-card__title" id="stateTitle">Produktmodell wird geladen …</p>
+          <div class="progress" id="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          <p class="state-card__text" id="stateText"></p>
+          <button class="btn btn--primary" id="retryBtn" type="button" hidden>Erneut versuchen</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel" tabindex="-1" aria-label="Erklärung">
+      <div class="panel__view" id="view-discover" role="tabpanel" aria-labelledby="tab-discover" data-view="discover"></div>
+      <div class="panel__view" id="view-set" role="tabpanel" aria-labelledby="tab-set" data-view="set" hidden></div>
+      <div class="panel__view" id="view-connect" role="tabpanel" aria-labelledby="tab-connect" data-view="connect" hidden></div>
+      <details class="more">
+        <summary class="more__summary">Hintergrund und Kennzeichnung</summary>
+        <div class="more__body">
+          <h2 class="more__title">So sind Angaben gekennzeichnet</h2>
+          <ul class="legend__list" id="legendList"></ul>
+          <h2 class="more__title">Zur Darstellung</h2>
+          <ul class="more__notes" id="moreNotes"></ul>
+        </div>
+      </details>
+    </section>
+    <!-- Eröffnung: Standbild sofort, Video lädt nur bei Bedarf (siehe src/opening.js). Liegt über
+         Bühne und Seitenleiste; die Seitenleiste erscheint erst beim Einstieg. -->
+    <div class="opening" id="opening" role="region" aria-labelledby="openingTitle">
+      <picture class="opening__media">
+        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.avif" type="image/avif">
+        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.webp" type="image/webp">
+        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.jpg">
+        <source srcset="assets/opening/opening-desktop-1920.avif 1920w, assets/opening/opening-desktop-2560.avif 2560w" sizes="100vw" type="image/avif">
+        <source srcset="assets/opening/opening-desktop-1920.webp 1920w, assets/opening/opening-desktop-2560.webp 2560w" sizes="100vw" type="image/webp">
+        <img class="opening__still" id="openingStill" src="assets/opening/opening-desktop-1920.jpg"
+          srcset="assets/opening/opening-desktop-1920.jpg 1920w, assets/opening/opening-desktop-2560.jpg 2560w" sizes="100vw" width="1920" height="1080"
+          alt="Visualisierung des EcoBum Home Handbidets in gebürstetem Silber, in seiner Halterung an einer hellen Putzwand im Morgenlicht" fetchpriority="high" decoding="async">
+      </picture>
+      <video class="opening__video" id="openingVideo" muted playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
+      <div class="opening__copy">
+        <h2 class="opening__title" id="openingTitle" translate="no">EcoBum Home</h2>
+        <p class="opening__lead">Das Handbidet-Set von Pudado. Klare Form, gebürstetes Silber.</p>
+        <button class="btn btn--primary opening__cta" id="openingCta" type="button">Präsentation starten</button>
+        <p class="opening__note">Produktvisualisierung – kein Produktfoto. Ausführung und Anschlüsse in Entwicklung.</p>
+      </div>
+    </div>
+  </main>
+
+  <noscript><p class="noscript">Dieser Prototyp benötigt JavaScript für die 3D-Ansicht.</p></noscript>
+
+  <!-- Hinweis, falls die Datei direkt (file://) geöffnet wird: Module und das 3D-Modell laden dann nicht. -->
+  <script>
+    if (location.protocol === 'file:') {
+      document.documentElement.classList.add('is-file');
+      window.addEventListener('DOMContentLoaded', function () {
+        var t = document.getElementById('stateTitle');
+        var x = document.getElementById('stateText');
+        var p = document.getElementById('progress');
+        if (t) t.textContent = 'Bitte über den lokalen Server öffnen';
+        if (x) x.textContent = 'Bitte die Präsentation über die Pudado-Website öffnen. Lokal heruntergeladene Dateien können die 3D-Ansicht nicht starten.';
+        if (p) p.hidden = true;
+      });
+    }
+    // Falls ein Modul nicht lädt (Netzwerk, fehlende Datei), nicht ewig „lädt …“ anzeigen.
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (window.__ecobumBooted || location.protocol === 'file:') return;
+        var t = document.getElementById('stateTitle');
+        var x = document.getElementById('stateText');
+        var p = document.getElementById('progress');
+        var r = document.getElementById('retryBtn');
+        if (t) t.textContent = 'Die Anwendung konnte nicht gestartet werden';
+        if (x) x.textContent = 'Eine Programmdatei wurde nicht geladen. Bitte die Seite neu laden.';
+        if (p) p.hidden = true;
+        if (r) { r.hidden = false; r.onclick = function () { location.reload(); }; }
+      }, 4000);
+    });
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
