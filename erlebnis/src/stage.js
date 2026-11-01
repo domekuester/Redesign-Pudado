@@ -4,11 +4,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
-import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js';
-import { ContactShadow } from './contactShadow.js';
-import { WaterSpray } from './water.js';
-import { Hose } from './hose.js';
-import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js';
+import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
+import { ContactShadow } from './contactShadow.js?v=5f1cba7a';
+import { WaterSpray } from './water.js?v=6632649a';
+import { Hose } from './hose.js?v=6f7de855';
+import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -70,12 +70,11 @@ function studioEnvironment(renderer) {
     m.lookAt(0, 0, 0);
     env.add(m);
   };
-  panel(4.5, 9, 1.9, V(-8, 2.5, 5), false, 0.12, [1.04, 1.0, .93]);   // Fenster links vorn (hoch, wie in der Eröffnung), klare Kanten
-  // Fenstersprossen: gerichtete, wiedererkennbare Spiegelung statt gleichmäßiger Helligkeit
-  panel(0.35, 9.2, 0, V(-7.6, 2.5, 4.75), true, 0.3);
-  panel(4.7, 0.3, 0, V(-7.6, 3.4, 4.75), true, 0.3);
+  panel(6, 10, 1.5, V(-8, 2.5, 5), false, 0.12, [1.04, 1.0, .93]);   // Fenster links vorn (hoch, wie in der Eröffnung), klare Kanten
+  // Ununterbrochene Fensterreflexion ohne dunkle Sprossen.
+
   panel(5, 3, 0.9, V(-5, 7, 5));          // Himmel über dem Fenster (weich)
-  panel(1.8, 10, 3.0, V(8, 1.5, -3), false, .22, [.94, .98, 1.05]);     // Streiflicht rechts hinten
+  panel(3, 10, 2.0, V(8, 1.5, -3), false, .22, [.94, .98, 1.05]);     // Streiflicht rechts hinten
   panel(9, 3, 0.7, V(0, 10, 0.5));         // Oberlicht (gedämpft: Kopfoberseite nicht überstrahlen)
   panel(4, 5, 1.1, V(6, 1, 7));           // Aufheller rechts vorn
   panel(2.2, 11, 0, V(1.4, 0.6, 9.5), true);  // dunkler Streifen vorn (Formkontrast)
@@ -156,7 +155,7 @@ export class Stage extends EventTarget {
 
     this.scene = new THREE.Scene();
     this.scene.environment = studioEnvironment(renderer);
-    this.scene.environmentIntensity = 1.6;   // an die Blender-Renderings angeglichen (Messung in docs/qa/eroeffnung)
+    this.scene.environmentIntensity = 1.35;   // ruhiger Metallkontrast passend zum neuen weichen Hintergrund
 
     this.camera = new THREE.PerspectiveCamera(28, 1, 0.005, 6);
     this.camera.layers.enable(1);
@@ -178,7 +177,7 @@ export class Stage extends EventTarget {
     this.controls.addEventListener('end', () => { this.dragging = false; });
     this.controls.addEventListener('change', () => { this.dirty = true; });
 
-    this.shadow = new ContactShadow(renderer, { size: 1.3, height: 0.3 });
+    this.shadow = new ContactShadow(renderer, { size: 1.3, height: 0.3, opacity: 0.28, blur: 4.0 });
     this.shadow.group.position.set(-0.08, 0, 0.05);
     this.scene.add(this.shadow.group);
 
@@ -394,6 +393,7 @@ export class Stage extends EventTarget {
     };
     this.button = get('HB_Button');
     const axis = get('HB_ButtonAxis');
+    this.pts.button = axis.position.clone();
     this.buttonRest = this.button.position.clone();
     this.buttonDir = V(1, 0, 0).applyQuaternion(axis.quaternion).normalize();
     this.lever = get('TV_LeverPivot');
@@ -471,10 +471,10 @@ export class Stage extends EventTarget {
 
     // Wasser (am Handbidet befestigt)
     const jets = [];
-    [[0.0032, 7, 0], [0.0066, 13, 0.2]].forEach(([r, n, off]) => {
+    [[0.0058, 8, 0]].forEach(([r, n, off]) => {
       for (let k = 0; k < n; k++) {
         const a = (Math.PI * 2 * k) / n + off;
-        jets.push({ offset: new THREE.Vector2(r * Math.cos(a), r * Math.sin(a)), spread: 9 });
+        jets.push({ offset: new THREE.Vector2(r * Math.cos(a), r * Math.sin(a)), spread: 2 });
       }
     });
     this.water = new WaterSpray({ origin: this.pts.nozzle.clone().add(V(-0.0006, 0, 0)), direction: V(-1, 0, 0), jets });
@@ -523,7 +523,7 @@ export class Stage extends EventTarget {
     this.backdrop.material.userData.baseOpacity = 1;
     this.backdrop.material.userData.baseTransparent = false;
     this.backdrop.material.userData.baseDepthWrite = true;
-    this.wallShadow = new ContactShadow(this.renderer, { size: 0.44, height: 0.075, opacity: 0.42, darkness: 1.2, blur: 2.2 });
+    this.wallShadow = new ContactShadow(this.renderer, { size: 0.44, height: 0.075, opacity: 0.22, darkness: 1.0, blur: 3.4 });
     this.wallShadow.group.rotation.x = Math.PI / 2;   // blickt von der Wand in den Raum
     this.wallShadow.group.position.set(0, 0.2, SET_WALL_Z + 0.0004);
     this.scene.add(this.wallShadow.group);
@@ -1019,6 +1019,8 @@ export class Stage extends EventTarget {
     const presets = {
       discover: { target: hb(V(0.0, 0.088, 0)), dir: V(-0.57, 0.16, 0.82), radius: 0.098 },
       nozzle: { target: hb(this.pts.nozzle.clone().add(V(0.004, 0, 0))), dir: V(-0.86, 0.14, 0.5), radius: 0.027 },
+      button: { target: hb(this.pts.button), dir: V(0.8, 0.16, 0.6), radius: 0.035 },
+      spray: { target: hb(V(-0.1, 0.10, 0)), dir: V(-0.18, 0.1, 1), radius: 0.125 },
       grip: { target: hb(V(0.004, 0.078, 0)), dir: V(0.32, 0.1, 0.94), radius: 0.05 },
       port: { target: hb(this.pts.port.clone().add(V(0, 0.01, 0))), dir: V(-0.5, -0.32, 0.8), radius: 0.024 },
       ...this._connectPresets(),
@@ -1244,6 +1246,7 @@ export class Stage extends EventTarget {
 
   setDetail(id) {
     if (this.view !== 'discover') return;
+    this.stopWater();
     this._flyTo(this._preset(id === 'overview' ? 'discover' : id), 1.0);
   }
 
@@ -1366,6 +1369,12 @@ export class Stage extends EventTarget {
   }
 
   /* ------------------------------------------------------------------ Wasser */
+  setWaterMode(mode) {
+    if (!this.water) return;
+    this.water.setMode(mode);
+    this.dirty = true;
+  }
+
   startWater() {
     if (!this.objects || this.view !== 'discover' || this.dragging || this.waterActive) return false;
     this.waterActive = true;
@@ -1387,12 +1396,12 @@ export class Stage extends EventTarget {
 
   _pressButton(down) {
     const from = this.button.position.clone();
-    const to = this.buttonRest.clone().addScaledVector(this.buttonDir, down ? -0.0014 : 0);
+    const rest = this.buttonRest.clone();
     this.tweens.cancel(this._btnTween);
     this._btnTween = this.tweens.add({
-      duration: this.reduced ? 0 : down ? 0.07 : 0.16,
+      duration: this.reduced ? 0 : 0.24,
       ease: easeOut,
-      update: (t) => { this.button.position.lerpVectors(from, to, t); this.dirty = true; },
+      update: (t) => { this.button.position.copy(rest).addScaledVector(this.buttonDir, -0.0022 * Math.sin(Math.PI * t)); this.dirty = true; },
     });
   }
 
@@ -2211,7 +2220,7 @@ function buildBackdrop(onReady) {
   // Blender hat Tageslicht und Putz bereits berechnet. Keine zweite Beleuchtung im Browser.
   // Bei Ladefehler bleibt die ruhige Grundfarbe; das Produkt bleibt bedienbar.
   const mat = new THREE.MeshBasicMaterial({ color: '#DAD8D2', vertexColors: true, toneMapped: false });
-  new THREE.TextureLoader().load('assets/atmosphere/mineral-daylight.jpg', (texture) => {
+  new THREE.TextureLoader().load('assets/atmosphere/mineral-soft.jpg', (texture) => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 8;
     mat.map = texture; mat.color.set('#FFFFFF'); mat.needsUpdate = true;

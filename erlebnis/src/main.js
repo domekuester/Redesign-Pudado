@@ -1,9 +1,9 @@
 // Oberfläche: Ansichten, Panels aus den Produktdaten, Bedienung der Bühne.
-import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js';
-import { Stage, webglAvailable } from './stage.js';
-import { initOpening } from './opening.js';
+import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js?v=78787a72';
+import { Stage, webglAvailable } from './stage.js?v=416fb5e5';
+import { initOpening } from './opening.js?v=41a317ad';
 
-const MODEL_URL = 'assets/models/ecobum-home.glb';
+const MODEL_URL = 'assets/models/ecobum-home-prototype02.glb';
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -56,7 +56,7 @@ function factList(facts) {
 }
 
 const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const state = { presentation: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
+const state = { waterMode: 'spray', presentation: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
 let stage = null;
 let opening = { active: () => false, end: () => {} };
 
@@ -82,6 +82,38 @@ function revealItem(el) {
   revealInPanel(el, 'start');
 }
 
+
+function waterControls(context) {
+  return h('div.water-choice', { 'data-water-controls': context },
+    h('div.segmented', { role: 'group', 'aria-label': 'Strahlart wählen' },
+      [['spray', 'Brausestrahl'], ['stream', 'Gebündelt']].map(([id, name]) =>
+        h('button.segmented__btn', { type: 'button', 'data-spray-mode': id, 'aria-pressed': id === state.waterMode ? 'true' : 'false', onclick: () => {
+          state.waterMode = id; stage?.setWaterMode(id); updateWaterUI();
+        } }, name))),
+    h('p.water-choice__description', { 'data-water-description': '', 'aria-live': 'polite' }, 'Mehrere getrennte Wasserstrahlen.'),
+    h('button.btn.btn--primary', { type: 'button', 'data-water-toggle': '', 'aria-pressed': 'false', onclick: toggleWater }, 'Wasser starten'),
+    h('p.water-choice__note', {}, 'Strahlbild illustrativ · keine Druck- oder Durchflussmessung.'));
+}
+function updateWaterUI() {
+  const active = !!stage?.waterActive;
+  $$('[data-spray-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sprayMode === state.waterMode)));
+  $$('[data-water-description]').forEach(p => { p.textContent = state.waterMode === 'spray' ? 'Mehrere getrennte Wasserstrahlen.' : 'Ein zusammenhängender Wasserstrahl.'; });
+  $$('[data-water-toggle]').forEach(b => { b.textContent = active ? 'Wasser stoppen' : 'Wasser starten'; b.setAttribute('aria-pressed', String(active)); });
+  const btn = $('#waterBtn');
+  btn.classList.toggle('is-active', active); btn.setAttribute('aria-pressed', String(active));
+  btn.querySelector('.water__label').textContent = active ? 'Wasser stoppen' : 'Wasser starten';
+  $('#sprayBadge').hidden = !active;
+}
+function toggleWater() {
+  if (!stage?.objects) return;
+  if (stage.waterActive) stage.stopWater();
+  else {
+    if (!state.presentation) setDetail('spray');
+    stage.setWaterMode(state.waterMode); stage.startWater(); hideHint();
+  }
+  updateWaterUI();
+}
+
 function renderDiscover() {
   const root = $('#view-discover');
   const caption = h('div.detail-card', { id: 'detailCard', 'aria-live': 'polite' });
@@ -96,6 +128,8 @@ function renderDiscover() {
     h('h3.panel__sub', { text: 'Detailansicht' }),
     group,
     caption,
+    h('h3.panel__sub', { text: 'Zwei Strahlarten. Deine Wahl.' }),
+    waterControls('discover'),
     h('h3.panel__sub', { text: 'Ausführung' }),
     h('div.finish', {},
       h('span.finish__swatch', { style: `background:${FINISH.hex}`, 'aria-hidden': 'true' }),
@@ -112,7 +146,7 @@ function renderDiscover() {
 }
 
 function updateDetailCard() {
-  const d = DETAILS.find((x) => x.id === state.detail);
+  const d = DETAILS.find((x) => x.id === state.detail) || { title: 'Zwei Strahlarten', text: 'Brausestrahl und gebündelter Strahl nach dem Prototypvideo. Die Wasseranimation ist eine Illustration.' };
   const card = $('#detailCard');
   card.replaceChildren(h('p.detail-card__title', { text: d.title }), h('p.detail-card__text', { text: d.text }));
   $$('[data-detail]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.detail === state.detail ? 'true' : 'false'));
@@ -264,16 +298,18 @@ function endSetTour({ connect = false } = {}) {
 
 // Drei bewusst selbst gewählte Perspektiven. Bestehende 3D-Szene, keine zweite Render-Schleife.
 const CHAPTERS = [
-  { label: 'Form', title: 'Ruhe. Bis ins Detail.', text: 'EcoBum Home von Pudado. Entdecke die Form, die Oberfläche und das Zusammenspiel des Sets.', view: 'discover', detail: 'overview', next: 'Zum Detail' },
-  { label: 'Detail', title: 'Silber, das Licht einfängt.', text: 'Gebürstete Flächen. Feine Konturen. Die Düsenfläche aus einer neuen Perspektive.', view: 'discover', detail: 'nozzle', next: 'Zum Set' },
-  { label: 'Set', title: 'Fünf Teile. Ein Zusammenspiel.', text: 'Vom Handbidet bis zum Anschlussschlauch. Erkunde jedes Teil und das geplante Anschlussprinzip.', view: 'set', next: 'Set erkunden' },
+  { label: 'Form', title: 'Klare Form. Zwei Strahlarten.', text: 'Der neue EcoBum-Prototyp: gerader Griff, silberne Oberfläche und ein Druckknopf hinten am Kopf.', view: 'discover', detail: 'overview', next: 'Wasser erleben' },
+  { label: 'Wasser', title: 'Zwei Strahlarten.', text: 'Direkt am Kopf wählbar. Hier in 3D vergleichen.', view: 'discover', detail: 'spray', next: 'Zum Druckknopf', water: true },
+  { label: 'Knopf', title: 'Drücken. Ein. Drücken. Aus.', text: 'Der Knopf am hinteren Kopfende schaltet im Prototypvideo den Wasserfluss. Einmal starten, erneut stoppen.', view: 'discover', detail: 'button', next: 'Zum Set', water: true },
+  { label: 'Set', title: 'Fünf Teile. Ein Zusammenspiel.', text: 'Der neue Handbidet-Prototyp im geplanten Set. Die passende Halterung und Anschlussausführung sind noch zu prüfen.', view: 'set', next: 'Set erkunden' },
 ];
 
 function renderPresentation() {
   $('#stage').append(h('section.presentation', { id: 'presentation', hidden: true, 'aria-label': 'Produktpräsentation' },
     h('button.btn.btn--light.presentation__exit', { type: 'button', onclick: () => endPresentation() }, 'Frei erkunden'),
     h('div.presentation__copy', { id: 'presentationCopy', 'aria-live': 'polite', 'aria-atomic': 'true' },
-      h('h2', { id: 'presentationTitle', tabindex: '-1' }), h('p', { id: 'presentationText' })),
+      h('h2', { id: 'presentationTitle', tabindex: '-1' }), h('p', { id: 'presentationText' }),
+      h('div', { id: 'presentationWater', hidden: true }, waterControls('presentation'))),
     h('nav.presentation__nav', { 'aria-label': 'Präsentationskapitel' },
       h('div.presentation__chapters', {}, CHAPTERS.map((c, i) => h('button.presentation__chapter', {
         type: 'button', 'data-chapter': i, 'aria-label': `Kapitel ${i + 1}: ${c.label}`, onclick: () => setChapter(i),
@@ -282,7 +318,7 @@ function renderPresentation() {
         h('button.btn.btn--quiet', { id: 'presentationPrev', type: 'button', onclick: () => setChapter(state.chapter - 1) }, 'Zurück'),
         h('button.btn.btn--primary', { id: 'presentationNext', type: 'button', onclick: () => state.chapter === CHAPTERS.length - 1 ? endPresentation({ tour: true }) : setChapter(state.chapter + 1) }))),
     h('p.presentation__note', { text: 'Gestaltungsprototyp · Ausführung und Anschlüsse in Entwicklung.' })));
-  $('#openingCta').addEventListener('click', () => startPresentation({ fromOpening: true }));
+
   document.addEventListener('keydown', (e) => {
     if (state.presentation && e.key === 'Escape') { e.preventDefault(); endPresentation(); }
   });
@@ -301,13 +337,17 @@ function startPresentation({ fromOpening = false } = {}) {
   window.scrollTo({ top: 0, behavior: 'auto' });
   requestAnimationFrame(() => {
     updateInsets();
-    if (!fromOpening) $('#presentationTitle').focus({ preventScroll: true });
+    if (!fromOpening && document.activeElement !== document.body) $('#presentationTitle').focus({ preventScroll: true });
   });
 }
 
 function setChapter(index, { sync = true } = {}) {
   state.chapter = Math.max(0, Math.min(CHAPTERS.length - 1, index));
   const c = CHAPTERS[state.chapter];
+  stage?.stopWater();
+  $('#presentationWater').hidden = !c.water;
+  document.body.classList.toggle('has-water-chapter', !!c.water);
+  document.body.classList.toggle('has-button-chapter', c.detail === 'button');
   $('#presentationTitle').textContent = c.title;
   $('#presentationText').textContent = c.text;
   const prev = $('#presentationPrev');
@@ -329,7 +369,8 @@ function setChapter(index, { sync = true } = {}) {
 
 function endPresentation({ tour = false } = {}) {
   state.presentation = false;
-  document.body.classList.remove('is-presentation');
+  document.body.classList.remove('is-presentation', 'has-water-chapter', 'has-button-chapter');
+  stage?.stopWater();
   $('#presentation').hidden = true;
   $('#panel').inert = false;
   $('#stageLabels').inert = false;
@@ -672,6 +713,7 @@ function updateInsets() {
   const ins = { top: 0, right: 0, bottom: 0, left: 0 };
   if (state.presentation) {
     const copy = $('#presentationCopy').getBoundingClientRect();
+    $('#stage').style.setProperty('--presentation-cut-bottom', `${Math.max(0, st.bottom - copy.top + 12)}px`);
     const nav = $('#presentation .presentation__nav').getBoundingClientRect();
     if (window.matchMedia('(min-width: 760px)').matches) {
       ins.left = copy.right - st.left + 32;
@@ -704,51 +746,16 @@ function hideHint() {
   $('#stageHint').classList.add('is-hidden');
 }
 
-// „Wasser testen“: nur solange gehalten. Jedes Ende-Signal beendet zuverlässig.
+// Ein/Aus wie im Prototypvideo. Beim Verlassen der Demo endet der Fluss.
 function bindWater() {
-  const btn = $('#waterBtn');
-  const badge = $('#sprayBadge');
-  let holding = null; // 'pointer' | 'key'
-  const start = (how) => {
-    if (holding || !stage) return;
-    if (stage.startWater()) {
-      hideHint();
-      holding = how;
-      btn.classList.add('is-active');
-    }
-  };
-  const stop = () => {
-    if (!holding) return;
-    holding = null;
-    btn.classList.remove('is-active');
-    stage && stage.stopWater();
-  };
-  btn.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0) return;
-    e.preventDefault();
-    e.stopPropagation();
-    try { btn.setPointerCapture(e.pointerId); } catch (_) { /* älterer Browser */ }
-    btn.focus({ preventScroll: true });
-    start('pointer');
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((t) => btn.addEventListener(t, () => { if (holding === 'pointer') stop(); }));
-  btn.addEventListener('keydown', (e) => {
-    if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); start('key'); }
-    if (e.key === 'Escape') stop();
-  });
-  btn.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); stop(); } });
-  btn.addEventListener('click', (e) => e.preventDefault());
-  btn.addEventListener('blur', stop);
-  btn.addEventListener('contextmenu', (e) => e.preventDefault());
+  $('#waterBtn').addEventListener('click', toggleWater);
+  const stop = () => stage?.stopWater();
   window.addEventListener('blur', stop);
   window.addEventListener('pagehide', stop);
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
-  stage.addEventListener('water', (e) => {
-    badge.hidden = !e.detail;
-    if (!e.detail && holding) { holding = null; btn.classList.remove('is-active'); }
-  });
-  // Ansichtswechsel beendet ebenfalls
-  $$('.views__tab').forEach((t) => t.addEventListener('click', stop));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') stop(); });
+  stage.addEventListener('water', updateWaterUI);
+  $$('.views__tab').forEach(t => t.addEventListener('click', stop));
 }
 
 /* ------------------------------------------------------------ Zustände */
@@ -848,6 +855,7 @@ async function boot() {
   showState('ready');
   document.body.classList.add('is-ready');
   updateInsets();
+  if (state.view === 'discover') startPresentation();
   // Wurde während des Ladens schon eine andere Ansicht gewählt, die Bühne nachziehen
   if (!opening.active() && state.view !== 'discover') syncStage();
   new ResizeObserver(() => updateInsets()).observe($('#stage'));

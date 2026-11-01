@@ -8,9 +8,9 @@
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#FFFFFF">
   <title>EcoBum Home Experience – Pudado (Prototyp)</title>
-  <meta name="description" content="EcoBum Home in 3D entdecken: Form, Details und geplantes Set. Gestaltungsprototyp von Pudado – Ausführung und Anschlüsse in Entwicklung.">
+  <meta name="description" content="EcoBum Home in 3D: neuer Prototyp mit zwei Strahlarten und Druckknopf. Ausführung und Anschlüsse in Entwicklung.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'%3E%3Cpath d='M28 6 C22 16 14 23 14 33 a14 14 0 0 0 28 0 C42 23 34 16 28 6 Z' fill='none' stroke='%23235FD0' stroke-width='4'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=7cbd5254">
   <script type="importmap">
     { "imports": {
       "three": "./vendor/three/three.module.js",
@@ -50,7 +50,7 @@
 
   <main class="layout">
     <section class="stage" id="stage" aria-label="3D-Produktbühne">
-      <!-- Hintergrundplatte aus Blender: letztes Bild der Eröffnung ohne Set-Teile (scharf zur Übergabe, danach weich) -->
+      <!-- Ruhiger Blender-Hintergrund; das Produkt wird live gerendert. -->
       <div class="stage__plate" id="stagePlate" aria-hidden="true"></div>
       <canvas class="stage__canvas" id="scene" tabindex="0"
         aria-label="3D-Ansicht. Ziehen oder Pfeiltasten drehen, Plus und Minus zoomen, Null setzt die Ansicht zurück."></canvas>
@@ -62,13 +62,13 @@
       <!-- Bedienelemente: Desktop frei auf der Bühne, mobil gebündelt am Rand (siehe CSS) -->
       <div class="stage__controls" id="stageControls">
         <div class="water" id="waterBox">
-          <button class="water__btn" id="waterBtn" type="button" aria-describedby="waterNotice">
+          <button class="water__btn" id="waterBtn" type="button" aria-pressed="false" aria-describedby="waterNotice">
             <span class="water__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3c-2.4 3.6-5 6.2-5 9.6a5 5 0 0 0 10 0C17 9.2 14.4 6.6 12 3Z" /></svg>
             </span>
             <span class="water__text">
-              <span class="water__label">Wasser testen</span>
-              <span class="water__hint">Gedrückt halten<span class="water__hint-sep"> · </span><span class="water__hint-demo">illustrative Demo</span></span>
+              <span class="water__label">Wasser starten</span>
+              <span class="water__hint">Drücken: Ein / Aus<span class="water__hint-sep"> · </span><span class="water__hint-demo">illustrative Demo</span></span>
             </span>
           </button>
           <p class="water__notice" id="waterNotice">Illustrative Demo – kein gemessenes Sprühbild.</p>
@@ -119,27 +119,6 @@
         </div>
       </details>
     </section>
-    <!-- Eröffnung: Standbild sofort, Video lädt nur bei Bedarf (siehe src/opening.js). Liegt über
-         Bühne und Seitenleiste; die Seitenleiste erscheint erst beim Einstieg. -->
-    <div class="opening" id="opening" role="region" aria-labelledby="openingTitle">
-      <picture class="opening__media">
-        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.avif" type="image/avif">
-        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.webp" type="image/webp">
-        <source media="(max-width: 959px) and (orientation: portrait), (max-width: 959px) and (min-height: 600.02px), (max-width: 559.98px)" srcset="assets/opening/opening-mobile.jpg">
-        <source srcset="assets/opening/opening-desktop-1920.avif 1920w, assets/opening/opening-desktop-2560.avif 2560w" sizes="100vw" type="image/avif">
-        <source srcset="assets/opening/opening-desktop-1920.webp 1920w, assets/opening/opening-desktop-2560.webp 2560w" sizes="100vw" type="image/webp">
-        <img class="opening__still" id="openingStill" src="assets/opening/opening-desktop-1920.jpg"
-          srcset="assets/opening/opening-desktop-1920.jpg 1920w, assets/opening/opening-desktop-2560.jpg 2560w" sizes="100vw" width="1920" height="1080"
-          alt="Visualisierung des EcoBum Home Handbidets in gebürstetem Silber, in seiner Halterung an einer hellen Putzwand im Morgenlicht" fetchpriority="high" decoding="async">
-      </picture>
-      <video class="opening__video" id="openingVideo" muted playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
-      <div class="opening__copy">
-        <h2 class="opening__title" id="openingTitle" translate="no">EcoBum Home</h2>
-        <p class="opening__lead">Das Handbidet-Set von Pudado. Klare Form, gebürstetes Silber.</p>
-        <button class="btn btn--primary opening__cta" id="openingCta" type="button">Präsentation starten</button>
-        <p class="opening__note">Produktvisualisierung – kein Produktfoto. Ausführung und Anschlüsse in Entwicklung.</p>
-      </div>
-    </div>
   </main>
 
   <noscript><p class="noscript">Dieser Prototyp benötigt JavaScript für die 3D-Ansicht.</p></noscript>
@@ -172,6 +151,6 @@
       }, 4000);
     });
   </script>
-  <script type="module" src="src/main.js"></script>
+  <script type="module" src="src/main.js?v=81b4ec57"></script>
 </body>
 </html>

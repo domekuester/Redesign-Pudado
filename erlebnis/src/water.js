@@ -53,7 +53,7 @@ export class WaterSpray {
       uHead: { value: 0 },
       uTail: { value: 0 },
       uFlow: { value: 1 },
-      uColor: { value: new THREE.Color('#4F8FD6') },
+      uColor: { value: new THREE.Color('#B9DCE9') },
     };
     const material = new THREE.ShaderMaterial({
       vertexShader: VERT,
@@ -68,7 +68,9 @@ export class WaterSpray {
     const side = new THREE.Vector3().crossVectors(dir, up).normalize();
     const lift = new THREE.Vector3().crossVectors(side, dir).normalize();
     const geos = [];
-    jets.forEach((jet, i) => {
+    const sprayCount = jets.length;
+    const allJets = [...jets, { offset: new THREE.Vector2(0, 0), spread: 0, bundled: true }];
+    allJets.forEach((jet, i) => {
       // jet: { offset: Vector2 (seitlich, hoch) in m, spread }
       const start = origin.clone().addScaledVector(side, jet.offset.x).addScaledVector(lift, jet.offset.y);
       const outward = dir.clone()
@@ -84,20 +86,22 @@ export class WaterSpray {
         pts.push(p);
       }
       const curve = new THREE.CatmullRomCurve3(pts);
-      const r = 0.00042 + (i % 3) * 0.00008;
-      const g = new THREE.TubeGeometry(curve, 48, r, 5, false);
+      const r = jet.bundled ? 0.0058 : 0.0008 + (i % 3) * 0.00008;
+      const g = new THREE.TubeGeometry(curve, 48, r, 12, false);
       const n = g.attributes.position.count;
       const aT = new Float32Array(n);
       const aSeed = new Float32Array(n).fill(((i * 37) % 17) / 17);
-      const ring = 6; // radialSegments + 1
+      const ring = 13; // radialSegments + 1
       for (let v = 0; v < n; v++) aT[v] = Math.floor(v / ring) / 48;
       g.setAttribute('aT', new THREE.BufferAttribute(aT, 1));
       g.setAttribute('aSeed', new THREE.BufferAttribute(aSeed, 1));
       geos.push(g);
     });
-    this.meshes = geos.map((g) => {
+    this.meshes = geos.map((g, i) => {
       const m = new THREE.Mesh(g, material);
       m.layers.set(1);
+      m.userData.mode = i < sprayCount ? 'spray' : 'stream';
+      m.visible = i < sprayCount;
       m.renderOrder = 5;
       m.frustumCulled = false;
       this.group.add(m);
@@ -106,6 +110,11 @@ export class WaterSpray {
     this.group.visible = false;
     this.active = false;
     this.reduced = false;
+  }
+
+  setMode(mode) {
+    this.mode = mode === 'stream' ? 'stream' : 'spray';
+    this.meshes.forEach(m => { m.visible = m.userData.mode === this.mode; });
   }
 
   setReducedMotion(on) {

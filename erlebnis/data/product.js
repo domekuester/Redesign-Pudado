@@ -5,10 +5,11 @@
  * Angaben bestätigt, hier den Status auf "confirmed" setzen und ggf. "source"
  * ergänzen; die Oberfläche übernimmt das automatisch.
  *
- * Stand: 30.10.2026 – Prototyp, keine Freigabe.
+ * Stand: 01.11.2026 – Prototyp, keine Freigabe.
  */
 
 export const STATUS = {
+  observed: { label: 'Im Prototyp gezeigt', description: 'In den vom Nutzer bereitgestellten Fotos und im Video vom 1. November 2026 sichtbar; keine technische Serienfreigabe.' },
   confirmed: {
     label: 'Bestätigt',
     description: 'Vom Hersteller schriftlich bestätigt.',
@@ -30,17 +31,17 @@ export const STATUS = {
 export const META = {
   title: 'EcoBum Home',
   subtitle: 'Handbidet-Set · Prototyp',
-  stand: '30.10.2026',
+  stand: '01.11.2026',
   disclaimer:
-    'Interaktiver Gestaltungsprototyp. Darstellungen sind nicht maßstäblich und keine technische Zeichnung. Derzeit sind keine Eigenschaften vom Hersteller bestätigt.',
+    'Interaktiver Gestaltungsprototyp. Darstellungen sind nicht maßstäblich und keine technische Zeichnung. Form und zwei Strahlarten sind aus den neuen Prototypaufnahmen abgeleitet. Maße, Düsenaufbau und Serienausführung sind noch nicht bestätigt.',
 };
 
 export const FINISH = {
   name: 'Arctic Brushed Silver',
-  code: 'KS-01',
+  code: 'Prototyp 02',
   hex: '#B7B4AE',
   status: 'design',
-  note: 'Gebürstete silberne Ausführung als erster Gestaltungsstand. Werkstoff und Oberfläche sind noch nicht bestätigt.',
+  note: 'Silberne Oberfläche nach den neuen Prototypaufnahmen. Werkstoff und endgültige Oberflächenspezifikation sind noch offen.',
 };
 
 /* Bauteile des Sets. "id" verbindet Text und 3D-Objekt. */
@@ -51,10 +52,11 @@ export const COMPONENTS = [
     name: 'Handbidet',
     short: 'Gibt das Wasser ab',
     role:
-      'Das Handbidet gibt das Wasser über die Düsenfläche ab. Der Knopf am Griff gibt den Wasserfluss frei, solange er gedrückt wird.',
+      'Zwei Strahlarten in einem Handbidet: getrennte Brausestrahlen und ein gebündelter Strahl. Im Video schaltet der hintere Druckknopf den Wasserfluss ein und aus; am vorderen Kopfbereich wird die Strahlart gewechselt.',
     facts: [
-      { label: 'Form', value: 'Nach freigegebener Bildvorlage', status: 'design' },
-      { label: 'Bedienung', value: 'Knopf gedrückt halten', status: 'design' },
+      { label: 'Form', value: 'Gerader Griff, querliegender Kopf', status: 'observed' },
+      { label: 'Bedienung', value: 'Druckknopf hinten am Kopf: Ein/Aus nach Video', status: 'observed' },
+      { label: 'Strahlarten', value: 'Brausestrahl und gebündelter Strahl', status: 'observed' },
       { label: 'Anschluss', value: 'Passend zum geplanten G1/2-Innengewinde des Schlauchs', status: 'planned' },
       { label: 'Werkstoff, Oberfläche', value: 'Noch nicht bestätigt', status: 'open' },
     ],
@@ -81,7 +83,8 @@ export const COMPONENTS = [
       'Die Halterung nimmt das Handbidet nach der Benutzung auf, damit es griffbereit an der Wand hängt.',
     facts: [
       { label: 'Montage', value: 'Klebe- und Schraubmontage vorgesehen', status: 'planned' },
-      { label: 'Form, Farbe', value: 'Nach Bildvorlage, Ausführung offen', status: 'design' },
+      { label: 'Form, Farbe', value: 'Nach bisheriger Bildvorlage, Ausführung offen', status: 'design' },
+      { label: 'Passung zum neuen Handbidet', value: 'Mit dem neuen Prototyp zu prüfen', status: 'open' },
     ],
   },
   {
@@ -122,19 +125,23 @@ export const DETAILS = [
     id: 'overview',
     name: 'Gesamt',
     title: 'Gesamtansicht',
-    text: 'Zylindrischer Kopf mit Düsenfläche, geschwungener Griff, Bedienknopf seitlich am Griff.',
+    text: 'Gerader zylindrischer Griff, querliegender Kopf und abgesetzter Druckknopf am hinteren Kopfende. Proportionen nach den neuen Fotos, nicht maßstäblich.',
   },
   {
     id: 'nozzle',
     name: 'Düse',
     title: 'Düsenfläche',
-    text: 'In der Mitte ein dunkler Einsatz mit Noppen, außen ein Ring feiner Öffnungen. Anordnung nach Bildvorlage, das Strahlbild ist nicht festgelegt.',
+    text: 'Am vorderen Kopfbereich wird im Video zwischen zwei Strahlarten gewechselt. Die verdeckte Düsenfläche ist vereinfacht dargestellt; ihre genaue Anordnung ist noch offen.',
   },
   {
     id: 'grip',
     name: 'Griff',
-    title: 'Griff und Knopf',
-    text: 'Der Griff ist unter dem Kopf schlank und wird zur Hand hin voller. Der Knopf sitzt seitlich im oberen Griffbereich (Lage nach Bildvorlage).',
+    title: 'Gerader Griff',
+    text: 'Der neue Prototyp hat einen geraden, zylindrischen Griff. Der Druckknopf sitzt separat am hinteren Ende des Kopfes.',
+  },
+  {
+    id: 'button', name: 'Knopf', title: 'Drücken. Ein. Drücken. Aus.',
+    text: 'Im Prototypvideo fließt das Wasser nach dem Loslassen weiter. Ein erneuter Druck stoppt es. Die 3D-Demo bildet dieses beobachtete Verhalten nach; Hub und Mechanik sind schematisch.',
   },
   {
     id: 'port',
@@ -146,7 +153,7 @@ export const DETAILS = [
 
 export const WATER = {
   label: 'Wasser testen',
-  hint: 'Gedrückt halten',
+  hint: 'Drücken: Ein / Aus',
   notice: 'Illustrative Demo – kein gemessenes Sprühbild.',
 };
 
