@@ -3,7 +3,7 @@ import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, s
 import { Stage, webglAvailable } from './stage.js?v=416fb5e5';
 import { initOpening } from './opening.js?v=41a317ad';
 
-const MODEL_URL = 'assets/models/ecobum-home-prototype02.glb';
+const MODEL_URL = 'assets/models/ecobum-home-prototype02-compact.glb';
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
