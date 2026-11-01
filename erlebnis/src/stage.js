@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
 import { ContactShadow } from './contactShadow.js?v=f48e9b31';
-import { WaterSpray } from './water.js?v=80528253';
+import { WaterSpray } from './water.js?v=604d4f58';
 import { WaterBackdrop } from './waterBackdrop.js?v=bd125f63';
 import { ProductInteraction } from './productInteraction.js?v=957f18d4';
 import { Hose } from './hose.js?v=46cdb43c';
@@ -1214,9 +1214,36 @@ export class Stage extends EventTarget {
   }
 
   /* ------------------------------------------------------------ Öffentlich */
+  setInspectionLight(degrees) {
+    this.tweens.cancel(this._lightTween);
+    this._lightTween = null;
+    this._applyInspectionLight(degrees);
+  }
+
+  _applyInspectionLight(degrees) {
+    const value = THREE.MathUtils.clamp(Number(degrees) || 0, -60, 60);
+    this.scene.environmentRotation.y = THREE.MathUtils.degToRad(value);
+    this.water?.setEnvironmentRotation(this.scene.environmentRotation);
+    this.dirty = true;
+    this.dispatchEvent(new CustomEvent('inspectionlight', { detail: value }));
+  }
+
+  playLightStudy() {
+    if (!this.objects || this.reduced || this.view !== 'discover') return;
+    this.tweens.cancel(this._lightTween);
+    const start = THREE.MathUtils.radToDeg(this.scene.environmentRotation.y);
+    // One slow out-and-back sweep. No loop; the chosen light is restored.
+    const target = start > 0 ? -45 : 45;
+    this._lightTween = this.tweens.add({ duration: 3.2, ease: t => t,
+      update: t => this._applyInspectionLight(start + (target - start) * Math.pow(Math.sin(Math.PI * t), 2)),
+      complete: () => { this._lightTween = null; this._applyInspectionLight(start); },
+    });
+  }
+
   setReducedMotion(on) {
     this.reduced = on;
     this.controls.enableDamping = !on;
+    if (on) this.setInspectionLight(THREE.MathUtils.radToDeg(this.scene.environmentRotation.y));
     if (this.water) this.water.setReducedMotion(on);
   }
 
@@ -1251,6 +1278,7 @@ export class Stage extends EventTarget {
 
   setView(view) {
     if (!this.objects) return;
+    this.setInspectionLight(THREE.MathUtils.radToDeg(this.scene.environmentRotation.y));
     this.stopWater();
     this.view = view;
     this._placeShadow();

@@ -1,6 +1,6 @@
 // Oberfläche: Ansichten, Panels aus den Produktdaten, Bedienung der Bühne.
 import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js?v=78787a72';
-import { Stage, webglAvailable } from './stage.js?v=03ae7b30';
+import { Stage, webglAvailable } from './stage.js?v=2aa2c228';
 import { initOpening } from './opening.js?v=41a317ad';
 
 const MODEL_URL = 'assets/models/ecobum-home-prototype02-detail.glb';
@@ -56,7 +56,7 @@ function factList(facts) {
 }
 
 const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const state = { waterMode: 'spray', presentation: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
+const state = { waterMode: 'spray', slowWater: false, lightAngle: 0, presentation: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
 let stage = null;
 let opening = { active: () => false, end: () => {} };
 
@@ -101,6 +101,11 @@ function waterControls(context) {
         } }, streamIcon(id), h('span', {}, name)))),
     h('p.water-choice__description', { 'data-water-description': '', 'aria-live': 'polite' }, 'Mehrere getrennte Wasserstrahlen.'),
     h('button.btn.btn--primary', { type: 'button', 'data-water-toggle': '', 'aria-pressed': 'false', onclick: toggleWater }, 'Wasser starten'),
+    context === 'discover' ? h('button.btn.btn--quiet.water-choice__slow', {
+      type: 'button', id: 'slowWater', 'aria-pressed': 'false', disabled: reducedQuery.matches,
+      onclick: () => { state.slowWater = !state.slowWater; stage?.water?.setSpeed(state.slowWater ? .25 : 1); updateWaterUI(); },
+    }, 'Zeitlupe einschalten') : null,
+    context === 'discover' ? h('p.water-choice__note', { id: 'motionNote', hidden: !reducedQuery.matches }, 'Reduzierte Bewegung aktiv: Das Wasser wird als Standbild gezeigt.') : null,
     h('p.water-choice__note', {}, 'Strahlbild illustrativ · keine Druck- oder Durchflussmessung.'));
 }
 function updateWaterUI() {
@@ -112,6 +117,14 @@ function updateWaterUI() {
   btn.classList.toggle('is-active', active); btn.setAttribute('aria-pressed', String(active));
   btn.querySelector('.water__label').textContent = active ? 'Wasser stoppen' : 'Wasser starten';
   $('#sprayBadge').hidden = !active;
+  $('#sprayBadge').textContent = state.slowWater ? 'Zeitlupe · ¼ Tempo · illustrative Demo' : 'Illustrative Demo';
+  const slow = $('#slowWater');
+  if (slow) {
+    slow.setAttribute('aria-pressed', String(state.slowWater));
+    slow.textContent = state.slowWater ? 'Normales Tempo einschalten' : 'Zeitlupe einschalten';
+    slow.disabled = reducedQuery.matches;
+    $('#motionNote').hidden = !reducedQuery.matches;
+  }
 }
 function toggleWater() {
   if (!stage?.objects) return;
@@ -121,6 +134,20 @@ function toggleWater() {
     stage.setWaterMode(state.waterMode); stage.startWater(); hideHint();
   }
   updateWaterUI();
+}
+
+function inspectionTools() {
+  return h('details.inspection', {},
+    h('summary', {}, 'Oberfläche im Licht entdecken'),
+    h('p', {}, 'Führe das Licht über den Kopf und den Griff. So werden Rundungen, Kanten und die feine Bürstung sichtbar.'),
+    h('label.inspection__label', { for: 'inspectionLight' }, 'Licht drehen', h('output', { id: 'lightValue', for: 'inspectionLight', 'aria-live': 'off' }, `${Math.round(state.lightAngle)}°`)),
+    h('input.inspection__range', { id: 'inspectionLight', type: 'range', min: '-60', max: '60', step: '1', value: String(Math.round(state.lightAngle)),
+      oninput: e => stage?.setInspectionLight(Number(e.target.value)),
+    }),
+    h('div.inspection__actions', {},
+      h('button.btn.btn--quiet', { id: 'lightStudy', type: 'button', disabled: reducedQuery.matches, onclick: () => stage?.playLightStudy() }, 'Lichtspiel ansehen'),
+      h('button.btn.btn--quiet', { type: 'button', onclick: () => stage?.setInspectionLight(0) }, 'Licht zurücksetzen')),
+    h('p.inspection__note', {}, 'Virtuelle Studiobeleuchtung. Die endgültige Oberfläche ist noch in Entwicklung.'));
 }
 
 function renderDiscover() {
@@ -137,6 +164,7 @@ function renderDiscover() {
     h('h3.panel__sub', { text: 'Detailansicht' }),
     group,
     caption,
+    inspectionTools(),
     h('h3.panel__sub', { text: 'Zwei Strahlarten. Deine Wahl.' }),
     waterControls('discover'),
     h('h3.panel__sub', { text: 'Ausführung' }),
@@ -340,6 +368,10 @@ function renderPresentation() {
 function startPresentation({ fromOpening = false } = {}) {
   if (document.body.classList.contains('no-3d') || $('#stageState')?.dataset.kind === 'error') return;
   if (state.tour) endSetTour();
+  state.slowWater = false;
+  stage?.water?.setSpeed(1);
+  stage?.setInspectionLight(0);
+  updateWaterUI();
   state.presentation = true;
   document.body.classList.add('is-presentation');
   $('#presentation').hidden = false;
@@ -772,9 +804,9 @@ function hideHint() {
 function bindWater() {
   $('#waterBtn').addEventListener('click', toggleWater);
   const stop = () => stage?.stopWater();
-  window.addEventListener('blur', stop);
+  window.addEventListener('blur', () => { stop(); stage?.setInspectionLight(state.lightAngle); });
   window.addEventListener('pagehide', stop);
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); stage?.setInspectionLight(state.lightAngle); } });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') stop(); });
   stage.addEventListener('water', updateWaterUI);
   $$('.views__tab').forEach(t => t.addEventListener('click', stop));
@@ -852,6 +884,13 @@ async function boot() {
   }
   if (opening.active() && $('#opening').classList.contains('is-playing')) stage.setPaused(true);
   stage.addEventListener('interaction', hideHint);
+  stage.addEventListener('inspectionlight', e => {
+    state.lightAngle = e.detail;
+    const slider = $('#inspectionLight'), label = $('#lightValue');
+    const value = String(Math.round(e.detail));
+    if (slider && slider.value !== value) slider.value = value;
+    if (label && label.textContent !== `${value}°`) label.textContent = `${value}°`;
+  });
   stage.addEventListener('productaction', (e) => {
     if (state.view !== 'discover' || state.presentation) return;
     if (e.detail === 'button') {
@@ -874,7 +913,12 @@ async function boot() {
     showState('error', { title: '3D-Ansicht unterbrochen', text: 'Die Grafikverbindung wurde vom Browser beendet. Bitte erneut versuchen.', retry: true });
   });
   stage.addEventListener('runtimeerror', (e) => showStageError(Object.assign(e.detail, { kind: e.detail.kind || 'runtime' })));
-  reducedQuery.addEventListener('change', (e) => stage.setReducedMotion(e.matches));
+  reducedQuery.addEventListener('change', (e) => {
+    stage.setReducedMotion(e.matches);
+    if (e.matches) { state.slowWater = false; stage.water?.setSpeed(1); }
+    $('#lightStudy').disabled = e.matches;
+    updateWaterUI();
+  });
   bindStageTools();
   bindWater();
 

@@ -47,6 +47,7 @@ const FRAG = /* glsl */`
   uniform float uOpacity;
   uniform float uBundle;
   uniform float uEnvironmentIntensity;
+  uniform mat3 uEnvironmentRotation;
   uniform sampler2D uBackdrop;
   uniform vec2 uResolution;
   uniform float uHasBackdrop;
@@ -76,9 +77,9 @@ const FRAG = /* glsl */`
     vec3 refracted = vec3(.48, .53, .54);
     vec3 diffuse = vec3(.64);
     #ifdef WATER_ENVIRONMENT
-      reflected = textureCubeUV(uEnvironment, reflect(-eye, n), .075).rgb * uEnvironmentIntensity;
-      refracted = textureCubeUV(uEnvironment, refract(-eye, n, 1.0 / 1.333), .13).rgb * uEnvironmentIntensity;
-      diffuse = textureCubeUV(uEnvironment, n, .8).rgb * uEnvironmentIntensity;
+      reflected = textureCubeUV(uEnvironment, uEnvironmentRotation * reflect(-eye, n), .075).rgb * uEnvironmentIntensity;
+      refracted = textureCubeUV(uEnvironment, uEnvironmentRotation * refract(-eye, n, 1.0 / 1.333), .13).rgb * uEnvironmentIntensity;
+      diffuse = textureCubeUV(uEnvironment, uEnvironmentRotation * n, .8).rgb * uEnvironmentIntensity;
     #endif
     float travel = vT - uTime * 3.2 * uFlow;
     float detail = noise(vec2(travel * 78.0 + vSeed * 17.0, vRing * 14.0));
@@ -116,6 +117,8 @@ export class WaterSpray {
     this.group.layers.set(1);
     this.uniforms = { uTime: { value: 0 }, uHead: { value: 0 }, uTail: { value: 0 }, uFlow: { value: 1 } };
     this.materials = {};
+    this.speed = 1;
+    this.environmentRotation = { value: new THREE.Matrix3() };
     const defines = {};
     if (environment?.image?.height && environment?.image?.width) {
       Object.assign(defines, {
@@ -128,7 +131,7 @@ export class WaterSpray {
     for (const mode of ['spray', 'stream']) {
       this.materials[mode] = new THREE.ShaderMaterial({
         vertexShader: VERT, fragmentShader: FRAG, defines,
-        uniforms: { ...this.uniforms, uBackdrop: { value: null }, uResolution: { value: new THREE.Vector2(1,1) }, uHasBackdrop: { value: 0 }, uEnvironment: { value: environment }, uEnvironmentIntensity: { value: environmentIntensity }, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
+        uniforms: { ...this.uniforms, uEnvironmentRotation: this.environmentRotation, uBackdrop: { value: null }, uResolution: { value: new THREE.Vector2(1,1) }, uHasBackdrop: { value: 0 }, uEnvironment: { value: environment }, uEnvironmentIntensity: { value: environmentIntensity }, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
         transparent: true, depthWrite: false, side: THREE.FrontSide,
       });
     }
@@ -187,6 +190,14 @@ export class WaterSpray {
     this.group.visible = false;
     this.active = false; this.reduced = false; this.mode = 'spray'; this.blend = 0; this._changed = false;
   }
+  setSpeed(value) {
+    this.speed = value === .25 ? .25 : 1;
+    this._changed = true;
+  }
+  setEnvironmentRotation(rotation) {
+    this.environmentRotation.value.setFromMatrix4(new THREE.Matrix4().makeRotationFromEuler(rotation)).transpose();
+    this._changed = true;
+  }
   setBackdrop(texture, size) {
     for (const m of Object.values(this.materials)) {
       m.uniforms.uBackdrop.value = texture;
@@ -232,7 +243,7 @@ export class WaterSpray {
         this._dropTangent.copy(path.outward).multiplyScalar(.22); this._dropTangent.y -= .124 * t;
         this._dummy.quaternion.setFromUnitVectors(this._dropUp, this._dropTangent.normalize());
         const visible = t <= this.uniforms.uHead.value && t >= this.uniforms.uTail.value;
-        const fade = Math.min(1, Math.max(0, (1.04 - t) / .07));
+        const fade = Math.min(1, Math.max(0, (1.0 - t) / .08));
         const radius = visible ? (.00032 + variation * .00048) * fade : 0;
         this._dummy.scale.set(radius, radius * (1.3 + variation * .8), radius);
         this._dummy.updateMatrix(); d.mesh.setMatrixAt(i, this._dummy.matrix);
@@ -260,11 +271,12 @@ export class WaterSpray {
     const changed = this._changed; this._changed = false;
     if (!this.group.visible || this.reduced) return changed;
     dt = Math.min(dt, 0.05);
-    this.uniforms.uTime.value += dt;
+    const motionDt = dt * this.speed;
+    this.uniforms.uTime.value += motionDt;
     const target = this.mode === 'stream' ? 1 : 0;
     this.blend += Math.sign(target - this.blend) * Math.min(Math.abs(target - this.blend), dt / 0.24);
     this._applyMode();
-    this._head = Math.min(1, (this._head || 0) + dt / 0.24);
+    this._head = Math.min(1, (this._head || 0) + motionDt / 0.24);
     if (this.active) this._tail = 0;
     else {
       this._tail = Math.min(1, (this._tail || 0) + dt / 0.24);

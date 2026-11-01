@@ -99,7 +99,7 @@ svg { display: block; }
 /* ---------------------------------------------------------------- Ansichten */
 .views {
   position: sticky; top: 0; z-index: 10;
-  background: rgba(255,255,255,.96);
+  background: var(--paper);
   border-bottom: var(--line) solid var(--border);
   padding: 6px clamp(12px, 3vw, 32px);
 }
@@ -545,7 +545,7 @@ details[open] > .step-more__summary::before { transform: rotate(45deg); }
   position: sticky; bottom: 0; z-index: 4;
   display: flex; align-items: center; gap: 8px;
   margin: var(--space-1) calc(-1 * var(--panel-pad-x)) 0; padding: 10px var(--panel-pad-x) max(10px, env(safe-area-inset-bottom));
-  background: rgba(255,255,255,.97); border-top: var(--line) solid var(--border);
+  background: var(--paper); border-top: var(--line) solid var(--border);
 }
 .stepper__nav .btn { flex: 1 1 0; scroll-margin-bottom: -100px; white-space: nowrap; padding-inline: 10px; } /* Leiste selbst löst kein Nachscrollen aus */
 .stepper__pos { flex: none; min-width: 44px; text-align: center; font-size: var(--text-small); font-weight: 600; color: var(--gray); font-variant-numeric: tabular-nums; }
@@ -897,5 +897,17 @@ body.is-presentation #sprayBadge { display: none; }
 .product-point[aria-pressed="true"] strong { color: var(--blue-deep); }
 .product-point__line { background: var(--border-control); }
 .product-point__line::before { background: var(--blue); }
+
+/* Opt-in inspection: real controls instead of a decorative animation loop. */
+.inspection { margin-block: var(--space-2); border-block: var(--line) solid var(--border); padding-block: var(--space-1); }
+.inspection summary { min-height: var(--touch); align-content: center; cursor: pointer; color: var(--blue-deep); font-size: var(--text-small); font-weight: 600; }
+.inspection p { margin-block: var(--space-2); font-size: var(--text-small); color: var(--gray); }
+.inspection__label { display: flex; justify-content: space-between; gap: var(--space-2); font-size: var(--text-small); }
+.inspection__label output { font-variant-numeric: tabular-nums; }
+.inspection__range { width: 100%; min-height: var(--touch); margin: 0; accent-color: var(--blue); cursor: ew-resize; }
+.inspection__actions { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.inspection .inspection__note { font-size: var(--text-xs); }
+.water-choice__slow { justify-self: start; }
+.water-choice__slow[aria-pressed="true"] { color: var(--blue-deep); background: var(--mist); }
 
 a.brand { color: inherit; text-decoration: none; }
