@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
 import { ContactShadow } from './contactShadow.js?v=f48e9b31';
-import { WaterSpray } from './water.js?v=604d4f58';
+import { WaterSpray } from './water.js?v=3d7d2975';
 import { WaterBackdrop } from './waterBackdrop.js?v=bd125f63';
 import { ProductInteraction } from './productInteraction.js?v=957f18d4';
 import { Hose } from './hose.js?v=46cdb43c';

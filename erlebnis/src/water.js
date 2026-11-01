@@ -18,20 +18,22 @@ const VERT = /* glsl */`
   void main() {
     vT = aT; vSeed = aSeed; vRing = uv.y;
     float theta = uv.y * 6.283185;
-    float travel = aT - uTime * 3.2 * uFlow;
-    float p1 = travel * 36.0 + theta * 2.0 + aSeed * 8.3;
-    float p2 = travel * 67.0 - theta * 3.0 + aSeed * 17.1;
-    float envelope = smoothstep(0.02, 0.34, aT);
-    float amplitude = mix(0.000085, 0.00028 + .00024 * smoothstep(.35, 1.0, aT), uBundle) * envelope;
+    float travel = aT - uTime * 1.45 * uFlow;
+    float p1 = travel * 27.0 + theta * 2.0 + aSeed * 8.3;
+    float p2 = travel * 49.0 - theta * 3.0 + aSeed * 17.1;
+    float envelope = smoothstep(0.015, 0.3, aT);
+    // A coherent exit develops small surface waves downstream, rather than
+    // wobbling at the nozzle. Each jet has its own travelling phase.
+    float amplitude = mix(0.00011, 0.00018 + .00032 * smoothstep(.25, 1.0, aT), uBundle) * envelope;
     float wave = sin(p1) * .65 + sin(p2) * .35;
-    float axial = amplitude * (36.0 * cos(p1) * .65 + 67.0 * cos(p2) * .35) / .22;
+    float axial = amplitude * (27.0 * cos(p1) * .65 + 49.0 * cos(p2) * .35) / .22;
     float around = amplitude * (2.0 * cos(p1) * .65 - 3.0 * cos(p2) * .35) / aRadius;
     vec3 tangent = normalize(aTangent);
     vec3 circumferential = normalize(cross(tangent, normal));
     // Deformed normals travel with the surface, so the studio reflections move
     // with the water instead of looking painted onto rigid tubes.
     vec3 n = normalize(normal - tangent * axial - circumferential * around);
-    float neck = 1.0 - .16 * smoothstep(.6, 1.0, aT) * (.5 + .5 * sin(p1 * .43));
+    float neck = 1.0 - .09 * aT - mix(.09, .04, uBundle) * smoothstep(.6, 1.0, aT) * (.5 + .5 * sin(p1 * .43));
     vec3 p = position + normal * (wave * amplitude + (neck - 1.0) * aRadius);
     vec4 world = modelMatrix * vec4(p, 1.0);
     vWorldPos = world.xyz;
@@ -81,15 +83,21 @@ const FRAG = /* glsl */`
       refracted = textureCubeUV(uEnvironment, uEnvironmentRotation * refract(-eye, n, 1.0 / 1.333), .13).rgb * uEnvironmentIntensity;
       diffuse = textureCubeUV(uEnvironment, uEnvironmentRotation * n, .8).rgb * uEnvironmentIntensity;
     #endif
-    float travel = vT - uTime * 3.2 * uFlow;
-    float detail = noise(vec2(travel * 78.0 + vSeed * 17.0, vRing * 14.0));
-    float slow = noise(vec2(travel * 23.0, vSeed * 7.0 + vRing * 4.0));
+    float travel = vT - uTime * 1.45 * uFlow;
+    float detail = noise(vec2(travel * 36.0 + vSeed * 17.0, vRing * 9.0));
+    float slow = noise(vec2(travel * 13.0, vSeed * 7.0 + vRing * 4.0));
     float luma = dot(reflected, vec3(.2126, .7152, .0722));
     vec3 clearWater = mix(refracted * .7, reflected, .3 + .7 * fresnel);
     // The reference's bundled stream has a bright, full core. Preserve that
     // difference without making either mode an opaque white cylinder.
-    vec3 fullCore = mix(vec3(.6, .66, .67), vec3(.94), .45 + .45 * detail) * (.55 + diffuse * .65);
-    vec3 color = mix(clearWater, fullCore, uBundle * .66 * facing);
+    // The recorded bundle has a bright, aerated-looking body; retain a clear
+    // rim instead of painting a solid white tube. This is an optical reference,
+    // not a claim about measured air content or a fluid simulation.
+    float body = 1.0 - exp(-2.4 * facing);
+    float filaments = noise(vec2(travel * 18.0 + vSeed * 11.0, vRing * 23.0));
+    vec3 illumination = clamp(diffuse, vec3(.28), vec3(1.35));
+    vec3 fullCore = vec3(.76 + .18 * detail + .06 * filaments) * (.68 + illumination * .32);
+    vec3 color = mix(clearWater, fullCore, uBundle * .82 * body);
     if (uHasBackdrop > .5) {
       vec3 viewNormal = normalize(mat3(viewMatrix) * n);
       vec2 screenUV = gl_FragCoord.xy / uResolution;
@@ -97,15 +105,19 @@ const FRAG = /* glsl */`
       vec2 offset = viewNormal.xy * mix(2.0, 7.0, uBundle) / uResolution;
       offset *= .55 + .45 * detail;
       vec3 through = texture2D(uBackdrop, clamp(screenUV + offset, vec2(.001), vec2(.999))).rgb;
-      vec3 wet = mix(through, reflected, .12 + .7 * fresnel);
-      color = mix(wet, fullCore, uBundle * .38 * facing);
+      // Keep the backdrop visible through the clear jets; reflections strengthen
+      // at grazing angles rather than becoming a uniform gray fill.
+      vec3 wet = mix(through, reflected, .18 + .72 * fresnel);
+      color = mix(wet, fullCore, uBundle * .78 * body);
     }
-    float endBreakup = mix(1.0, smoothstep(.12, .38, slow), smoothstep(.76, 1.0, vT));
+    float endBreakup = mix(1.0, smoothstep(.15, .42, slow), smoothstep(.72, 1.0, vT) * (1.0 - uBundle * .7));
     float start = smoothstep(0.0, .018, vT - uTail);
-    float end = 1.0 - smoothstep(.82, 1.0, vT);
+    float end = 1.0 - smoothstep(mix(.86, .9, uBundle), 1.0, vT);
+    float edgeWidth = max(fwidth(facing) * 1.2, .025);
+    float silhouette = smoothstep(0.0, edgeWidth, facing);
     float head = uHead > .999 ? 1.0 : 1.0 - smoothstep(uHead - .035, uHead, vT);
-    float alpha = .15 + .64 * fresnel + .24 * smoothstep(.45, 1.5, luma) + uBundle * (.37 + detail * .12) * facing;
-    gl_FragColor = vec4(color, clamp(alpha, 0.0, .9) * start * end * head * endBreakup * uOpacity);
+    float alpha = .26 + .58 * fresnel + .22 * smoothstep(.45, 1.5, luma) + uBundle * (.48 + detail * .13) * body;
+    gl_FragColor = vec4(color, clamp(alpha, 0.0, .9) * start * end * head * endBreakup * silhouette * uOpacity);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
   }
@@ -243,7 +255,8 @@ export class WaterSpray {
         this._dropTangent.copy(path.outward).multiplyScalar(.22); this._dropTangent.y -= .124 * t;
         this._dummy.quaternion.setFromUnitVectors(this._dropUp, this._dropTangent.normalize());
         const visible = t <= this.uniforms.uHead.value && t >= this.uniforms.uTail.value;
-        const fade = Math.min(1, Math.max(0, (1.0 - t) / .08));
+        const birth = THREE.MathUtils.smoothstep(t, .76, .82);
+        const fade = birth * (1 - THREE.MathUtils.smoothstep(t, .92, 1.0));
         const radius = visible ? (.00032 + variation * .00048) * fade : 0;
         this._dummy.scale.set(radius, radius * (1.3 + variation * .8), radius);
         this._dummy.updateMatrix(); d.mesh.setMatrixAt(i, this._dummy.matrix);
