@@ -1,9 +1,9 @@
 // Oberfläche: Ansichten, Panels aus den Produktdaten, Bedienung der Bühne.
 import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js?v=78787a72';
-import { Stage, webglAvailable } from './stage.js?v=416fb5e5';
+import { Stage, webglAvailable } from './stage.js?v=e1e9dd63';
 import { initOpening } from './opening.js?v=41a317ad';
 
-const MODEL_URL = 'assets/models/ecobum-home-prototype02-compact.glb';
+const MODEL_URL = 'assets/models/ecobum-home-prototype02-detail.glb';
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -83,13 +83,22 @@ function revealItem(el) {
 }
 
 
+function streamIcon(mode) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'stream-icon'); svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', mode === 'spray' ? 'M8 4L4 20M12 4v16M16 4l4 16' : 'M9 4v16M12 4v16M15 4v16');
+  svg.append(path); return svg;
+}
 function waterControls(context) {
   return h('div.water-choice', { 'data-water-controls': context },
     h('div.segmented', { role: 'group', 'aria-label': 'Strahlart wählen' },
       [['spray', 'Brausestrahl'], ['stream', 'Gebündelt']].map(([id, name]) =>
         h('button.segmented__btn', { type: 'button', 'data-spray-mode': id, 'aria-pressed': id === state.waterMode ? 'true' : 'false', onclick: () => {
           state.waterMode = id; stage?.setWaterMode(id); updateWaterUI();
-        } }, name))),
+        } }, streamIcon(id), h('span', {}, name)))),
     h('p.water-choice__description', { 'data-water-description': '', 'aria-live': 'polite' }, 'Mehrere getrennte Wasserstrahlen.'),
     h('button.btn.btn--primary', { type: 'button', 'data-water-toggle': '', 'aria-pressed': 'false', onclick: toggleWater }, 'Wasser starten'),
     h('p.water-choice__note', {}, 'Strahlbild illustrativ · keine Druck- oder Durchflussmessung.'));
@@ -210,7 +219,7 @@ function updatePartCard({ reveal = false } = {}) {
   }
   card.replaceChildren(
     h('p.part-card__text', { text: c.role }),
-    factList(c.facts),
+    h('details.part-card__facts', {}, h('summary.step-more__summary', {}, 'Details und Planungsstand'), factList(c.facts)),
     h('button.btn.btn--quiet', { type: 'button', onclick: () => { const id = state.component; selectComponent(null); $(`[data-component="${id}"]`).focus({ preventScroll: true }); } }, 'Zur Gesamtansicht')
   );
   $(`[data-item="${c.id}"]`).append(card);
@@ -298,10 +307,10 @@ function endSetTour({ connect = false } = {}) {
 
 // Drei bewusst selbst gewählte Perspektiven. Bestehende 3D-Szene, keine zweite Render-Schleife.
 const CHAPTERS = [
-  { label: 'Form', title: 'Klare Form. Zwei Strahlarten.', text: 'Der neue EcoBum-Prototyp: gerader Griff, silberne Oberfläche und ein Druckknopf hinten am Kopf.', view: 'discover', detail: 'overview', next: 'Wasser erleben' },
-  { label: 'Wasser', title: 'Zwei Strahlarten.', text: 'Direkt am Kopf wählbar. Hier in 3D vergleichen.', view: 'discover', detail: 'spray', next: 'Zum Druckknopf', water: true },
-  { label: 'Knopf', title: 'Drücken. Ein. Drücken. Aus.', text: 'Der Knopf am hinteren Kopfende schaltet im Prototypvideo den Wasserfluss. Einmal starten, erneut stoppen.', view: 'discover', detail: 'button', next: 'Zum Set', water: true },
-  { label: 'Set', title: 'Fünf Teile. Ein Zusammenspiel.', text: 'Der neue Handbidet-Prototyp im geplanten Set. Die passende Halterung und Anschlussausführung sind noch zu prüfen.', view: 'set', next: 'Set erkunden' },
+  { label: 'Form', title: 'Wasser. In deiner Hand.', text: 'Entdecke EcoBum Home: eine klare Form, zwei Strahlarten und ein Druckknopf für Ein und Aus.', view: 'discover', detail: 'overview', next: 'Wasser erleben' },
+  { label: 'Wasser', title: 'Ein Dreh. Zwei Strahlarten.', text: 'Einzelne Strahlen oder ein gebündelter Wasserstrahl. Starte die Demo und entdecke den Unterschied.', view: 'discover', detail: 'spray', next: 'Zum Druckknopf', water: true },
+  { label: 'Knopf', title: 'Ein Druck. Wasser an.', text: 'Noch einmal drücken: Wasser aus. Erlebe den hinteren Druckknopf in der Nahansicht.', view: 'discover', detail: 'button', next: 'Zum Set', water: true },
+  { label: 'Set', title: 'Fünf Teile. Ein Zusammenspiel.', text: 'Vom Handbidet bis zum flexiblen Anschlussschlauch: Entdecke, wie das geplante Set zusammengehört. Passung und Anschlüsse sind noch in Prüfung.', view: 'set', next: 'Set erkunden' },
 ];
 
 function renderPresentation() {
@@ -309,7 +318,11 @@ function renderPresentation() {
     h('button.btn.btn--light.presentation__exit', { type: 'button', onclick: () => endPresentation() }, 'Frei erkunden'),
     h('div.presentation__copy', { id: 'presentationCopy', 'aria-live': 'polite', 'aria-atomic': 'true' },
       h('h2', { id: 'presentationTitle', tabindex: '-1' }), h('p', { id: 'presentationText' }),
-      h('div', { id: 'presentationWater', hidden: true }, waterControls('presentation'))),
+      h('div', { id: 'presentationWater', hidden: true }, waterControls('presentation')),
+      h('button.btn.btn--quiet.presentation__connection', { id: 'presentationConnection', type: 'button', hidden: true, onclick: () => {
+        endPresentation(); setView('connect');
+        requestAnimationFrame(() => $('#panel').focus({ preventScroll: true }));
+      } }, 'Wie passt es in mein Bad?')),
     h('nav.presentation__nav', { 'aria-label': 'Präsentationskapitel' },
       h('div.presentation__chapters', {}, CHAPTERS.map((c, i) => h('button.presentation__chapter', {
         type: 'button', 'data-chapter': i, 'aria-label': `Kapitel ${i + 1}: ${c.label}`, onclick: () => setChapter(i),
@@ -342,10 +355,13 @@ function startPresentation({ fromOpening = false } = {}) {
 }
 
 function setChapter(index, { sync = true } = {}) {
+  const returnToTop = window.scrollY > 0;
+  const focusReading = !!document.activeElement?.closest('.presentation__nav');
   state.chapter = Math.max(0, Math.min(CHAPTERS.length - 1, index));
   const c = CHAPTERS[state.chapter];
   stage?.stopWater();
   $('#presentationWater').hidden = !c.water;
+  $('#presentationConnection').hidden = c.view !== 'set';
   document.body.classList.toggle('has-water-chapter', !!c.water);
   document.body.classList.toggle('has-button-chapter', c.detail === 'button');
   $('#presentationTitle').textContent = c.title;
@@ -359,11 +375,15 @@ function setChapter(index, { sync = true } = {}) {
   state.detail = c.detail || 'overview';
   updateDetailCard();
   if (sync) { updateInsets(); syncStage(); }
+  if (returnToTop) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (focusReading) $('#presentationTitle').focus({ preventScroll: true });
+  }
   const copy = $('#presentationCopy');
   copy.getAnimations().forEach((a) => a.cancel());
   if (!reducedQuery.matches) copy.animate([
-    { clipPath: 'inset(0 0 100% 0)', opacity: .4 },
-    { clipPath: 'inset(0 0 0% 0)', opacity: 1 },
+    { opacity: .25, translate: '0 12px' },
+    { opacity: 1, translate: '0 0' },
   ], { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
 }
 
@@ -412,6 +432,7 @@ function renderConnect() {
       }, sc.label))),
     h('div.stepper', { id: 'stepper' },
       h('p.stepper__count', { id: 'stepCount' }),
+      h('div.stepper__progress', { 'aria-hidden': 'true' }, h('span', { id: 'connectionProgress' })),
       h('div.step-card', { id: 'stepCard', 'aria-live': 'polite' })),
     tech,
     h('details.steps-all', { id: 'stepsAll' },
@@ -455,6 +476,7 @@ function updateStepCard() {
     h('span', { text: `Schritt ${state.step + 1} von ${steps.length}` }),
     statusTag(sc.status));
   $('#stepPos').textContent = `${state.step + 1} / ${steps.length}`;
+  $('#connectionProgress').style.transform = `scaleX(${(state.step + 1) / steps.length})`;
   const card = $('#stepCard');
   const inlineFacts = s.id === 'open';   // „Was noch offen ist“: die Liste ist die Erklärung
   keepFocus(card, () => {

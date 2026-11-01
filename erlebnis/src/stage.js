@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
 import { ContactShadow } from './contactShadow.js?v=5f1cba7a';
-import { WaterSpray } from './water.js?v=6632649a';
+import { WaterSpray } from './water.js?v=a7b756ac';
 import { Hose } from './hose.js?v=6f7de855';
 import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
 
@@ -75,6 +75,7 @@ function studioEnvironment(renderer) {
 
   panel(5, 3, 0.9, V(-5, 7, 5));          // Himmel über dem Fenster (weich)
   panel(3, 10, 2.0, V(8, 1.5, -3), false, .22, [.94, .98, 1.05]);     // Streiflicht rechts hinten
+  panel(7, 2.8, 1.8, V(1, 6, 5), false, .32, [1.02, 1.0, .97]);
   panel(9, 3, 0.7, V(0, 10, 0.5));         // Oberlicht (gedämpft: Kopfoberseite nicht überstrahlen)
   panel(4, 5, 1.1, V(6, 1, 7));           // Aufheller rechts vorn
   panel(2.2, 11, 0, V(1.4, 0.6, 9.5), true);  // dunkler Streifen vorn (Formkontrast)
@@ -233,7 +234,7 @@ export class Stage extends EventTarget {
         // sichtbaren Maßstab. Mehr Anisotropie (0,5) brennt den Kopf zu einer gleichmäßig hellen Fläche aus
         // (Vergleich docs/qa/qualitaet/produkt/varianten/); 0,25 bei Rauheit 0,28 zeigt gerichtete Glanzbänder
         const m = new THREE.MeshPhysicalMaterial({
-          name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.28,
+          name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.25,
           roughnessMap: this._tex.brushed, anisotropy: 0.25, anisotropyRotation: 0,
           normalMap: this._tex.brushedNormal, normalScale: new THREE.Vector2(0.09, 0.09),
         });
@@ -1017,10 +1018,10 @@ export class Stage extends EventTarget {
     const hbPos = this._layout('discover', 0).handbidet.pos;
     const hb = (v) => v.clone().add(hbPos);
     const presets = {
-      discover: { target: hb(V(0.0, 0.088, 0)), dir: V(-0.57, 0.16, 0.82), radius: 0.098 },
+      discover: { target: hb(V(0.0, 0.088, 0)), dir: V(-0.48, 0.12, 0.87), radius: 0.093 },
       nozzle: { target: hb(this.pts.nozzle.clone().add(V(0.004, 0, 0))), dir: V(-0.86, 0.14, 0.5), radius: 0.027 },
       button: { target: hb(this.pts.button), dir: V(0.8, 0.16, 0.6), radius: 0.035 },
-      spray: { target: hb(V(-0.1, 0.10, 0)), dir: V(-0.18, 0.1, 1), radius: 0.125 },
+      spray: { target: hb(V(-0.105, 0.10, 0)), dir: V(-0.18, 0.1, 1), radius: 0.125 },
       grip: { target: hb(V(0.004, 0.078, 0)), dir: V(0.32, 0.1, 0.94), radius: 0.05 },
       port: { target: hb(this.pts.port.clone().add(V(0, 0.01, 0))), dir: V(-0.5, -0.32, 0.8), radius: 0.024 },
       ...this._connectPresets(),
@@ -1075,10 +1076,17 @@ export class Stage extends EventTarget {
   }
 
   _setCamera(p) {
+    // Resize must use the new distance bounds before OrbitControls updates.
+    // Old portrait/detail bounds could otherwise clamp the new desktop framing.
+    this._applyControlLimits(this.view, p);
+    const damping = this.controls.enableDamping;
+    this.controls.enableDamping = false;
+    this.controls.update();
     this.controls.target.copy(p.target);
     this.camera.position.copy(p.target).addScaledVector(p.dir, p.distance);
     this.camera.lookAt(p.target);
     this.controls.update();
+    this.controls.enableDamping = damping;
     this.dirty = true;
   }
 
@@ -1206,6 +1214,9 @@ export class Stage extends EventTarget {
   }
 
   _placeShadow() {
+    // A tighter contact shadow grounds the laid-out set; the free hero stays soft.
+    this.shadow.blur = this.view === 'set' ? 1.8 : 4.0;
+    this.shadow.plane.material.opacity = this.view === 'set' ? .42 : .28;
     if (this.view === 'connect') this.shadow.group.position.copy(SCENARIOS[this.scenario].shadowCenter);
     else if (this.view === 'set') this.shadow.group.position.set(0.02, 0, 0.1);
     else this.shadow.group.position.set(-0.08, 0, 0.05);
