@@ -5,9 +5,10 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
-import { ContactShadow } from './contactShadow.js?v=bc8ef541';
+import { ContactShadow } from './contactShadow.js?v=f48e9b31';
 import { WaterSpray } from './water.js?v=80528253';
 import { WaterBackdrop } from './waterBackdrop.js?v=bd125f63';
+import { ProductInteraction } from './productInteraction.js?v=957f18d4';
 import { Hose } from './hose.js?v=46cdb43c';
 import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
 
@@ -552,6 +553,7 @@ export class Stage extends EventTarget {
     Object.values(this.flows).forEach((f) => this.scene.add(f.mesh));
 
     this._buildLabels();
+    this.productInteraction = new ProductInteraction(this);
     // Jedes Bauteil aus den Produktdaten braucht ein Gegenstück in der Szene und umgekehrt
     const missingComps = this.content.components.map((c) => c.id).filter((id) => !this.comps[id]);
     if (missingComps.length) throw stageError('setup', `Bauteile ohne Darstellung: ${missingComps.join(', ')}`);
@@ -1219,6 +1221,8 @@ export class Stage extends EventTarget {
   }
 
   _placeShadow() {
+    // Keep the floor shadow off the curved backdrop transition (radius .14).
+    this.shadow.floorFade.value.set(this.view === 'set' ? SET_WALL_Z + .14 : -1000, this.view === 'set' ? SET_WALL_Z + .19 : -999);
     // A tighter contact shadow grounds the laid-out set; the free hero stays soft.
     this.shadow.setBounds(this.view === 'set' ? .68 : 1.3, this.view === 'set' ? .12 : .3);
     this.shadow.blur = this.view === 'set' ? 1.2 : 4.0;
@@ -1389,6 +1393,7 @@ export class Stage extends EventTarget {
   setWaterMode(mode) {
     if (!this.water) return;
     this.water.setMode(mode);
+    if (this.productInteraction) this.productInteraction.mode = mode;
     this.dirty = true;
   }
 
@@ -1537,6 +1542,7 @@ export class Stage extends EventTarget {
   }
 
   _updateLabels() {
+    this.productInteraction?.update();
     if (!this.labels.length) return;
     if (this.view === 'set') {
       for (const l of this.labels) if (l.view !== 'set') l.el.hidden = true;

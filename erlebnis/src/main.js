@@ -1,6 +1,6 @@
 // Oberfläche: Ansichten, Panels aus den Produktdaten, Bedienung der Bühne.
 import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js?v=78787a72';
-import { Stage, webglAvailable } from './stage.js?v=983c6432';
+import { Stage, webglAvailable } from './stage.js?v=03ae7b30';
 import { initOpening } from './opening.js?v=41a317ad';
 
 const MODEL_URL = 'assets/models/ecobum-home-prototype02-detail.glb';
@@ -852,6 +852,18 @@ async function boot() {
   }
   if (opening.active() && $('#opening').classList.contains('is-playing')) stage.setPaused(true);
   stage.addEventListener('interaction', hideHint);
+  stage.addEventListener('productaction', (e) => {
+    if (state.view !== 'discover' || state.presentation) return;
+    if (e.detail === 'button') {
+      if (stage.waterActive) stage.stopWater();
+      else { stage.setWaterMode(state.waterMode); stage.startWater(); }
+    } else if (e.detail === 'mode') {
+      state.waterMode = state.waterMode === 'spray' ? 'stream' : 'spray';
+      stage.setWaterMode(state.waterMode);
+    }
+    hideHint();
+    updateWaterUI();
+  });
   stage.addEventListener('labelselect', (e) => {
     const fromLabel = document.activeElement && document.activeElement.closest && document.activeElement.closest('.stage__labels');
     selectComponent(state.tour ? e.detail : state.component === e.detail ? null : e.detail);

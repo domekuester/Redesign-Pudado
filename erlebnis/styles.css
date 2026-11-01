@@ -882,4 +882,20 @@ body.is-presentation #sprayBadge { display: none; }
   body.is-presentation.has-water-chapter .stage { min-height: 560px; }
 }
 
+/* Bedienpunkte am Produkt: große Ziele, feine Zuordnung, bestehende Markenfarben. */
+.product-point {
+  position: absolute; left: 0; top: 0; pointer-events: auto;
+  min-height: var(--touch); padding: var(--space-1); display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center; line-height: 1.3; white-space: nowrap;
+  color: var(--ink); background: var(--paper); border: var(--line) solid var(--border-control);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-float); font-size: var(--text-xs);
+  transition: background var(--duration), border-color var(--duration);
+}
+.product-point small { color: var(--gray); font-size: inherit; font-weight: 400; }
+.product-point:hover { border-color: var(--blue); background: var(--mist); }
+.product-point[aria-pressed="true"] { border-color: var(--blue); }
+.product-point[aria-pressed="true"] strong { color: var(--blue-deep); }
+.product-point__line { background: var(--border-control); }
+.product-point__line::before { background: var(--blue); }
+
 a.brand { color: inherit; text-decoration: none; }

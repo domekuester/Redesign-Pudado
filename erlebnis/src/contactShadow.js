@@ -19,6 +19,14 @@ export class ContactShadow {
     this.plane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({
       map: this.rt.texture, opacity, transparent: true, depthWrite: false,
     }));
+    // A horizontal receiver must fade before a curved backdrop rises through
+    // it; otherwise the intersection exposes a hard triangular shadow edge.
+    this.floorFade = { value: new THREE.Vector2(-1000, -999) };
+    this.plane.material.onBeforeCompile = shader => {
+      shader.uniforms.uFloorFade = this.floorFade;
+      shader.vertexShader = 'varying float vShadowZ;\n' + shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvShadowZ = (modelMatrix * vec4(position, 1.0)).z;');
+      shader.fragmentShader = 'varying float vShadowZ; uniform vec2 uFloorFade;\n' + shader.fragmentShader.replace('#include <alphamap_fragment>', '#include <alphamap_fragment>\ndiffuseColor.a *= smoothstep(uFloorFade.x, uFloorFade.y, vShadowZ);');
+    };
     this.plane.renderOrder = -1;
     this.plane.scale.y = -1;
     this.plane.layers.set(1);
