@@ -21,11 +21,21 @@ export class Hose {
   }
 
   // points: Array<Vector3> (Weltkoordinaten), Endtangenten bereits enthalten
-  build(points) {
+  build(points, { floor = null } = {}) {
     // Layout-Tweens aktualisieren auch unveränderte Teile: deren GPU-Puffer bleiben unberührt.
-    if (points.length === this._points.length && points.every((p, i) => p.distanceToSquared(this._points[i]) < 1e-18)) return this.curve;
+    if (floor === this._floor && points.length === this._points.length && points.every((p, i) => p.distanceToSquared(this._points[i]) < 1e-18)) return this.curve;
+    this._floor = floor;
     this._points = points.map((p) => p.clone());
     const curve = new THREE.CatmullRomCurve3(points, false, 'centripetal', 0.5);
+    if (floor !== null) {
+      const original = curve.getPoint.bind(curve);
+      curve.getPoint = (t, target = new THREE.Vector3()) => {
+        const p = original(t, target);
+        // Smooth floor contact prevents spline undershoot between support points.
+        if (t > 0 && t < 1) p.y = .5 * (p.y + floor + Math.sqrt((p.y-floor)**2 + .0004**2));
+        return p;
+      };
+    }
     const length = curve.getLength();
     // Kapazität wächst in Stufen; weder Indizes noch UVs ändern sich während der Verformung.
     const needed = Math.max(32, Math.min(520, Math.ceil(length / 0.0035 / 32) * 32));

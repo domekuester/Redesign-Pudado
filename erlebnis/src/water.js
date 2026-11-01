@@ -22,7 +22,7 @@ const VERT = /* glsl */`
     float p1 = travel * 36.0 + theta * 2.0 + aSeed * 8.3;
     float p2 = travel * 67.0 - theta * 3.0 + aSeed * 17.1;
     float envelope = smoothstep(0.02, 0.34, aT);
-    float amplitude = mix(0.000085, 0.00022, uBundle) * envelope;
+    float amplitude = mix(0.000085, 0.00028 + .00024 * smoothstep(.35, 1.0, aT), uBundle) * envelope;
     float wave = sin(p1) * .65 + sin(p2) * .35;
     float axial = amplitude * (36.0 * cos(p1) * .65 + 67.0 * cos(p2) * .35) / .22;
     float around = amplitude * (2.0 * cos(p1) * .65 - 3.0 * cos(p2) * .35) / aRadius;
@@ -47,6 +47,9 @@ const FRAG = /* glsl */`
   uniform float uOpacity;
   uniform float uBundle;
   uniform float uEnvironmentIntensity;
+  uniform sampler2D uBackdrop;
+  uniform vec2 uResolution;
+  uniform float uHasBackdrop;
   #ifdef WATER_ENVIRONMENT
     uniform sampler2D uEnvironment;
     #include <cube_uv_reflection_fragment>
@@ -86,6 +89,16 @@ const FRAG = /* glsl */`
     // difference without making either mode an opaque white cylinder.
     vec3 fullCore = mix(vec3(.6, .66, .67), vec3(.94), .45 + .45 * detail) * (.55 + diffuse * .65);
     vec3 color = mix(clearWater, fullCore, uBundle * .66 * facing);
+    if (uHasBackdrop > .5) {
+      vec3 viewNormal = normalize(mat3(viewMatrix) * n);
+      vec2 screenUV = gl_FragCoord.xy / uResolution;
+      // Short screen-space offset: approximate refraction, not ray-traced fluid optics.
+      vec2 offset = viewNormal.xy * mix(2.0, 7.0, uBundle) / uResolution;
+      offset *= .55 + .45 * detail;
+      vec3 through = texture2D(uBackdrop, clamp(screenUV + offset, vec2(.001), vec2(.999))).rgb;
+      vec3 wet = mix(through, reflected, .12 + .7 * fresnel);
+      color = mix(wet, fullCore, uBundle * .38 * facing);
+    }
     float endBreakup = mix(1.0, smoothstep(.12, .38, slow), smoothstep(.76, 1.0, vT));
     float start = smoothstep(0.0, .018, vT - uTail);
     float end = 1.0 - smoothstep(.82, 1.0, vT);
@@ -115,7 +128,7 @@ export class WaterSpray {
     for (const mode of ['spray', 'stream']) {
       this.materials[mode] = new THREE.ShaderMaterial({
         vertexShader: VERT, fragmentShader: FRAG, defines,
-        uniforms: { ...this.uniforms, uEnvironment: { value: environment }, uEnvironmentIntensity: { value: environmentIntensity }, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
+        uniforms: { ...this.uniforms, uBackdrop: { value: null }, uResolution: { value: new THREE.Vector2(1,1) }, uHasBackdrop: { value: 0 }, uEnvironment: { value: environment }, uEnvironmentIntensity: { value: environmentIntensity }, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
         transparent: true, depthWrite: false, side: THREE.FrontSide,
       });
     }
@@ -173,6 +186,13 @@ export class WaterSpray {
     }
     this.group.visible = false;
     this.active = false; this.reduced = false; this.mode = 'spray'; this.blend = 0; this._changed = false;
+  }
+  setBackdrop(texture, size) {
+    for (const m of Object.values(this.materials)) {
+      m.uniforms.uBackdrop.value = texture;
+      m.uniforms.uResolution.value.copy(size);
+      m.uniforms.uHasBackdrop.value = texture ? 1 : 0;
+    }
   }
   _applyMode() {
     this.materials.spray.uniforms.uOpacity.value = 1 - this.blend;

@@ -7,6 +7,7 @@ import { VerticalBlurShader } from 'three/addons/shaders/VerticalBlurShader.js';
 export class ContactShadow {
   constructor(renderer, { size = 1.4, height = 0.32, resolution = 512, darkness = 1.15, opacity = 0.62, blur = 2.6 } = {}) {
     this.renderer = renderer;
+    this.baseSize = size;
     this.blur = blur;
     this.group = new THREE.Group();
     this.rt = new THREE.WebGLRenderTarget(resolution, resolution);
@@ -51,6 +52,15 @@ export class ContactShadow {
     this.vBlur.depthTest = false;
   }
 
+  setBounds(size, height) {
+    this.plane.scale.x = size / this.baseSize;
+    this.plane.scale.z = size / this.baseSize;
+    this.blurPlane.scale.set(size / this.baseSize, 1, size / this.baseSize);
+    this.camera.left = this.camera.bottom = -size / 2;
+    this.camera.right = this.camera.top = size / 2;
+    this.camera.far = height;
+    this.camera.updateProjectionMatrix();
+  }
   _blur(amount) {
     const r = this.renderer;
     this.blurPlane.visible = true;

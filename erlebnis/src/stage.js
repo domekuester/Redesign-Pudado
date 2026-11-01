@@ -5,9 +5,10 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
-import { ContactShadow } from './contactShadow.js?v=5f1cba7a';
-import { WaterSpray } from './water.js?v=17d7fbcd';
-import { Hose } from './hose.js?v=6f7de855';
+import { ContactShadow } from './contactShadow.js?v=bc8ef541';
+import { WaterSpray } from './water.js?v=80528253';
+import { WaterBackdrop } from './waterBackdrop.js?v=bd125f63';
+import { Hose } from './hose.js?v=46cdb43c';
 import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -70,14 +71,14 @@ function studioEnvironment(renderer) {
     m.lookAt(0, 0, 0);
     env.add(m);
   };
-  panel(6, 10, 1.5, V(-8, 2.5, 5), false, 0.12, [1.04, 1.0, .93]);   // Fenster links vorn (hoch, wie in der Eröffnung), klare Kanten
+  panel(6, 10, 1.8, V(-8, 2.5, 5), false, 0.12, [1.04, 1.0, .93]);   // Fenster links vorn (hoch, wie in der Eröffnung), klare Kanten
   // Ununterbrochene Fensterreflexion ohne dunkle Sprossen.
 
   panel(5, 3, 0.9, V(-5, 7, 5));          // Himmel über dem Fenster (weich)
-  panel(3, 10, 2.0, V(8, 1.5, -3), false, .22, [.94, .98, 1.05]);     // Streiflicht rechts hinten
+  panel(2.4, 10, 2.1, V(8, 1.5, -3), false, .22, [.94, .98, 1.05]);     // Streiflicht rechts hinten
   panel(7, 2.8, 1.8, V(1, 6, 5), false, .32, [1.02, 1.0, .97]);
   panel(9, 3, 0.7, V(0, 10, 0.5));         // Oberlicht (gedämpft: Kopfoberseite nicht überstrahlen)
-  panel(4, 5, 1.1, V(6, 1, 7));           // Aufheller rechts vorn
+  panel(4, 5, 0.85, V(6, 1, 7));           // Aufheller rechts vorn
   panel(2.2, 11, 0, V(1.4, 0.6, 9.5), true);  // dunkler Streifen vorn (Formkontrast)
   panel(3, 11, 0, V(-9, 0.6, -2), true);      // dunkler Streifen links hinten
   const pmrem = new THREE.PMREMGenerator(renderer);
@@ -234,15 +235,15 @@ export class Stage extends EventTarget {
         // sichtbaren Maßstab. Mehr Anisotropie (0,5) brennt den Kopf zu einer gleichmäßig hellen Fläche aus
         // (Vergleich docs/qa/qualitaet/produkt/varianten/); 0,25 bei Rauheit 0,28 zeigt gerichtete Glanzbänder
         const m = new THREE.MeshPhysicalMaterial({
-          name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.25,
+          name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.24,
           roughnessMap: this._tex.brushed, anisotropy: 0.25, anisotropyRotation: 0,
-          normalMap: this._tex.brushedNormal, normalScale: new THREE.Vector2(0.09, 0.09),
+          normalMap: this._tex.brushedNormal, normalScale: new THREE.Vector2(0.115, 0.115),
         });
         addEdgeCalm(m);
         return m;
       case 'Metal_Satin':
         // Stirnfläche: konzentrische Struktur, keine Rauheitskarte
-        return new THREE.MeshPhysicalMaterial({ name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.27, anisotropy: 0.25 });
+        return new THREE.MeshPhysicalMaterial({ name, color: METAL_RENDER_HEX, metalness: 1, roughness: 0.30, anisotropy: 0.16 });
       case 'Metal_Thread':
         // Gewinde und Schlauchmuttern: gedreht und glatt, glänzender als die gebürstete Oberfläche
         return new THREE.MeshPhysicalMaterial({ name, color: '#DAD8D4', metalness: 1, roughness: 0.17 });
@@ -412,7 +413,7 @@ export class Stage extends EventTarget {
     // Schlauch
     // Brauseschlauch: blanke, gewickelte Metallspirale (glänzend, kräftige Rillen)
     const hoseMat = new THREE.MeshPhysicalMaterial({
-      name: 'Hose', color: '#DCDAD6', metalness: 1, roughness: 0.15,
+      name: 'Hose', color: '#DCDAD6', metalness: 1, roughness: 0.22,
       normalMap: this._tex.rib, normalScale: new THREE.Vector2(1.05, 1.05),
     });
     mats.hose.push(hoseMat);
@@ -480,6 +481,7 @@ export class Stage extends EventTarget {
     });
     this.water = new WaterSpray({ origin: this.pts.nozzle.clone().add(V(-0.0006, 0, 0)), direction: V(-1, 0, 0), jets, environment: this.scene.environment, environmentIntensity: this.scene.environmentIntensity });
     this.water.setReducedMotion(this.reduced);
+    this.waterBackdrop = new WaterBackdrop(this.renderer, () => { this.dirty = true; });
     hb.add(this.water.group);
 
     // Schematische Umgebung
@@ -634,7 +636,7 @@ export class Stage extends EventTarget {
     this.nutD.quaternion.setFromUnitVectors(Y, F.b.dir);
     const a0 = F.a.pos.clone().addScaledVector(F.a.dir, this.flexNutLen);
     const b0 = F.b.pos.clone().addScaledVector(F.b.dir, this.flexNutLen);
-    this.flex.build([a0, a0.clone().addScaledVector(F.a.dir, 0.017), ...F.wp, b0.clone().addScaledVector(F.b.dir, 0.017), b0]);   // gerade durch die Pressmuffe
+    this.flex.build([a0, a0.clone().addScaledVector(F.a.dir, 0.017), ...F.wp, b0.clone().addScaledVector(F.b.dir, 0.017), b0], { floor: this.view === 'set' ? this.flex.radius : null });   // gerade durch die Pressmuffe
     this._flexMid = this.flex.curve.getPointAt(0.5);
   }
 
@@ -731,18 +733,21 @@ export class Stage extends EventTarget {
     if (sel === 'tvalve') { tvPos = tvPos.add(V(0, 0.012, 0.018)); tvYaw += 0.75; }   // Logokappe zur Kamera
     // Explosionsansicht: Anschlussschlauch steht über dem oberen Abgang des T-Ventils und führt in einem
     // ruhigen S nach oben – dorthin, wo der bestehende Anschluss (z. B. Spülkasten) liegt
+    if (sel === 'hose') hose.forEach((p,i) => { p.y += .012 * Math.sin(Math.PI * (i+1)/(hose.length+1)); });
     const top = tvPos.clone().add(V(0, 0.064, 0));
     const up = {
       a: { pos: top.clone().add(V(0, 0.03, 0)), dir: V(0, 1, 0) },
       b: { pos: top.clone().add(V(0.04, 0.2, 0.01)), dir: V(0, -1, 0) },
       wp: [top.clone().add(V(0.003, 0.095, 0.003)), top.clone().add(V(0.02, 0.116, 0.006)), top.clone().add(V(0.037, 0.137, 0.009))],
     };
+    const flex = e > 0 ? this._lerpFlex(C.flex, up, e) : this._lerpFlex(C.flex, C.flex, 0);
+    if (sel === 'flexhose') [flex.a.pos, flex.b.pos, ...flex.wp].forEach(p => { p.y += .014; });
     return {
       bracket: { pos: brPos, quat: q(0) },
       handbidet: { pos: hbPos, quat: q(0) },
       tvalve: { pos: tvPos, quat: q(tvYaw) },
       waypoints: hose,
-      flex: e > 0 ? this._lerpFlex(C.flex, up, e) : this._lerpFlex(C.flex, C.flex, 0),
+      flex,
       reveal: 1,
     };
   }
@@ -880,7 +885,7 @@ export class Stage extends EventTarget {
     const b0 = this.nutB.localToWorld(this.pts.hoseStart.clone());
     const bDir = Y.clone().applyQuaternion(this.nutB.getWorldQuaternion(new THREE.Quaternion()));
     const pts = [a0, a0.clone().addScaledVector(aDir, 0.018), ...waypoints, b0.clone().addScaledVector(bDir, 0.018), b0];
-    this.hose.build(pts);
+    this.hose.build(pts, { floor: this.view === 'set' ? this.hose.radius : null });
     this._hoseMid = this.hose.curve.getPointAt(0.45);
   }
 
@@ -1021,7 +1026,7 @@ export class Stage extends EventTarget {
       discover: { target: hb(V(0.0, 0.088, 0)), dir: V(-0.48, 0.12, 0.87), radius: 0.093 },
       nozzle: { target: hb(this.pts.nozzle.clone().add(V(0.004, 0, 0))), dir: V(-0.86, 0.14, 0.5), radius: 0.027 },
       button: { target: hb(this.pts.button), dir: V(0.8, 0.16, 0.6), radius: 0.035 },
-      spray: { target: hb(V(-0.105, 0.10, 0)), dir: V(-0.18, 0.1, 1), radius: 0.125 },
+      spray: { target: hb(V(-0.105, 0.10, 0)), dir: V(-0.18, 0.1, 1), radius: this._frameWidth() < 360 ? 0.14 : 0.125 },
       grip: { target: hb(V(0.004, 0.078, 0)), dir: V(0.32, 0.1, 0.94), radius: 0.05 },
       port: { target: hb(this.pts.port.clone().add(V(0, 0.01, 0))), dir: V(-0.5, -0.32, 0.8), radius: 0.024 },
       ...this._connectPresets(),
@@ -1215,8 +1220,9 @@ export class Stage extends EventTarget {
 
   _placeShadow() {
     // A tighter contact shadow grounds the laid-out set; the free hero stays soft.
-    this.shadow.blur = this.view === 'set' ? 1.8 : 4.0;
-    this.shadow.plane.material.opacity = this.view === 'set' ? .42 : .28;
+    this.shadow.setBounds(this.view === 'set' ? .68 : 1.3, this.view === 'set' ? .12 : .3);
+    this.shadow.blur = this.view === 'set' ? 1.2 : 4.0;
+    this.shadow.plane.material.opacity = this.view === 'set' ? .46 : .28;
     if (this.view === 'connect') this.shadow.group.position.copy(SCENARIOS[this.scenario].shadowCenter);
     else if (this.view === 'set') this.shadow.group.position.set(0.02, 0, 0.1);
     else this.shadow.group.position.set(-0.08, 0, 0.05);
@@ -2011,6 +2017,7 @@ export class Stage extends EventTarget {
       if (this.paused) return;
       let active = this.tweens.update(dt);
       if (this.controls.enabled) active = this.controls.update() || active;
+      const sceneMoving = active;
       active = this.water.update(dt) || active;
       for (const f of Object.values(this.flows)) active = f.update(dt, this.reduced) || active;
       if (active || this.dirty) {
@@ -2019,6 +2026,10 @@ export class Stage extends EventTarget {
           if (this.backdrop && this.backdrop.visible) this.wallShadow.render(this.scene);
           this.shadowDirty = false;
         }
+        if (this.water.group.visible) {
+          this.waterBackdrop.resize(this.canvas.width, this.canvas.height);
+          if (!this.waterBackdrop.valid || this.dirty || sceneMoving) this.waterBackdrop.capture(this.scene, this.camera, this.water);
+        } else this.waterBackdrop.valid = false;
         this.renderer.render(this.scene, this.camera);
         this._updateLabels();
         this.dirty = false;
