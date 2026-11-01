@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
 import { brushedTextures, turnedTextures, ribNormalTexture, braidNormalTexture, grainNormalTexture, logoTexture } from './textures.js?v=f7c1c8a3';
 import { ContactShadow } from './contactShadow.js?v=5f1cba7a';
-import { WaterSpray } from './water.js?v=a7b756ac';
+import { WaterSpray } from './water.js?v=17d7fbcd';
 import { Hose } from './hose.js?v=6f7de855';
 import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
 
@@ -478,7 +478,7 @@ export class Stage extends EventTarget {
         jets.push({ offset: new THREE.Vector2(r * Math.cos(a), r * Math.sin(a)), spread: 2 });
       }
     });
-    this.water = new WaterSpray({ origin: this.pts.nozzle.clone().add(V(-0.0006, 0, 0)), direction: V(-1, 0, 0), jets });
+    this.water = new WaterSpray({ origin: this.pts.nozzle.clone().add(V(-0.0006, 0, 0)), direction: V(-1, 0, 0), jets, environment: this.scene.environment, environmentIntensity: this.scene.environmentIntensity });
     this.water.setReducedMotion(this.reduced);
     hb.add(this.water.group);
 

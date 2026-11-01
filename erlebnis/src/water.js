@@ -5,25 +5,38 @@ import * as THREE from 'three';
 const VERT = /* glsl */`
   attribute float aT;
   attribute float aSeed;
+  attribute float aRadius;
+  attribute vec3 aTangent;
   uniform float uTime;
   uniform float uFlow;
   uniform float uBundle;
   varying float vT;
   varying float vSeed;
   varying float vRing;
-  varying vec3 vNormalV;
-  varying vec3 vViewPos;
+  varying vec3 vWorldNormal;
+  varying vec3 vWorldPos;
   void main() {
     vT = aT; vSeed = aSeed; vRing = uv.y;
-    float phase = aT * 110.0 - uTime * 13.0 * uFlow + aSeed * 6.283185;
-    float wave = sin(phase + uv.y * 6.283185) * 0.65 + sin(phase * 1.71) * 0.35;
-    float amplitude = mix(0.00012, 0.00036, uBundle);
-    // Unbroken at the outlet; increasing surface variation downstream.
-    vec3 p = position + normal * wave * amplitude * smoothstep(0.0, 0.3, aT);
-    vec4 mv = modelViewMatrix * vec4(p, 1.0);
-    vViewPos = mv.xyz;
-    vNormalV = normalize(normalMatrix * normal);
-    gl_Position = projectionMatrix * mv;
+    float theta = uv.y * 6.283185;
+    float travel = aT - uTime * 3.2 * uFlow;
+    float p1 = travel * 36.0 + theta * 2.0 + aSeed * 8.3;
+    float p2 = travel * 67.0 - theta * 3.0 + aSeed * 17.1;
+    float envelope = smoothstep(0.02, 0.34, aT);
+    float amplitude = mix(0.000085, 0.00022, uBundle) * envelope;
+    float wave = sin(p1) * .65 + sin(p2) * .35;
+    float axial = amplitude * (36.0 * cos(p1) * .65 + 67.0 * cos(p2) * .35) / .22;
+    float around = amplitude * (2.0 * cos(p1) * .65 - 3.0 * cos(p2) * .35) / aRadius;
+    vec3 tangent = normalize(aTangent);
+    vec3 circumferential = normalize(cross(tangent, normal));
+    // Deformed normals travel with the surface, so the studio reflections move
+    // with the water instead of looking painted onto rigid tubes.
+    vec3 n = normalize(normal - tangent * axial - circumferential * around);
+    float neck = 1.0 - .16 * smoothstep(.6, 1.0, aT) * (.5 + .5 * sin(p1 * .43));
+    vec3 p = position + normal * (wave * amplitude + (neck - 1.0) * aRadius);
+    vec4 world = modelMatrix * vec4(p, 1.0);
+    vWorldPos = world.xyz;
+    vWorldNormal = normalize(mat3(modelMatrix) * n);
+    gl_Position = projectionMatrix * viewMatrix * world;
   }
 `;
 const FRAG = /* glsl */`
@@ -33,46 +46,76 @@ const FRAG = /* glsl */`
   uniform float uFlow;
   uniform float uOpacity;
   uniform float uBundle;
+  uniform float uEnvironmentIntensity;
+  #ifdef WATER_ENVIRONMENT
+    uniform sampler2D uEnvironment;
+    #include <cube_uv_reflection_fragment>
+  #endif
   varying float vT;
   varying float vSeed;
   varying float vRing;
-  varying vec3 vNormalV;
-  varying vec3 vViewPos;
+  varying vec3 vWorldNormal;
+  varying vec3 vWorldPos;
+  float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float noise(vec2 p) {
+    vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y);
+  }
   void main() {
     if (vT > uHead || vT < uTail) discard;
-    float phase = vT * 110.0 - uTime * 13.0 * uFlow + vSeed * 6.283185;
-    vec3 n = normalize(vNormalV);
-    vec3 eye = normalize(-vViewPos);
-    float facing = abs(dot(n, eye));
-    float rim = pow(1.0 - facing, 2.1);
-    // Broad softbox reflection and fine traveling filaments. Clear central body,
-    // darker optical edge: legible against a light wall without painting it blue.
-    vec3 light = normalize(vec3(-0.45, 0.8, 0.65));
-    float reflection = pow(max(dot(reflect(-light, n), eye), 0.0), 28.0);
-    float ripple = 0.5 + 0.5 * sin(phase + sin(vRing * 18.84956) * 1.1);
-    float filaments = pow(0.5 + 0.5 * sin(vRing * 62.83185 + phase * 0.13), 10.0) * uBundle;
-    float sparkle = pow(ripple, 7.0) * (0.18 + 0.3 * rim);
-    float breakup = mix(1.0, smoothstep(0.13, 0.35, ripple), smoothstep(0.62, 0.96, vT));
-    float start = smoothstep(0.0, 0.025, vT - uTail);
-    float end = 1.0 - smoothstep(0.78, 1.0, vT);
-    float head = uHead > 0.999 ? 1.0 : 1.0 - smoothstep(uHead - 0.045, uHead, vT);
-    float highlight = clamp(reflection * 1.4 + sparkle + filaments * 0.28, 0.0, 1.0);
-    vec3 color = mix(vec3(0.43, 0.55, 0.59), vec3(0.96, 0.99, 1.0), highlight);
-    float alpha = (0.10 + 0.30 * rim + 0.46 * highlight) * start * end * head * breakup * uOpacity;
-    gl_FragColor = vec4(color, alpha);
+    vec3 n = normalize(vWorldNormal);
+    vec3 eye = normalize(cameraPosition - vWorldPos);
+    float facing = clamp(abs(dot(n, eye)), 0.0, 1.0);
+    // Water's optical Fresnel response (IOR about 1.333). Refraction below is an
+    // environment approximation, not an expensive screen-space fluid simulation.
+    float fresnel = .0204 + .9796 * pow(1.0 - facing, 5.0);
+    vec3 reflected = vec3(.72);
+    vec3 refracted = vec3(.48, .53, .54);
+    vec3 diffuse = vec3(.64);
+    #ifdef WATER_ENVIRONMENT
+      reflected = textureCubeUV(uEnvironment, reflect(-eye, n), .075).rgb * uEnvironmentIntensity;
+      refracted = textureCubeUV(uEnvironment, refract(-eye, n, 1.0 / 1.333), .13).rgb * uEnvironmentIntensity;
+      diffuse = textureCubeUV(uEnvironment, n, .8).rgb * uEnvironmentIntensity;
+    #endif
+    float travel = vT - uTime * 3.2 * uFlow;
+    float detail = noise(vec2(travel * 78.0 + vSeed * 17.0, vRing * 14.0));
+    float slow = noise(vec2(travel * 23.0, vSeed * 7.0 + vRing * 4.0));
+    float luma = dot(reflected, vec3(.2126, .7152, .0722));
+    vec3 clearWater = mix(refracted * .7, reflected, .3 + .7 * fresnel);
+    // The reference's bundled stream has a bright, full core. Preserve that
+    // difference without making either mode an opaque white cylinder.
+    vec3 fullCore = mix(vec3(.6, .66, .67), vec3(.94), .45 + .45 * detail) * (.55 + diffuse * .65);
+    vec3 color = mix(clearWater, fullCore, uBundle * .66 * facing);
+    float endBreakup = mix(1.0, smoothstep(.12, .38, slow), smoothstep(.76, 1.0, vT));
+    float start = smoothstep(0.0, .018, vT - uTail);
+    float end = 1.0 - smoothstep(.82, 1.0, vT);
+    float head = uHead > .999 ? 1.0 : 1.0 - smoothstep(uHead - .035, uHead, vT);
+    float alpha = .15 + .64 * fresnel + .24 * smoothstep(.45, 1.5, luma) + uBundle * (.37 + detail * .12) * facing;
+    gl_FragColor = vec4(color, clamp(alpha, 0.0, .9) * start * end * head * endBreakup * uOpacity);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
   }
 `;
 
 export class WaterSpray {
-  constructor({ origin, direction, jets }) {
+  constructor({ origin, direction, jets, environment = null, environmentIntensity = 1 }) {
     this.group = new THREE.Group();
     this.group.layers.set(1);
     this.uniforms = { uTime: { value: 0 }, uHead: { value: 0 }, uTail: { value: 0 }, uFlow: { value: 1 } };
     this.materials = {};
+    const defines = {};
+    if (environment?.image?.height && environment?.image?.width) {
+      Object.assign(defines, {
+        WATER_ENVIRONMENT: 1, ENVMAP_TYPE_CUBE_UV: 1,
+        CUBEUV_MAX_MIP: (Math.log2(environment.image.height) - 2).toFixed(1),
+        CUBEUV_TEXEL_WIDTH: (1 / environment.image.width).toPrecision(12),
+        CUBEUV_TEXEL_HEIGHT: (1 / environment.image.height).toPrecision(12),
+      });
+    }
     for (const mode of ['spray', 'stream']) {
       this.materials[mode] = new THREE.ShaderMaterial({
-        vertexShader: VERT, fragmentShader: FRAG,
-        uniforms: { ...this.uniforms, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
+        vertexShader: VERT, fragmentShader: FRAG, defines,
+        uniforms: { ...this.uniforms, uEnvironment: { value: environment }, uEnvironmentIntensity: { value: environmentIntensity }, uOpacity: { value: mode === 'spray' ? 1 : 0 }, uBundle: { value: mode === 'stream' ? 1 : 0 } },
         transparent: true, depthWrite: false, side: THREE.FrontSide,
       });
     }
@@ -92,12 +135,16 @@ export class WaterSpray {
         p.y -= 0.062 * s * s;
         pts.push(p);
       }
-      const radius = jet.bundled ? 0.0054 : 0.00086 + (i % 3) * 0.00007;
+      const radius = jet.bundled ? 0.0064 : 0.00086 + (i % 3) * 0.00007;
       const g = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, radius, 12, false);
       const count = g.attributes.position.count;
       const aT = new Float32Array(count);
       for (let v = 0; v < count; v++) aT[v] = Math.floor(v / 13) / 80;
       g.setAttribute('aT', new THREE.BufferAttribute(aT, 1));
+      const tangent = new Float32Array(count * 3);
+      for (let v = 0; v < count; v++) g.tangents[Math.floor(v / 13)].toArray(tangent, v * 3);
+      g.setAttribute('aTangent', new THREE.BufferAttribute(tangent, 3));
+      g.setAttribute('aRadius', new THREE.BufferAttribute(new Float32Array(count).fill(radius), 1));
       g.setAttribute('aSeed', new THREE.BufferAttribute(new Float32Array(count).fill(((i * 37) % 17) / 17), 1));
       const mode = jet.bundled ? 'stream' : 'spray';
       const mesh = new THREE.Mesh(g, this.materials[mode]);
@@ -116,7 +163,7 @@ export class WaterSpray {
     for (const mode of ['spray', 'stream']) {
       const paths = this.paths.filter(p => p.mode === mode);
       const count = paths.length * (mode === 'spray' ? 4 : 16);
-      const material = new THREE.MeshPhysicalMaterial({ color: '#CBDADC', metalness: 0, roughness: .09,
+      const material = new THREE.MeshPhysicalMaterial({ color: '#F2F6F5', metalness: 0, roughness: .055, ior: 1.333,
         clearcoat: 1, clearcoatRoughness: .04, transparent: true, opacity: .65, depthWrite: false,
         envMapIntensity: 1.6, specularIntensity: 1 });
       const mesh = new THREE.InstancedMesh(dropGeometry, material, count);
@@ -152,9 +199,12 @@ export class WaterSpray {
       for (let i = 0; i < d.mesh.count; i++) {
         const path = d.paths[i % d.paths.length];
         const seed = (i * .61803398875) % 1;
-        const t = .68 + ((time * 1.5 + seed) % 1) * .36;
-        const scatter = (t - .68) * (d.mode === 'stream' ? .006 : .003);
-        const angle = i * 2.399963;
+        const clock = time * (2.8 + seed * .7) + seed;
+        const cycle = Math.floor(clock);
+        const variation = Math.sin(i * 91.13 + cycle * 17.71) * .5 + .5;
+        const t = .76 + (clock - cycle) * .28;
+        const scatter = (t - .76) * (d.mode === 'stream' ? .006 : .003);
+        const angle = i * 2.399963 + variation * 1.8;
         this._dummy.position.copy(path.start).addScaledVector(path.outward, t * .22);
         this._dummy.position.y -= .062 * t * t;
         this._dummy.position.y += Math.sin(angle) * scatter;
@@ -163,8 +213,8 @@ export class WaterSpray {
         this._dummy.quaternion.setFromUnitVectors(this._dropUp, this._dropTangent.normalize());
         const visible = t <= this.uniforms.uHead.value && t >= this.uniforms.uTail.value;
         const fade = Math.min(1, Math.max(0, (1.04 - t) / .07));
-        const radius = visible ? (.00045 + seed * .00035) * fade : 0;
-        this._dummy.scale.set(radius, radius * (1.5 + seed), radius);
+        const radius = visible ? (.00032 + variation * .00048) * fade : 0;
+        this._dummy.scale.set(radius, radius * (1.3 + variation * .8), radius);
         this._dummy.updateMatrix(); d.mesh.setMatrixAt(i, this._dummy.matrix);
       }
       d.mesh.instanceMatrix.needsUpdate = true;
@@ -194,10 +244,10 @@ export class WaterSpray {
     const target = this.mode === 'stream' ? 1 : 0;
     this.blend += Math.sign(target - this.blend) * Math.min(Math.abs(target - this.blend), dt / 0.24);
     this._applyMode();
-    this._head = Math.min(1, (this._head || 0) + dt / 0.36);
+    this._head = Math.min(1, (this._head || 0) + dt / 0.24);
     if (this.active) this._tail = 0;
     else {
-      this._tail = Math.min(1, (this._tail || 0) + dt / 0.32);
+      this._tail = Math.min(1, (this._tail || 0) + dt / 0.24);
       if (this._tail >= 1) { this.hide(); return true; }
     }
     this._apply(); this._updateDrops(); return true;

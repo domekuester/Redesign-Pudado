@@ -1,6 +1,6 @@
 // Oberfläche: Ansichten, Panels aus den Produktdaten, Bedienung der Bühne.
 import { STATUS, META, FINISH, COMPONENTS, DETAILS, CONNECTION, INSTALL_GUIDE, stepFor } from '../data/product.js?v=78787a72';
-import { Stage, webglAvailable } from './stage.js?v=e1e9dd63';
+import { Stage, webglAvailable } from './stage.js?v=0a84c119';
 import { initOpening } from './opening.js?v=41a317ad';
 
 const MODEL_URL = 'assets/models/ecobum-home-prototype02-detail.glb';
