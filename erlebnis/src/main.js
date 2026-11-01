@@ -56,7 +56,7 @@ function factList(facts) {
 }
 
 const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const state = { waterMode: 'spray', slowWater: false, lightAngle: 0, presentation: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
+const state = { waterMode: 'spray', slowWater: false, lightAngle: 0, presentation: false, guided: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
 let stage = null;
 let opening = { active: () => false, end: () => {} };
 
@@ -100,12 +100,11 @@ function waterControls(context) {
           state.waterMode = id; stage?.setWaterMode(id); updateWaterUI();
         } }, streamIcon(id), h('span', {}, name)))),
     h('p.water-choice__description', { 'data-water-description': '', 'aria-live': 'polite' }, 'Mehrere getrennte Wasserstrahlen.'),
-    h('button.btn.btn--primary', { type: 'button', 'data-water-toggle': '', 'aria-pressed': 'false', onclick: toggleWater }, 'Wasser starten'),
+    context !== 'discover' ? h('button.btn.btn--primary', { type: 'button', 'data-water-toggle': '', 'aria-pressed': 'false', onclick: toggleWater }, 'Wasser starten') : null,
     context === 'discover' ? h('button.btn.btn--quiet.water-choice__slow', {
-      type: 'button', id: 'slowWater', 'aria-pressed': 'false', disabled: reducedQuery.matches,
+      type: 'button', id: 'slowWater', 'aria-describedby': reducedQuery.matches ? 'motionNote' : null, 'aria-pressed': 'false', disabled: reducedQuery.matches,
       onclick: () => { state.slowWater = !state.slowWater; stage?.water?.setSpeed(state.slowWater ? .25 : 1); updateWaterUI(); },
-    }, 'Zeitlupe einschalten') : null,
-    context === 'discover' ? h('p.water-choice__note', { id: 'motionNote', hidden: !reducedQuery.matches }, 'Reduzierte Bewegung aktiv: Das Wasser wird als Standbild gezeigt.') : null,
+    }, 'Zeitlupe · ¼') : null,
     h('p.water-choice__note', {}, 'Strahlbild illustrativ · keine Druck- oder Durchflussmessung.'));
 }
 function updateWaterUI() {
@@ -114,15 +113,19 @@ function updateWaterUI() {
   $$('[data-water-description]').forEach(p => { p.textContent = state.waterMode === 'spray' ? 'Mehrere getrennte Wasserstrahlen.' : 'Ein zusammenhängender Wasserstrahl.'; });
   $$('[data-water-toggle]').forEach(b => { b.textContent = active ? 'Wasser stoppen' : 'Wasser starten'; b.setAttribute('aria-pressed', String(active)); });
   const btn = $('#waterBtn');
+  btn.setAttribute('aria-label', active ? 'Wasser stoppen' : 'Wasser starten');
   btn.classList.toggle('is-active', active); btn.setAttribute('aria-pressed', String(active));
   btn.querySelector('.water__label').textContent = active ? 'Wasser stoppen' : 'Wasser starten';
   $('#sprayBadge').hidden = !active;
-  $('#sprayBadge').textContent = state.slowWater ? 'Zeitlupe · ¼ Tempo · illustrative Demo' : 'Illustrative Demo';
+  $('#sprayBadge').textContent = reducedQuery.matches ? 'Reduzierte Bewegung · Standbild' : state.slowWater ? 'Zeitlupe · ¼ Tempo · illustrative Demo' : 'Illustrative Demo';
   const slow = $('#slowWater');
   if (slow) {
     slow.setAttribute('aria-pressed', String(state.slowWater));
-    slow.textContent = state.slowWater ? 'Normales Tempo einschalten' : 'Zeitlupe einschalten';
+    slow.textContent = 'Zeitlupe · ¼';
+    slow.setAttribute('aria-label', state.slowWater ? 'Zeitlupe ausschalten' : 'Zeitlupe einschalten');
     slow.disabled = reducedQuery.matches;
+    if (reducedQuery.matches) slow.setAttribute('aria-describedby', 'motionNote');
+    else slow.removeAttribute('aria-describedby');
     $('#motionNote').hidden = !reducedQuery.matches;
   }
 }
@@ -160,13 +163,13 @@ function renderDiscover() {
     }, d.name)));
   root.append(
     h('h2.panel__title', { text: 'Das Handbidet von allen Seiten' }),
-    h('button.btn.btn--quiet', { type: 'button', onclick: () => startPresentation() }, 'Präsentation ansehen'),
+    h('button.btn.btn--quiet', { type: 'button', onclick: () => startPresentation({ guided: true }) }, 'Präsentation ansehen'),
     h('h3.panel__sub', { text: 'Detailansicht' }),
     group,
     caption,
+    h('p.water-choice__note', { id: 'motionNote', hidden: !reducedQuery.matches }, 'Reduzierte Bewegung aktiv: Das Wasser wird als Standbild gezeigt. Die Zeitlupe ist deshalb ausgeschaltet.'),
     inspectionTools(),
-    h('h3.panel__sub', { text: 'Zwei Strahlarten. Deine Wahl.' }),
-    waterControls('discover'),
+    h('p.water-choice__note', {}, 'Brausestrahl oder gebündelt: Die Wasserbedienung findest du direkt an der 3D-Ansicht. Strahlbild illustrativ, keine Druck- oder Durchflussmessung.'),
     h('h3.panel__sub', { text: 'Ausführung' }),
     h('div.finish', {},
       h('span.finish__swatch', { style: `background:${FINISH.hex}`, 'aria-hidden': 'true' }),
@@ -179,11 +182,29 @@ function renderDiscover() {
       h('p', { text: 'Vom einzelnen Handbidet zum Zusammenspiel aller fünf Teile.' }),
       h('button.btn.btn--primary', { type: 'button', onclick: startSetTour }, 'Das Set kennenlernen'))
   );
+  const dock = h('div.water-dock', { id: 'waterDock', 'aria-label': 'Wasser ausprobieren', role: 'group' }, waterControls('discover'));
+  // On short screens keep controls in the reading area, leaving the 3D product room.
+  const shortScreen = window.matchMedia('(max-height: 600px)');
+  const placeWaterDock = () => {
+    const focus = dock.contains(document.activeElement) ? document.activeElement : null;
+    if (shortScreen.matches) root.prepend(dock);
+    else $('#stageControls').before(dock);
+    if (focus) focus.focus({ preventScroll: true });
+    requestAnimationFrame(updateInsets);
+  };
+  placeWaterDock();
+  shortScreen.addEventListener('change', placeWaterDock);
+  $('#stageHint').after(h('button.btn.btn--light.detail-return', { id: 'detailReturn', type: 'button', hidden: true, onclick: () => {
+    stage?.stopWater(); setDetail('overview'); $('#scene').focus({ preventScroll: true });
+  } }, 'Zum ganzen Produkt'));
   updateDetailCard();
 }
 
 function updateDetailCard() {
   const d = DETAILS.find((x) => x.id === state.detail) || { title: 'Zwei Strahlarten', text: 'Brausestrahl und gebündelter Strahl nach dem Prototypvideo. Die Wasseranimation ist eine Illustration.' };
+  const back = $('#detailReturn');
+  if (back) back.hidden = state.detail === 'overview';
+  document.body.classList.toggle('has-detail', state.detail !== 'overview');
   const card = $('#detailCard');
   card.replaceChildren(h('p.detail-card__title', { text: d.title }), h('p.detail-card__text', { text: d.text }));
   $$('[data-detail]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.detail === state.detail ? 'true' : 'false'));
@@ -352,6 +373,10 @@ function renderPresentation() {
         requestAnimationFrame(() => $('#panel').focus({ preventScroll: true }));
       } }, 'Wie passt es in mein Bad?')),
     h('nav.presentation__nav', { 'aria-label': 'Präsentationskapitel' },
+      h('div.presentation__routes', { id: 'entryRoutes', hidden: true, role: 'group', 'aria-label': 'Dein Einstieg' },
+        h('button.btn.btn--primary', { type: 'button', onclick: () => enterExperience('product') }, 'Produkt entdecken'),
+        h('button.btn.btn--light', { type: 'button', onclick: () => enterExperience('water') }, 'Wasser ausprobieren'),
+        h('button.btn.btn--quiet', { type: 'button', onclick: () => enterExperience('connect') }, 'Anschlussmöglichkeiten ansehen')),
       h('div.presentation__chapters', {}, CHAPTERS.map((c, i) => h('button.presentation__chapter', {
         type: 'button', 'data-chapter': i, 'aria-label': `Kapitel ${i + 1}: ${c.label}`, onclick: () => setChapter(i),
       }, h('span', { 'aria-hidden': 'true', text: String(i + 1).padStart(2, '0') }), c.label))),
@@ -365,7 +390,7 @@ function renderPresentation() {
   });
 }
 
-function startPresentation({ fromOpening = false } = {}) {
+function startPresentation({ fromOpening = false, guided = false } = {}) {
   if (document.body.classList.contains('no-3d') || $('#stageState')?.dataset.kind === 'error') return;
   if (state.tour) endSetTour();
   state.slowWater = false;
@@ -373,6 +398,7 @@ function startPresentation({ fromOpening = false } = {}) {
   stage?.setInspectionLight(0);
   updateWaterUI();
   state.presentation = true;
+  state.guided = guided;
   document.body.classList.add('is-presentation');
   $('#presentation').hidden = false;
   $('#panel').inert = true;
@@ -394,6 +420,8 @@ function setChapter(index, { sync = true } = {}) {
   stage?.stopWater();
   $('#presentationWater').hidden = !c.water;
   $('#presentationConnection').hidden = c.view !== 'set';
+  document.body.classList.toggle('is-entry', !state.guided && state.chapter === 0);
+  $('#entryRoutes').hidden = state.guided || state.chapter !== 0;
   document.body.classList.toggle('has-water-chapter', !!c.water);
   document.body.classList.toggle('has-button-chapter', c.detail === 'button');
   $('#presentationTitle').textContent = c.title;
@@ -419,18 +447,37 @@ function setChapter(index, { sync = true } = {}) {
   ], { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
 }
 
-function endPresentation({ tour = false } = {}) {
+function endPresentation({ tour = false, after = null } = {}) {
   state.presentation = false;
-  document.body.classList.remove('is-presentation', 'has-water-chapter', 'has-button-chapter');
+  document.body.classList.remove('is-presentation', 'has-water-chapter', 'has-button-chapter', 'is-entry');
   stage?.stopWater();
   $('#presentation').hidden = true;
   $('#panel').inert = false;
   $('#stageLabels').inert = false;
   requestAnimationFrame(() => {
     updateInsets(); syncStage();
-    if (tour) startSetTour();
+    if (after) after();
+    else if (tour) startSetTour();
     else $('#panel').focus({ preventScroll: true });
   });
+}
+
+function enterExperience(route) {
+  endPresentation({ after: () => {
+    setView(route === 'connect' ? 'connect' : 'discover');
+    if (route === 'water') {
+      setDetail('spray');
+      stage?.setWaterMode(state.waterMode);
+      stage?.startWater();
+      hideHint();
+      updateWaterUI();
+      $('#waterBtn').focus({ preventScroll: true });
+    } else if (route === 'product') {
+      setDetail('overview');
+      $('#scene').focus({ preventScroll: true });
+    } else $('#panel').focus({ preventScroll: true });
+    if (narrowQuery.matches) window.scrollTo({ top: $('.topbar').offsetHeight, behavior: 'auto' });
+  } });
 }
 
 /* Anschluss verstehen: der aktuelle Schritt zuerst (Titel, kurze Erklärung, hervorgehobene Verbindung),
@@ -640,6 +687,7 @@ function syncStage() {
 function setDetail(id) {
   state.detail = id;
   updateDetailCard();
+  updateInsets();
   stage && stage.setDetail(id);
 }
 
@@ -783,6 +831,8 @@ function updateInsets() {
   const hint = $('#stageHint');
   // auch ausgeblendet gleich behandeln, sonst springt der Bildausschnitt beim ersten Ziehen
   if (vis(hint)) ins.top = Math.max(0, hint.getBoundingClientRect().bottom - st.top + 4);
+  const detailReturn = $('#detailReturn');
+  if (vis(detailReturn)) ins.top = Math.max(ins.top, detailReturn.getBoundingClientRect().bottom - st.top + 8);
   // Bedienzeile am unteren Rand: Wasserknopf (nur „Entdecken“) links, Werkzeugleiste rechts
   const tools = $('.stage__tools');
   const water = $('#waterBox');
@@ -791,7 +841,9 @@ function updateInsets() {
   if (state.view === 'discover' && vis(water)) top = Math.min(top, water.getBoundingClientRect().top);
   // „Entdecken“ auf breiten Bühnen: halbe Höhe genügt (Leiste in den Ecken, Produkt in der Mitte).
   // Set und Anschluss tragen Beschriftungen bis an den Rand: dort volle Höhe
-  const half = st.width >= 560 && state.view === 'discover';
+  const dock = $('#waterDock');
+  if (vis(dock) && $('#stage').contains(dock)) top = Math.min(top, dock.getBoundingClientRect().top);
+  const half = st.width >= 560 && state.view === 'discover' && !(vis(dock) && $('#stage').contains(dock));
   ins.bottom = Math.max(0, st.bottom - top + 6) * (half ? 0.5 : 1);
   stage.setInsets(ins);
 }

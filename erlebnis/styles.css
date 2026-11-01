@@ -910,4 +910,43 @@ body.is-presentation #sprayBadge { display: none; }
 .water-choice__slow { justify-self: start; }
 .water-choice__slow[aria-pressed="true"] { color: var(--blue-deep); background: var(--mist); }
 
+/* Direct entry and water controls keep the task beside the product. */
+:root { --water-dock-bottom: 72px; --water-dock-width: 420px; --entry-copy-offset: 240px; }
+.presentation__routes { display: flex; flex-wrap: wrap; gap: var(--space-2); width: 100%; }
+.presentation__routes .btn--quiet { margin-left: auto; }
+.is-entry .presentation__chapters, .is-entry .presentation__actions,
+.is-entry .presentation__exit { display: none; }
+.water-dock { position: absolute; z-index: 3; left: var(--space-1); bottom: var(--water-dock-bottom); width: min(var(--water-dock-width), calc(100% - var(--space-2))); }
+.water-dock .water-choice { display: flex; gap: var(--space-1); margin: 0; }
+.water-dock .segmented { flex: 1; flex-wrap: nowrap; gap: var(--space-1); }
+.water-dock .segmented__btn { padding: var(--space-1); min-width: 0; font-size: var(--text-xs); background: var(--paper); border-color: var(--border-control); }
+.water-dock .segmented__btn[aria-pressed="true"] { background: var(--mist); border-color: var(--blue); color: var(--blue-deep); }
+.water-dock .stream-icon { width: var(--space-2); height: var(--space-2); flex: none; }
+.water-dock .water-choice__slow { padding: var(--space-1); background: var(--paper); border-color: var(--border-control); font-size: var(--text-xs); white-space: nowrap; }
+.water-dock .water-choice__slow[aria-pressed="true"] { background: var(--mist); border-color: var(--blue); }
+.water-dock .water-choice__description, .water-dock .water-choice__note { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body:not([data-view="discover"]) .water-dock, body:not([data-view="discover"]) .detail-return,
+body.is-presentation .water-dock, body.is-presentation .detail-return,
+body:not(.is-ready) .water-dock, body:not(.is-ready) .detail-return { display: none; }
+.detail-return { position: absolute; z-index: 3; left: var(--space-2); top: var(--space-1); font-size: var(--text-xs); }
+body.has-detail .stage__hint { visibility: hidden; }
+body.has-detail .stage__badge { top: auto; bottom: calc(var(--water-dock-bottom) + var(--touch) + var(--space-1)); left: auto; right: var(--space-1); transform: none; }
+@media (max-width: 759px) {
+  .is-entry .presentation__copy { bottom: var(--entry-copy-offset); }
+  .presentation__routes { flex-direction: column; gap: var(--space-1); }
+  .presentation__routes .btn { width: 100%; margin: 0; }
+}
+@container stage (max-width: 340px) {
+  .water-dock .stream-icon { display: none; }
+  .water-dock .water-choice, .water-dock .segmented { gap: 4px; }
+}
+/* Very short windows need the reading area: controls stay in flow rather than cover the model. */
+@media (max-height: 600px) {
+  body:not(.is-presentation) .water-dock { position: static; width: auto; margin: 0 0 var(--space-2); }
+  body.has-detail .stage__badge { bottom: var(--water-dock-bottom); }
+  .water-dock .water-choice { flex-wrap: wrap; }
+  .water-dock .water-choice__slow { flex: 1; }
+  .water-dock .segmented { flex-basis: 100%; }
+}
+
 a.brand { color: inherit; text-decoration: none; }
