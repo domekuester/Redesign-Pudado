@@ -23,6 +23,7 @@
   const state = {
     triggers: [],
     calculatorObserver: null,
+    brandContext: null,
     destroyed: false
   };
 
@@ -98,7 +99,39 @@
     revealOnce('#set', ['#set .set-copy', '#set .set-visual'], { y: 18, stagger: 0.12 });
     revealOnce('#checker', ['#checker .section-head', '#checker .fotocheck'], { y: 18, stagger: 0.1 });
     revealOnce('#rechner', ['#rechner .calc2-inputs', '#rechner .calc2-results'], { y: 18, stagger: 0.12 });
-    revealOnce('#warum', ['#warum .section-head', '#warum .brand-stage'], { y: 18, stagger: 0.12 });
+    revealOnce('#warum', '#warum .section-head', { y: 18, stagger: 0.12 });
+  }
+
+  function initBrandSignature() {
+    const stage = document.querySelector('#warum .brand-stage');
+    const word = stage && stage.querySelector('.brand-stage-word');
+    const mirror = word && word.querySelector('.wordmark-mirror');
+    if (!word || !mirror) return;
+    let played = false;
+    // Context restores the authored CSS, including the mirror's scaleY(-1).
+    state.brandContext = gsap.context(() => {}, stage);
+    state.triggers.push(ScrollTrigger.create({
+      trigger: stage,
+      start: 'top 82%',
+      once: true,
+      onEnter: () => {
+        if (played || state.destroyed || reducedMotion.matches || !state.brandContext) return;
+        played = true;
+        state.brandContext.add(() => {
+          gsap.timeline({ defaults: { ease: MOTION.easeSoft } })
+            .from(word, { y: 6, opacity: 0.6, duration: 0.5 }, 0)
+            .from(mirror, { opacity: 0, duration: 0.38 }, 0.16);
+        });
+      }
+    }));
+    reducedMotion.addEventListener('change', stopBrandMotion);
+  }
+
+  function stopBrandMotion() {
+    if (!state.brandContext) return;
+    state.brandContext.revert();
+    state.brandContext = null;
+    reducedMotion.removeEventListener('change', stopBrandMotion);
   }
 
   function initSignatureMoments() {
@@ -178,6 +211,7 @@
   function cleanup() {
     if (state.destroyed) return;
     state.destroyed = true;
+    stopBrandMotion();
     if (state.calculatorObserver) state.calculatorObserver.disconnect();
     state.triggers.forEach((trigger) => trigger.kill());
     state.triggers.length = 0;
@@ -186,6 +220,7 @@
   try {
     initHero();
     initSectionReveals();
+    initBrandSignature();
     initSignatureMoments();
     initScrollProgress();
     initCalculatorFeedback();

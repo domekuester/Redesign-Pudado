@@ -2251,3 +2251,35 @@ summary:focus-visible, [tabindex]:focus-visible, .blog-card:focus-visible {
   .home-compact #how .how-grid { display: flex; flex-direction: column; }
   .home-compact #how .how-figure { width: 100%; }
 }
+
+/* Supplier polish: tactile feedback without scaling type or a ripple flash. */
+:root {
+  --press-duration: 140ms;
+  --press-distance: 1px;
+  --press-ease: cubic-bezier(.16,.84,.44,1);
+}
+.home-supplier .btn {
+  transition: transform var(--press-duration) var(--press-ease),
+    background-color var(--press-duration) ease, color var(--press-duration) ease,
+    border-color var(--press-duration) ease, box-shadow var(--press-duration) ease;
+}
+.home-supplier .btn::after { display: none; }
+.home-supplier .btn:hover { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .home-supplier .btn:hover:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(calc(-1 * var(--press-distance)));
+  }
+}
+.home-supplier .btn:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: translateY(var(--press-distance));
+  transition-duration: var(--press-duration);
+}
+.home-supplier .btn:disabled,
+.home-supplier .btn[aria-disabled="true"] { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-supplier .btn:hover:not(:disabled):not([aria-disabled="true"]),
+  .home-supplier .btn:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+    transition: none;
+  }
+}
