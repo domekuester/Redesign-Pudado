@@ -10,7 +10,7 @@ import { WaterSpray } from './water.js?v=3d7d2975';
 import { WaterBackdrop } from './waterBackdrop.js?v=bd125f63';
 import { ProductInteraction } from './productInteraction.js?v=957f18d4';
 import { Hose } from './hose.js?v=46cdb43c';
-import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=c8fce713';
+import { buildSchematic, FlowLine, SCENARIOS, WALL_Z } from './schematic.js?v=115483db';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -671,7 +671,7 @@ export class Stage extends EventTarget {
     const nut = 0.0101; // liegende Mutter
     const n = (x, y, z) => V(x, y, z).normalize();
     // Brauseschlauch: fällt von der Mutter, setzt auf und läuft in einem einzigen Bogen (Ellipse um c,
-    // Halbachsen rx/rz) zum Abzweig des T-Ventils. Der Abzweig zeigt dem ankommenden Schlauch entgegen.
+    // Halbachsen rx/rz, nahezu 180° für eine großzügige U-Schlaufe) zum Abzweig des T-Ventils. Der Abzweig zeigt dem ankommenden Schlauch entgegen.
     const arc = (c, rx, rz, deg, y = r) => {
       const t = THREE.MathUtils.degToRad(deg);
       return V(c.x + rx * Math.cos(t), y, c.z + rz * Math.sin(t));
@@ -687,12 +687,12 @@ export class Stage extends EventTarget {
     };
     if (this.compact) {
       const c = V(-0.058, 0, 0.05);
-      const rx = 0.058, rz = 0.118;
-      const tv = tee(c, rx, rz, 82);
+      const rx = 0.058, rz = 0.200;
+      const tv = tee(c, rx, rz, 175);
       return {
         bracket: V(0.0, 0.082, SET_WALL_Z + 0.007),
         tvalve: tv.pos, tvYaw: tv.yaw,
-        hose: [V(0.001, 0.042, -0.012), V(0.002, r, 0.035), arc(c, rx, rz, 22), arc(c, rx, rz, 42), arc(c, rx, rz, 60), arc(c, rx, rz, 73, 0.014)],
+        hose: [V(0.001, 0.042, -0.012), V(0.002, r, 0.035), arc(c, rx, rz, 42), arc(c, rx, rz, 86), arc(c, rx, rz, 130), arc(c, rx, rz, 160, 0.014)],
         flex: {
           a: { pos: V(0.012, nut, 0.3), dir: n(1, 0, -0.12) },
           b: { pos: V(0.022, nut, 0.205), dir: n(1, 0, 0.5) },
@@ -702,12 +702,12 @@ export class Stage extends EventTarget {
       };
     }
     const c = V(-0.075, 0, 0.05);
-    const rx = 0.105, rz = 0.105;
-    const tv = tee(c, rx, rz, 80);
+    const rx = 0.105, rz = 0.175;
+    const tv = tee(c, rx, rz, 175);
     return {
       bracket: V(0.03, 0.085, SET_WALL_Z + 0.007),
       tvalve: tv.pos, tvYaw: tv.yaw,
-      hose: [V(0.031, 0.045, -0.012), V(0.033, r, 0.035), arc(c, rx, rz, 15), arc(c, rx, rz, 35), arc(c, rx, rz, 55), arc(c, rx, rz, 70, 0.013)],
+      hose: [V(0.031, 0.045, -0.012), V(0.033, r, 0.035), arc(c, rx, rz, 40), arc(c, rx, rz, 85), arc(c, rx, rz, 130), arc(c, rx, rz, 160, 0.013)],
       flex: {
         a: { pos: V(0.068, nut, 0.232), dir: n(1, 0, -0.1) },
         b: { pos: V(0.078, nut, 0.112), dir: n(1, 0, 0.4) },

@@ -46,8 +46,8 @@ export const SCENARIOS = {
     cisternInlet: V3(-0.15, 0.419, -0.012),
     flexWaypoints: [V3(-0.258, 0.315, -0.012), V3(-0.228, 0.35, -0.012), V3(-0.172, 0.358, -0.012)],
     bracket: BRACKET,
-    // Schlauchweg vom Handbidet zum Abzweig (lockerer Bogen, keine Überlänge)
-    hose: [V3(-0.462, 0.3, -0.035), V3(-0.452, 0.235, -0.01), V3(-0.42, 0.175, 0.012), V3(-0.37, 0.16, 0.018), V3(-0.335, 0.185, 0.008), V3(-0.322, 0.215, -0.012)],
+    // Großzügige hängende U-Schlaufe; illustrative Anordnung, keine bestätigte Schlauchlänge.
+    hose: [V3(-0.462, 0.3, -0.035), V3(-0.465, 0.16, -0.01), V3(-0.44, 0.075, 0.018), V3(-0.37, 0.065, 0.025), V3(-0.33, 0.13, 0.008), V3(-0.322, 0.215, -0.012)],
     shadowCenter: V3(-0.2, 0, 0.1),
     // Überblick auf die Verbindungen (Halterung bis Spülkasteneinlass), WC nur angeschnitten als Bezug
     overview: { target: V3(-0.31, 0.33, 0.02), dir: V3(0.22, 0.2, 1), radius: 0.24 },
@@ -62,7 +62,7 @@ export const SCENARIOS = {
     // Vorher: Zuleitung der Armatur direkt am Eckventil
     beforePoints: [V3(-0.74, 0.572, -0.012), V3(-0.74, 0.61, -0.012), V3(-0.79, 0.68, 0.01), V3(-0.84, 0.7, 0.05), V3(-0.86, 0.705, 0.07)],
     bracket: BRACKET,
-    hose: [V3(-0.47, 0.29, -0.025), V3(-0.5, 0.225, 0.015), V3(-0.56, 0.2, 0.04), V3(-0.62, 0.25, 0.045), V3(-0.66, 0.4, 0.035), V3(-0.67, 0.53, 0.02)],
+    hose: [V3(-0.47, 0.29, -0.025), V3(-0.48, 0.15, 0.015), V3(-0.55, 0.075, 0.04), V3(-0.63, 0.17, 0.045), V3(-0.66, 0.4, 0.035), V3(-0.67, 0.53, 0.02)],
     shadowCenter: V3(-0.5, 0, 0.1),
     overview: { target: V3(-0.66, 0.47, 0.06), dir: V3(0.12, 0.18, 1), radius: 0.4 },
   },
