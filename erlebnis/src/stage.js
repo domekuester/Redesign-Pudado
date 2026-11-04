@@ -27,6 +27,7 @@ const METAL_RENDER_HEX = '#CFCCC6';   // wie blender/opening_scene.py (METAL_HEX
 // Setansicht: Studiohintergrund (Boden, Hohlkehle, Wand). Die Halterung hängt an der Wand wie in
 // der Vorlage „Set mit Halterung“; die übrigen Teile liegen davor auf dem Boden.
 const SET_WALL_Z = -0.05;
+const SET_BACKDROP_RADIUS = 0.14;
 // Nicht gewählte Bauteile treten zurück: deckend, aber zur Hintergrundfarbe hin aufgehellt
 // (keine Transparenz, damit Verdeckungen und Formen lesbar bleiben)
 const MUTE = 0.34;        // Tonwertrücknahme nicht gewählter Teile: Metall und Form bleiben lesbar
@@ -719,6 +720,10 @@ export class Stage extends EventTarget {
 
   _setLayout(e, sel) {
     const C = this._setConfig();
+    // Die Hohlkehle steigt hinter z = Wand + Radius an. Die gesamte Bodenanordnung
+    // davor halten: sonst verschluckt der Hintergrund den unteren Teil des T-Ventils.
+    const floorShift = V(0, 0, SET_WALL_Z + SET_BACKDROP_RADIUS + 0.04);
+    [C.tvalve, ...C.hose, C.flex.a.pos, C.flex.b.pos, ...C.flex.wp].forEach(p => p.add(floorShift));
     const q = (yaw) => new THREE.Quaternion().setFromAxisAngle(Y, yaw);
     const brPos = C.bracket.clone();
     // Explosionsansicht: Handbidet hebt sich ganz aus der Aufnahme (nach oben und nach vorn)
@@ -727,15 +732,23 @@ export class Stage extends EventTarget {
     hose[0].add(V(0, 0.07 * e, 0.035 * e));
     hose[1].add(V(0, 0.02 * e, 0.015 * e));
     let tvPos = C.tvalve.clone();
-    let tvYaw = C.tvYaw;
+    // Quer zur Blickrichtung: beide Seiten des Ventils bleiben als T-Silhouette lesbar.
+    const tvYaw = 2.4;
     // Auswahl: das gewählte Teil bewegt sich verständlich (Handbidet hebt sich aus der Halterung,
-    // für die Halterung weiter; das T-Ventil dreht die Seite mit dem Logo zur Kamera)
+    // für die Halterung weiter; das T-Ventil hebt sich bei gleichbleibender Ausrichtung)
     if (sel === 'handbidet') { hbPos.add(V(0, 0.03, 0.035)); hose[0].add(V(0, 0.015, 0.02)); }
     if (sel === 'bracket') { hbPos.add(V(-0.03, 0.09, 0.06)); hose[0].add(V(-0.03, 0.05, 0.04)); }
-    if (sel === 'tvalve') { tvPos = tvPos.add(V(0, 0.012, 0.018)); tvYaw += 0.75; }   // Logokappe zur Kamera
+    if (sel === 'tvalve') tvPos = tvPos.add(V(0, 0.012, 0.018));
     // Explosionsansicht: Anschlussschlauch steht über dem oberen Abgang des T-Ventils und führt in einem
     // ruhigen S nach oben – dorthin, wo der bestehende Anschluss (z. B. Spülkasten) liegt
     if (sel === 'hose') hose.forEach((p,i) => { p.y += .012 * Math.sin(Math.PI * (i+1)/(hose.length+1)); });
+    // Letzter Bogen folgt dem echten Mutterausgang (auch beim Auseinanderziehen).
+    // So erreicht der Schlauch das gedrehte Ventil ohne Knick vor der Kupplung.
+    const tvQuat = q(tvYaw);
+    const exitDir = Y.clone().applyQuaternion(this.nutB.quaternion).applyQuaternion(tvQuat);
+    const exit = this.pts.hoseStart.clone().applyQuaternion(this.nutB.quaternion)
+      .add(this.nutBHome).add(V(-0.035 * e, 0, 0)).applyQuaternion(tvQuat).add(tvPos);
+    hose[hose.length - 1] = exit.addScaledVector(exitDir, 0.045).add(V(0, -0.014, 0));
     const top = tvPos.clone().add(V(0, 0.064, 0));
     const up = {
       a: { pos: top.clone().add(V(0, 0.03, 0)), dir: V(0, 1, 0) },
@@ -1723,6 +1736,8 @@ export class Stage extends EventTarget {
             if (x0 < ins.left + 8 || x1 > W - ins.right - 8 || y0 < ins.top + 6 || y1 > H - ins.bottom - 8) continue;
             if (placed.some((b) => x0 < b.x1 + 6 && x1 > b.x0 - 6 && y0 < b.y1 + 6 && y1 > b.y0 - 6)) continue;
             const o = occ(x0 - GAP, y0 - GAP, x1 + GAP, y1 + GAP);
+            // Kein freier Platz: Beschriftung ausblenden statt das Produkt zu verdecken.
+            if (o > 0) continue;
             // Linie zum Anker soll keine anderen Teile kreuzen (die ersten 10 px liegen am eigenen Teil)
             const ex = Math.min(Math.max(a.x, x0), x1);
             const ey = Math.min(Math.max(a.y, y0), y1);
@@ -2238,7 +2253,7 @@ function addMute(m, uni) {
 
 // Boden, Hohlkehle (r 0,14 m) und Wand als eine Fläche; nur in der Setansicht sichtbar.
 function buildBackdrop(onReady) {
-  const R = 0.14;
+  const R = SET_BACKDROP_RADIUS;
   const prof = [];   // (y, z)
   for (let z = 1.6; z > SET_WALL_Z + R + 1e-6; z -= 0.1) prof.push([0, z]);
   for (let i = 0; i <= 16; i++) {
