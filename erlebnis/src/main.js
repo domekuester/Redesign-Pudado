@@ -22,6 +22,20 @@ function h(tag, attrs = {}, ...children) {
   return el;
 }
 
+function directionIcon(kind = 'next') {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'control-icon');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  const path = document.createElementNS(NS, 'path');
+  const paths = { next: 'M5 12h14m-6-6 6 6-6 6', expand: 'M5 12h14M12 5v14', play: 'm9 5 11 7-11 7Z', pause: 'M8 5v14M16 5v14', replay: 'M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5' };
+  path.setAttribute('d', paths[kind]);
+  svg.append(path);
+  return svg;
+}
+
 function infoIcon() {
   const NS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(NS, 'svg');
@@ -58,6 +72,9 @@ function factList(facts) {
 const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const state = { waterMode: 'spray', slowWater: false, lightAngle: 0, presentation: false, guided: false, chapter: 0, tour: false, view: 'discover', detail: 'overview', component: null, exploded: false, step: 0, stepChosen: false, lever: true, scenario: 'wc', compare: 'before', techOpen: false };
 let stage = null;
+let playbackTimer = 0;
+let playbackActive = false;
+let playbackFinished = false;
 let opening = { active: () => false, end: () => {} };
 
 /* ------------------------------------------------------------------ Panels */
@@ -97,6 +114,7 @@ function waterControls(context) {
     h('div.segmented', { role: 'group', 'aria-label': 'Strahlart wählen' },
       [['spray', 'Brausestrahl'], ['stream', 'Gebündelt']].map(([id, name]) =>
         h('button.segmented__btn', { type: 'button', 'data-spray-mode': id, 'aria-pressed': id === state.waterMode ? 'true' : 'false', onclick: () => {
+          pausePresentationPlayback();
           state.waterMode = id; stage?.setWaterMode(id); updateWaterUI();
         } }, streamIcon(id), h('span', {}, name)))),
     h('p.water-choice__description', { 'data-water-description': '', 'aria-live': 'polite' }, 'Mehrere getrennte Wasserstrahlen.'),
@@ -130,6 +148,7 @@ function updateWaterUI() {
   }
 }
 function toggleWater() {
+  pausePresentationPlayback();
   if (!stage?.objects) return;
   if (stage.waterActive) stage.stopWater();
   else {
@@ -156,31 +175,32 @@ function inspectionTools() {
 function renderDiscover() {
   const root = $('#view-discover');
   const caption = h('div.detail-card', { id: 'detailCard', 'aria-live': 'polite' });
-  const group = h('div.segmented', { role: 'group', 'aria-label': 'Detailansicht wählen' },
+  const group = h('div.segmented.detail-options', { role: 'group', 'aria-label': 'Detailansicht wählen' },
     DETAILS.map((d) => h('button.segmented__btn', {
       type: 'button', 'data-detail': d.id, 'aria-pressed': d.id === state.detail ? 'true' : 'false',
       onclick: () => setDetail(d.id),
     }, d.name)));
   root.append(
-    h('h2.panel__title', { text: 'Das Handbidet von allen Seiten' }),
-    h('button.btn.btn--quiet', { type: 'button', onclick: () => startPresentation({ guided: true }) }, 'Präsentation ansehen'),
+    h('h2.panel__title', { text: 'Jedes Detail entdecken.' }),
+    h('p.panel__text', {}, 'Drehe das Produkt, entdecke die Details oder lass dich durch Form und Bedienung führen.'),
+    h('button.btn.btn--primary', { type: 'button', onclick: () => startPresentation({ guided: true }) }, 'Präsentation starten', directionIcon()),
     h('h3.panel__sub', { text: 'Detailansicht' }),
     group,
     caption,
     h('p.water-choice__note', { id: 'motionNote', hidden: !reducedQuery.matches }, 'Reduzierte Bewegung aktiv: Das Wasser wird als Standbild gezeigt. Die Zeitlupe ist deshalb ausgeschaltet.'),
     inspectionTools(),
     h('p.water-choice__note', {}, 'Brausestrahl oder gebündelt: Die Wasserbedienung findest du direkt an der 3D-Ansicht. Strahlbild illustrativ, keine Druck- oder Durchflussmessung.'),
-    h('h3.panel__sub', { text: 'Ausführung' }),
+    h('details.finish-details', {}, h('summary', {}, 'Oberfläche und Entwicklungsstand'),
     h('div.finish', {},
       h('span.finish__swatch', { style: `background:${FINISH.hex}`, 'aria-hidden': 'true' }),
       h('div', {},
         h('p.finish__name', {}, `${FINISH.name} `, h('span.finish__code', { text: FINISH.code })),
         h('p.finish__note', { text: FINISH.note }),
         statusTag(FINISH.status))
-    ),
+    )),
     h('div.discovery-next', {},
       h('p', { text: 'Vom einzelnen Handbidet zum Zusammenspiel aller fünf Teile.' }),
-      h('button.btn.btn--primary', { type: 'button', onclick: startSetTour }, 'Das Set kennenlernen'))
+      h('button.btn.btn--light', { type: 'button', onclick: startSetTour }, 'Das Set kennenlernen', directionIcon()))
   );
   const dock = h('div.water-dock', { id: 'waterDock', 'aria-label': 'Wasser ausprobieren', role: 'group' }, waterControls('discover'));
   // On short screens keep controls in the reading area, leaving the 3D product room.
@@ -212,23 +232,29 @@ function updateDetailCard() {
 
 function renderSet() {
   const root = $('#view-set');
+  $('#stageControls').prepend(h('button.btn.btn--light.set-overview', {
+    id: 'setOverview', type: 'button', hidden: true, onclick: () => {
+      state.tour = false; setExploded(false); selectComponent(null, { reveal: false });
+      $('#scene').focus({ preventScroll: true });
+    },
+  }, 'Ganzes Set'));
   const list = h('ul.parts', { 'aria-label': 'Bauteile des Sets' },
     COMPONENTS.map((c) => h('li.parts__item', { 'data-item': c.id },
       h('button.parts__btn', {
-        type: 'button', 'data-component': c.id, 'aria-pressed': 'false', 'aria-controls': 'partCard',
+        type: 'button', 'data-component': c.id, 'aria-pressed': 'false', 'aria-expanded': 'false', 'aria-controls': 'partCard',
         onclick: () => selectComponent(state.component === c.id ? null : c.id),
       },
       h('span.parts__n', { text: String(c.number), 'aria-hidden': 'true' }),
-      h('span.parts__text', {}, h('span.parts__name', { text: c.name }), h('span.parts__short', { text: c.short })))
+      h('span.parts__text', {}, h('span.parts__name', { text: c.name }), h('span.parts__short', { text: c.short })), directionIcon('expand'))
     )));
   root.append(
-    h('h2.panel__title', { id: 'setTitle', text: 'Fünf Teile, die zusammengehören' }),
+    h('h2.panel__title', { id: 'setTitle', text: 'Fünf Teile. Ein Zusammenspiel.' }),
     h('div.set-intro', { id: 'setIntro' },
-      h('p.panel__text', { text: 'Erkunde die Teile frei oder lass dich Schritt für Schritt durch das Set führen.' }),
-      h('button.btn.btn--primary', { type: 'button', id: 'startSetTour', onclick: startSetTour }, 'Set kennenlernen')),
+      h('p.panel__text', { text: 'Wähle ein Bauteil direkt im Bild oder erkunde die fünf Teile in einem kurzen Rundgang.' }),
+      h('button.btn.btn--primary', { type: 'button', id: 'startSetTour', onclick: startSetTour }, 'Rundgang starten', directionIcon())),
     h('button.switch', { type: 'button', id: 'explodeBtn', 'aria-pressed': 'false', onclick: () => setExploded(!state.exploded) },
       h('span.switch__track', { 'aria-hidden': 'true' }, h('span.switch__thumb')),
-      h('span', { text: 'Auseinandergezogen anzeigen' })),
+      h('span', { text: 'Bauteile auseinanderziehen' })),
     list,
     h('div.part-card', { id: 'partCard', 'aria-live': 'polite', hidden: true }),
     h('section.set-tour', { id: 'setTour', hidden: true, 'aria-label': 'Geführter Set-Rundgang' },
@@ -255,7 +281,12 @@ function updatePartCard({ reveal = false } = {}) {
   const card = $('#partCard');
   const c = COMPONENTS.find((x) => x.id === state.component);
   updateTourVisibility();
-  $$('[data-component]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.component === state.component ? 'true' : 'false'));
+  updateSetOverview();
+  $$('[data-component]').forEach((b) => {
+    const on = b.dataset.component === state.component;
+    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute('aria-expanded', String(on && !state.tour));
+  });
   if (state.tour && c) {
     card.hidden = true;
     updateSetTour(c);
@@ -266,10 +297,18 @@ function updatePartCard({ reveal = false } = {}) {
     $('#view-set').append(card);
     return;
   }
+  const nextPart = COMPONENTS[COMPONENTS.indexOf(c) + 1];
   card.replaceChildren(
     h('p.part-card__text', { text: c.role }),
     h('details.part-card__facts', {}, h('summary.step-more__summary', {}, 'Details und Planungsstand'), factList(c.facts)),
-    h('button.btn.btn--quiet', { type: 'button', onclick: () => { const id = state.component; selectComponent(null); $(`[data-component="${id}"]`).focus({ preventScroll: true }); } }, 'Zur Gesamtansicht')
+    h('div.part-card__actions', {},
+      h('button.btn.btn--quiet', { type: 'button', onclick: () => { const id = state.component; selectComponent(null); $(`[data-component="${id}"]`).focus({ preventScroll: true }); } }, 'Ganzes Set'),
+      h('button.btn.btn--quiet', { type: 'button', onclick: () => {
+        if (nextPart) {
+          selectComponent(nextPart.id);
+          $(`[data-component="${nextPart.id}"]`).focus({ preventScroll: true });
+        } else setView('connect', { focusPanel: true });
+      } }, nextPart ? nextPart.name : 'Anschluss verstehen', directionIcon()))
   );
   $(`[data-item="${c.id}"]`).append(card);
   card.hidden = false;
@@ -362,8 +401,60 @@ const CHAPTERS = [
   { label: 'Set', title: 'Fünf Teile. Ein Zusammenspiel.', text: 'Vom Handbidet bis zum flexiblen Anschlussschlauch: Entdecke, wie das geplante Set zusammengehört. Passung und Anschlüsse sind noch in Prüfung.', view: 'set', next: 'Set erkunden' },
 ];
 
+// One finite, opt-in sequence. Existing cameras do the work; no extra animation loop.
+const PRESENTATION_CHAPTER_MS = 4000;
+function updatePresentationPlayback() {
+  const button = $('#presentationPlay');
+  if (!button) return;
+  const label = playbackActive ? 'Pause' : playbackFinished ? 'Erneut abspielen' : 'Einspieler starten';
+  button.replaceChildren(directionIcon(playbackActive ? 'pause' : playbackFinished ? 'replay' : 'play'), h('span', {}, label));
+  button.setAttribute('aria-label', label);
+  button.setAttribute('aria-pressed', String(playbackActive));
+  button.disabled = reducedQuery.matches;
+  $('#presentationTempo').textContent = reducedQuery.matches ? 'Reduzierte Bewegung · Kapitel einzeln wählen' : playbackActive ? '4 Kapitel · ca. 16 Sekunden' : 'In deinem Tempo oder als kurzer Einspieler';
+  $('#presentation').classList.toggle('is-playing', playbackActive);
+}
+function pausePresentationPlayback() {
+  clearTimeout(playbackTimer);
+  playbackTimer = 0;
+  playbackActive = false;
+  updatePresentationPlayback();
+}
+function handleStageInteraction() {
+  pausePresentationPlayback();
+  hideHint();
+}
+function schedulePresentationChapter() {
+  clearTimeout(playbackTimer);
+  playbackTimer = window.setTimeout(() => {
+    playbackTimer = 0;
+    if (!playbackActive || !state.presentation || document.hidden || reducedQuery.matches) {
+      pausePresentationPlayback(); return;
+    }
+    if (state.chapter >= CHAPTERS.length - 1) {
+      playbackFinished = true; pausePresentationPlayback(); return;
+    }
+    setChapter(state.chapter + 1, { playback: true });
+    schedulePresentationChapter();
+  }, PRESENTATION_CHAPTER_MS);
+}
+function togglePresentationPlayback() {
+  if (playbackActive) { pausePresentationPlayback(); return; }
+  if (reducedQuery.matches || document.hidden || !state.presentation) return;
+  state.guided = true;
+  const chapter = playbackFinished ? 0 : state.chapter;
+  playbackFinished = false;
+  setChapter(chapter, { playback: true });
+  playbackActive = true;
+  updatePresentationPlayback();
+  schedulePresentationChapter();
+}
+
 function renderPresentation() {
   $('#stage').append(h('section.presentation', { id: 'presentation', hidden: true, 'aria-label': 'Produktpräsentation' },
+    h('div.presentation__playback', {},
+      h('button.btn.btn--light', { id: 'presentationPlay', type: 'button', 'aria-pressed': 'false', 'aria-describedby': 'presentationTempo', onclick: togglePresentationPlayback }, 'Einspieler starten'),
+      h('p', { id: 'presentationTempo' })),
     h('button.btn.btn--light.presentation__exit', { type: 'button', onclick: () => endPresentation() }, 'Frei erkunden'),
     h('div.presentation__copy', { id: 'presentationCopy', 'aria-live': 'polite', 'aria-atomic': 'true' },
       h('h2', { id: 'presentationTitle', tabindex: '-1' }), h('p', { id: 'presentationText' }),
@@ -385,12 +476,17 @@ function renderPresentation() {
         h('button.btn.btn--primary', { id: 'presentationNext', type: 'button', onclick: () => state.chapter === CHAPTERS.length - 1 ? endPresentation({ tour: true }) : setChapter(state.chapter + 1) }))),
     h('p.presentation__note', { text: 'Gestaltungsprototyp · Ausführung und Anschlüsse in Entwicklung.' })));
 
+  updatePresentationPlayback();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pausePresentationPlayback(); });
+  window.addEventListener('pagehide', pausePresentationPlayback);
   document.addEventListener('keydown', (e) => {
     if (state.presentation && e.key === 'Escape') { e.preventDefault(); endPresentation(); }
   });
 }
 
 function startPresentation({ fromOpening = false, guided = false } = {}) {
+  pausePresentationPlayback();
+  playbackFinished = false;
   if (document.body.classList.contains('no-3d') || $('#stageState')?.dataset.kind === 'error') return;
   if (state.tour) endSetTour();
   state.slowWater = false;
@@ -412,7 +508,8 @@ function startPresentation({ fromOpening = false, guided = false } = {}) {
   });
 }
 
-function setChapter(index, { sync = true } = {}) {
+function setChapter(index, { sync = true, playback = false } = {}) {
+  if (!playback) { playbackFinished = false; pausePresentationPlayback(); }
   const returnToTop = window.scrollY > 0;
   const focusReading = !!document.activeElement?.closest('.presentation__nav');
   state.chapter = Math.max(0, Math.min(CHAPTERS.length - 1, index));
@@ -435,7 +532,7 @@ function setChapter(index, { sync = true } = {}) {
   state.detail = c.detail || 'overview';
   updateDetailCard();
   if (sync) { updateInsets(); syncStage(); }
-  if (returnToTop) {
+  if (returnToTop && !playback) {
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (focusReading) $('#presentationTitle').focus({ preventScroll: true });
   }
@@ -448,6 +545,7 @@ function setChapter(index, { sync = true } = {}) {
 }
 
 function endPresentation({ tour = false, after = null } = {}) {
+  pausePresentationPlayback();
   state.presentation = false;
   document.body.classList.remove('is-presentation', 'has-water-chapter', 'has-button-chapter', 'is-entry');
   stage?.stopWater();
@@ -626,6 +724,7 @@ function setView(view, { focusPanel = false, syncStageNow = true } = {}) {
   }
   state.view = view;
   document.body.dataset.view = view;
+  updateSetOverview();
   $$('.views__tab').forEach((t) => {
     const on = t.dataset.view === view;
     t.setAttribute('aria-selected', on ? 'true' : 'false');
@@ -698,8 +797,15 @@ function selectComponent(id, { reveal = true } = {}) {
   stage && stage.selectComponent(id);
 }
 
+function updateSetOverview() {
+  const button = $('#setOverview');
+  if (button) button.hidden = state.view !== 'set' || (!state.component && !state.exploded);
+  requestAnimationFrame(updateInsets);
+}
+
 function setExploded(on) {
   state.exploded = on;
+  updateSetOverview();
   $('#explodeBtn').setAttribute('aria-pressed', on ? 'true' : 'false');
   stage && stage.setExploded(on);
 }
@@ -770,6 +876,7 @@ function bindTabs() {
   // Eine Ansicht wählen beendet die Eröffnung: Die Bühne übernimmt die Videokamera und fährt von dort in
   // die gewählte Ansicht; die Seitenleiste zeigt sofort deren Inhalt
   const choose = (view) => {
+    pausePresentationPlayback();
     if (opening.active()) { opening.end({ view, focus: false }); setView(view, { syncStageNow: false }); }
     else setView(view);
   };
@@ -792,12 +899,13 @@ function bindTabs() {
 
 function bindStageTools() {
   $('#resetBtn').addEventListener('click', () => {
+    handleStageInteraction();
     if (state.view === 'discover' && state.detail !== 'overview') setDetail('overview');
     else stage && stage.resetView();
   });
   $$('.stage__tools [data-action]').forEach((b) => b.addEventListener('click', () => {
     if (!stage) return;
-    hideHint();
+    handleStageInteraction();
     const a = b.dataset.action;
     if (a === 'zoom-in') stage.zoomBy(0.8);
     if (a === 'zoom-out') stage.zoomBy(1.25);
@@ -838,6 +946,8 @@ function updateInsets() {
   const water = $('#waterBox');
   let top = st.bottom;
   if (vis(tools)) top = Math.min(top, tools.getBoundingClientRect().top);
+  const setOverview = $('#setOverview');
+  if (vis(setOverview)) top = Math.min(top, setOverview.getBoundingClientRect().top);
   if (state.view === 'discover' && vis(water)) top = Math.min(top, water.getBoundingClientRect().top);
   // „Entdecken“ auf breiten Bühnen: halbe Höhe genügt (Leiste in den Ecken, Produkt in der Mitte).
   // Set und Anschluss tragen Beschriftungen bis an den Rand: dort volle Höhe
@@ -871,6 +981,7 @@ function showState(kind, { title, text, retry = false, progress = false } = {}) 
   box.dataset.kind = kind;
   box.hidden = kind === 'ready';
   if (kind === 'ready') return;
+  if (kind === 'error') pausePresentationPlayback();
   $('#stateTitle').textContent = title || '';
   $('#stateText').textContent = text || '';
   $('#progress').hidden = !progress;
@@ -900,6 +1011,9 @@ async function boot() {
     opening.end({ focus: false });
     $('#panel').focus({ preventScroll: false });
   });
+  const requestedView = new URLSearchParams(location.search).get('view');
+  const directView = ['set', 'connect'].includes(requestedView) ? requestedView : null;
+  if (directView) setView(directView, { syncStageNow: false });
   opening = initOpening({
     getStage: () => stage,
     narrowQuery,
@@ -935,7 +1049,7 @@ async function boot() {
     return;
   }
   if (opening.active() && $('#opening').classList.contains('is-playing')) stage.setPaused(true);
-  stage.addEventListener('interaction', hideHint);
+  stage.addEventListener('interaction', handleStageInteraction);
   stage.addEventListener('inspectionlight', e => {
     state.lightAngle = e.detail;
     const slider = $('#inspectionLight'), label = $('#lightValue');
@@ -966,6 +1080,8 @@ async function boot() {
   });
   stage.addEventListener('runtimeerror', (e) => showStageError(Object.assign(e.detail, { kind: e.detail.kind || 'runtime' })));
   reducedQuery.addEventListener('change', (e) => {
+    if (e.matches) pausePresentationPlayback();
+    updatePresentationPlayback();
     stage.setReducedMotion(e.matches);
     if (e.matches) { state.slowWater = false; stage.water?.setSpeed(1); }
     $('#lightStudy').disabled = e.matches;
@@ -995,6 +1111,7 @@ async function boot() {
 
 // Verständliche Meldung je Fehlerart, ohne eine unbewiesene Ursache zu behaupten
 function showStageError(err) {
+  pausePresentationPlayback();
   console.error(err, err.cause || '');
   document.body.classList.remove('is-ready');
   $('#scene').tabIndex = -1;   // ohne Darstellung kein Tab-Ziel

@@ -24,6 +24,7 @@
     triggers: [],
     calculatorObserver: null,
     brandContext: null,
+    brandCleanup: null,
     destroyed: false
   };
 
@@ -107,31 +108,77 @@
     const word = stage && stage.querySelector('.brand-stage-word');
     const mirror = word && word.querySelector('.wordmark-mirror');
     if (!word || !mirror) return;
+    const light = stage.querySelector('.brand-stage-light');
+    const replay = stage.querySelector('[data-brand-replay]');
     let played = false;
-    // Context restores the authored CSS, including the mirror's scaleY(-1).
-    state.brandContext = gsap.context(() => {}, stage);
+    let running = false;
+
+    const finish = () => {
+      running = false;
+      if (replay) replay.setAttribute('aria-disabled', 'false');
+    };
+    const restore = () => {
+      if (state.brandContext) state.brandContext.revert();
+      state.brandContext = null;
+      finish();
+    };
+    const play = () => {
+      if (running || state.destroyed || reducedMotion.matches || document.hidden) return;
+      restore();
+      played = true;
+      running = true;
+      // aria-disabled keeps keyboard focus stable while guarding repeated presses.
+      if (replay) replay.setAttribute('aria-disabled', 'true');
+      state.brandContext = gsap.context(() => {
+        const timeline = gsap.timeline({ defaults: { ease: MOTION.easeEnter }, onComplete: finish });
+        timeline.from(word, {
+          y: 6, opacity: 0.65, duration: 0.85,
+          clearProps: 'transform,opacity'
+        }, 0).from(mirror, {
+          opacity: 0, clipPath: 'inset(100% 0 0 0)', duration: 0.95,
+          clearProps: 'opacity,clipPath'
+        }, 0.3);
+        // A single, finite light pass resolves into the original reflected logo.
+        // Never animate the mirror transform: CSS owns its exact inversion.
+        if (light) timeline
+          .fromTo(light, { xPercent: -110 }, {
+            xPercent: 500, duration: 1.45, ease: 'power2.inOut', clearProps: 'transform'
+          }, 0.08)
+          .fromTo(light, { opacity: 0 }, { opacity: 0.7, duration: 0.22 }, 0.12)
+          .to(light, { opacity: 0, duration: 0.38, clearProps: 'opacity' }, 1.15);
+      }, stage);
+    };
+    const preferenceChanged = () => {
+      if (reducedMotion.matches) restore();
+      if (replay) replay.hidden = reducedMotion.matches;
+    };
+    const visibilityChanged = () => { if (document.hidden) restore(); };
+    if (replay) {
+      replay.hidden = false;
+      replay.addEventListener('click', play);
+    }
+    reducedMotion.addEventListener('change', preferenceChanged);
+    document.addEventListener('visibilitychange', visibilityChanged);
+    state.brandCleanup = () => {
+      restore();
+      reducedMotion.removeEventListener('change', preferenceChanged);
+      document.removeEventListener('visibilitychange', visibilityChanged);
+      if (replay) {
+        replay.removeEventListener('click', play);
+        replay.hidden = true;
+      }
+    };
     state.triggers.push(ScrollTrigger.create({
       trigger: stage,
       start: 'top 82%',
       once: true,
-      onEnter: () => {
-        if (played || state.destroyed || reducedMotion.matches || !state.brandContext) return;
-        played = true;
-        state.brandContext.add(() => {
-          gsap.timeline({ defaults: { ease: MOTION.easeSoft } })
-            .from(word, { y: 6, opacity: 0.6, duration: 0.5 }, 0)
-            .from(mirror, { opacity: 0, duration: 0.38 }, 0.16);
-        });
-      }
+      onEnter: () => { if (!played) play(); }
     }));
-    reducedMotion.addEventListener('change', stopBrandMotion);
   }
 
   function stopBrandMotion() {
-    if (!state.brandContext) return;
-    state.brandContext.revert();
-    state.brandContext = null;
-    reducedMotion.removeEventListener('change', stopBrandMotion);
+    if (state.brandCleanup) state.brandCleanup();
+    state.brandCleanup = null;
   }
 
   function initSignatureMoments() {

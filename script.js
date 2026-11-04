@@ -66,6 +66,10 @@ function applyLanguage(lang) {
 
   document.documentElement.lang = lang;
   applyMeta(dict, lang);
+  const menuToggle = document.getElementById('hamburger');
+  if (menuToggle) {
+    menuToggle.setAttribute('aria-label', t(menuToggle.getAttribute('aria-expanded') === 'true' ? 'a11y.menu_close' : 'a11y.menu_open'));
+  }
 
   // Textinhalte
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -851,6 +855,7 @@ function initBrandVideos() {
     const label = button && button.querySelector('[data-i18n]');
     if (!label) return;
     const key = video.paused ? 'video.play' : 'video.pause';
+    button.classList.toggle('is-paused', video.paused);
     label.setAttribute('data-i18n', key);
     label.textContent = t(key);
   };
@@ -887,6 +892,7 @@ function initBrandVideos() {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
+        if ('manualPlay' in e.target.dataset) return;
         if (reduceMotion && reduceMotion.matches) return;
         if (e.target.ended || e.target.dataset.userPaused === 'true') return;
         const p = e.target.play();
@@ -911,7 +917,7 @@ function initBrandVideos() {
           return;
         }
         const rect = video.getBoundingClientRect();
-        if (!video.ended && video.dataset.userPaused !== 'true' && rect.bottom > 0 && rect.top < window.innerHeight) {
+        if (!('manualPlay' in video.dataset) && !video.ended && video.dataset.userPaused !== 'true' && rect.bottom > 0 && rect.top < window.innerHeight) {
           const p = video.play();
           if (p && p.catch) p.catch(() => {});
         }

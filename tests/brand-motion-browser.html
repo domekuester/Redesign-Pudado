@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Pudado motion regression</title>
+<link rel="stylesheet" href="../style.css">
+<body data-page="home" class="home-supplier">
+<main id="warum"><div class="brand-stage"><span class="brand-stage-light" aria-hidden="true"></span><div class="brand-stage-word">PUDADO<span class="wordmark-mirror">PUDADO</span></div><button type="button" data-brand-replay class="brand-stage-replay" hidden>Markenmoment wiederholen</button></div></main>
+<pre id="results">Running real GSAP regression…</pre>
+<script>
+// Test-only media source: dispatches a preference change during real playback.
+const nativeMatchMedia = window.matchMedia.bind(window);
+const preference = new EventTarget();
+preference.matches = false;
+window.matchMedia = query => query === '(prefers-reduced-motion: reduce)' ? preference : nativeMatchMedia(query);
+</script>
+<script src="../assets/vendor/gsap.min.js"></script>
+<script src="../assets/vendor/ScrollTrigger.min.js"></script>
+<script src="../motion.js"></script>
+<script>
+(async () => {
+  const result = document.querySelector('#results');
+  const word = document.querySelector('.brand-stage-word');
+  const mirror = document.querySelector('.wordmark-mirror');
+  const replay = document.querySelector('[data-brand-replay]');
+  const light = document.querySelector('.brand-stage-light');
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  try {
+    await wait(80);
+    check(Number(getComputedStyle(mirror).opacity) < .16, 'real tween must be running');
+    check(getComputedStyle(mirror).transform === 'matrix(1, 0, 0, -1, 0, 0)', 'inversion preserved during playback');
+    const lifecycle = new URLSearchParams(location.search).has('pagehide');
+    if (lifecycle) window.dispatchEvent(new Event('pagehide'));
+    else {
+      check(replay.getAttribute('aria-disabled') === 'true', 'replay guarded during animation');
+      await wait(1800);
+      check(replay.getAttribute('aria-disabled') === 'false', 'replay available after completion');
+      check(!word.style.transform && !mirror.style.opacity && !light.style.opacity, 'authored styles restored after completion');
+      replay.click();
+      await wait(80);
+      check(replay.getAttribute('aria-disabled') === 'true', 'replay begins a fresh animation');
+      preference.matches = true; preference.dispatchEvent(new Event('change'));
+    }
+    await wait(30);
+    check(replay.hidden, 'replay hidden after motion cancellation');
+    check(getComputedStyle(light).opacity === '0', 'light returns to hidden baseline');
+    check(getComputedStyle(word).opacity === '1', 'word opacity restored');
+    check(getComputedStyle(word).transform === 'none', 'word transform restored');
+    check(getComputedStyle(mirror).opacity === '0.16', 'reflection opacity restored');
+    check(getComputedStyle(mirror).transform === 'matrix(1, 0, 0, -1, 0, 0)', 'reflection inversion restored');
+    await wait(600);
+    check(!word.style.transform && !mirror.style.opacity, 'no residual or replayed inline animation');
+    result.textContent = 'PASS: real GSAP replay, interruption and CSS restoration (' + (lifecycle ? 'pagehide' : 'reduced motion') + ')';
+  } catch (error) { result.textContent = 'FAIL: ' + error.message; }
+})();
+</script>
+</body></html>
