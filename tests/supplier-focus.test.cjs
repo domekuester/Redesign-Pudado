@@ -19,7 +19,7 @@ test('supplier hero prioritizes contact and states development status in every l
 });
 test('curated product visuals, second film retained and no removed modules restored', () => {
   const imageSources = [...html.matchAll(/<img src="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(imageSources, ['assets/ecobum-prototype02-bathroom.jpg', 'assets/ecobum-product-studio.webp']);
+  assert.deepEqual(imageSources, ['assets/ecobum-prototype02-bathroom.jpg', 'assets/ecobum-product-studio.webp', 'assets/ecobum-set-studio.webp', 'assets/ecobum-connection-studio.webp']);
   imageSources.forEach(source => assert.ok(fs.existsSync(path.join(root, source)), source));
   const hero = html.split('id="hero"')[1].split('</section>')[0];
   const imageSource = hero.match(/<img src="([^"]+)"/)[1];

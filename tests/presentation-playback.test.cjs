@@ -7,7 +7,8 @@ const source = fs.readFileSync(path.join(__dirname, '../erlebnis/src/main.js'), 
 
 function setup() {
   let now = 0, serial = 0;
-  const timers = new Map(), visits = [];
+  const timers = new Map(), visits = [], animations = [];
+  const tracks = Array.from({length: 4}, (_, i) => ({dataset: {chapterProgress: String(i)}, style: {}, animate(frames, options) { const animation = {frames, options, cancelled: false, cancel() { this.cancelled = true; }}; animations.push(animation); return animation; }}));
   const nodes = new Map();
   const node = selector => {
     if (!nodes.has(selector)) nodes.set(selector, {attrs: {}, textContent: '', disabled: false, children: [], replaceChildren(...children) { this.children = children; }, setAttribute(k, v) { this.attrs[k] = v; }, classList: { toggle() {} } });
@@ -15,7 +16,9 @@ function setup() {
   };
   const state = { presentation: true, guided: false, chapter: 0 };
   const context = {
-    state, CHAPTERS: Array.from({length: 4}, (_, i) => i),
+    state, CHAPTERS: ['Form', 'Wasser', 'Knopf', 'Set'].map(label => ({label})),
+    performance: {now: () => now},
+    $$: () => tracks,
     reducedQuery: {matches: false}, document: {hidden: false},
     $: node, hideHint() {}, directionIcon: kind => kind, h: (tag, attrs, text) => text,
     clearTimeout: id => timers.delete(id),
@@ -23,7 +26,7 @@ function setup() {
     setChapter(i) { state.chapter = i; visits.push(i); },
   };
   vm.createContext(context);
-  vm.runInContext('let playbackTimer = 0; let playbackActive = false; let playbackFinished = false;\n' + source.slice(source.indexOf('const PRESENTATION_CHAPTER_MS'), source.indexOf('function renderPresentation()')), context);
+  vm.runInContext('let playbackTimer = 0; let playbackActive = false; let playbackFinished = false; let playbackElapsed = 0; let playbackStartedAt = 0; let playbackHasStarted = false; let playbackProgress = null;\n' + source.slice(source.indexOf('const PRESENTATION_CHAPTER_MS'), source.indexOf('function renderPresentation()')), context);
   const tick = ms => {
     const end = now + ms;
     while (true) {
@@ -33,7 +36,7 @@ function setup() {
     }
     now = end;
   };
-  return {context, state, visits, timers, tick, node};
+  return {context, state, visits, timers, tick, node, tracks, animations};
 }
 
 test('presentation is opt-in, finishes after four chapters, and replays from the first', () => {
@@ -103,7 +106,7 @@ test('zoom, rotate and reset buttons pause playback before applying the inspecti
   const reset = app.node('#resetBtn');
   reset.addEventListener = (type, fn) => { reset.click = fn; };
   const actions = [];
-  app.context.$$ = () => controls;
+  app.context.$$ = selector => selector === '.stage__tools [data-action]' ? controls : app.tracks;
   app.context.stage = { zoomBy: value => actions.push(['zoom', value]), rotateBy: value => actions.push(['rotate', value]), resetView: () => actions.push(['reset']) };
   vm.runInContext(source.slice(source.indexOf('function bindStageTools()'), source.indexOf('function updateInsets()')), app.context);
   app.context.bindStageTools();
@@ -116,4 +119,44 @@ test('zoom, rotate and reset buttons pause playback before applying the inspecti
     assert.equal(app.state.chapter, 0);
   }
   assert.deepEqual(actions, [['zoom', .8], ['zoom', 1.25], ['rotate', -45], ['rotate', 45], ['reset']]);
+});
+
+
+test('pause preserves chapter time and resumes without resetting the product camera', () => {
+  const app = setup();
+  app.context.togglePresentationPlayback();
+  app.tick(1700);
+  app.context.pausePresentationPlayback();
+  assert.equal(app.node('#presentationPlay').attrs['aria-label'], 'Weiterlaufen');
+  assert.equal(app.tracks[0].style.transform, 'scaleX(0.425)');
+  assert.equal(app.animations.at(-1).cancelled, true);
+  app.tick(60000);
+  app.context.togglePresentationPlayback();
+  assert.deepEqual(app.visits, [0], 'resume must not reselect or reframe the current chapter');
+  assert.equal(app.animations.at(-1).options.duration, 2300);
+  app.tick(2299);
+  assert.equal(app.state.chapter, 0);
+  app.tick(1);
+  assert.equal(app.state.chapter, 1);
+  assert.equal(app.tracks[0].style.transform, 'scaleX(1)');
+  assert.equal(app.node('#presentationPosition').textContent, '02 / 04 · Wasser');
+});
+
+test('progress freezes when hidden, and reduced motion leaves a static chapter position', () => {
+  const app = setup();
+  app.context.togglePresentationPlayback();
+  app.tick(800);
+  app.context.document.hidden = true;
+  app.context.pausePresentationPlayback();
+  assert.equal(app.tracks[0].style.transform, 'scaleX(0.2)');
+  assert.equal(app.animations.at(-1).cancelled, true);
+  app.context.reducedQuery.matches = true;
+  const count = app.animations.length;
+  app.context.updatePresentationPlayback();
+  app.context.togglePresentationPlayback();
+  app.tick(12000);
+  assert.equal(app.animations.length, count);
+  assert.equal(app.timers.size, 0);
+  assert.equal(app.node('#presentationPlay').disabled, true);
+  assert.equal(app.node('#presentationPosition').textContent, '01 / 04 · Form');
 });

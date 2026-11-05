@@ -42,7 +42,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="style.css?v=7a2884b7" />
+  <link rel="stylesheet" href="style.css?v=29a7e3d1" />
 
   <!-- ================== JSON-LD STRUKTURIERTE DATEN ================== -->
   <script type="application/ld+json">
@@ -114,7 +114,6 @@
           <li><a href="blog/index.html" data-i18n="nav.magazin">Magazin</a></li>
           -->
           <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
-          <li><a href="#kontakt" data-i18n="nav.kontakt">Kontakt</a></li>
         </ul>
         <div class="nav-actions">
           <!-- Sprachumschalter DE / EN / FR -->
@@ -123,8 +122,7 @@
             <button type="button" data-lang="en">EN</button>
             <button type="button" data-lang="fr">FR</button>
           </div>
-          <a href="#kontakt" class="btn btn-link nav-cta nav-cta-secondary" data-i18n="cta.interesse">Kontakt aufnehmen</a>
-          <a href="#produkt" class="btn btn-primary nav-cta" data-i18n="cta.entdecken">EcoBum entdecken</a>
+          <a href="#kontakt" class="btn btn-primary nav-cta" data-i18n="cta.interesse">Kontakt aufnehmen</a>
         </div>
       </nav>
 
@@ -137,16 +135,8 @@
 <section class="hero" id="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <!-- Firmen-Wortmarke nach Logo-Referenz (Royal-Blue-Konzept):
-               sprachneutraler Markenname, daher bewusst ohne data-i18n. -->
-          <p class="hero-wordmark" translate="no">PUDADO<span class="wordmark-mirror" aria-hidden="true">PUDADO</span></p>
           <h1><span data-i18n="hero.h1a">Wasser reinigt.</span></h1>
           <p class="lead" data-i18n="supplier.lead">Wir entwickeln EcoBum Home: ein Handbidet für die tägliche Reinigung mit Wasser.</p>
-          <p class="supplier-status" data-i18n="supplier.status">In Entwicklung. Ausführung, Anschlusskompatibilität und Verfügbarkeit sind noch offen.</p>
-          <div class="hero-actions">
-            <a href="#kontakt" class="btn btn-primary" data-i18n="supplier.contact">Zusammenarbeit anfragen</a>
-            <a href="#produkt" class="btn btn-ghost hero-secondary-link" data-i18n="cta.entdecken">EcoBum entdecken</a>
-          </div>
         </div>
         <figure class="supplier-product-preview">
           <a href="erlebnis/" class="supplier-product-link">
@@ -155,6 +145,13 @@
           </a>
           <figcaption data-i18n="ux.prototype_caption">Visualisierung nach Prototyp 02. Anschluss beispielhaft, nicht montagefreigegeben.</figcaption>
         </figure>
+        <div class="hero-footer">
+          <div class="hero-actions">
+            <a href="#kontakt" class="btn btn-primary" data-i18n="supplier.contact">Zusammenarbeit anfragen</a>
+            <a href="#produkt" class="btn btn-ghost hero-secondary-link" data-i18n="cta.entdecken">EcoBum entdecken</a>
+          </div>
+          <p class="supplier-status" data-i18n="supplier.status">In Entwicklung. Ausführung, Anschlusskompatibilität und Verfügbarkeit sind noch offen.</p>
+        </div>
       </div>
     </section>
 
@@ -167,18 +164,45 @@
     </div>
     <div class="landing-chapter">
     <section class="section section-alt" id="produkt">
-      <div class="container product-grid product-studio">
-        <a class="product-studio-visual" href="erlebnis/" aria-labelledby="studio-link-title">
-          <img src="assets/ecobum-product-studio.webp" width="1000" height="650" loading="lazy" decoding="async" alt="EcoBum Home" />
-          <span class="product-studio-invite"><span id="studio-link-title" data-i18n="experience.cta">EcoBum in 3D entdecken</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
+      <div class="container product-grid product-studio" data-product-studio>
+        <div class="product-intro">
+          <h2 id="studio-title" data-i18n="supplier.explore_title">EcoBum. Aus jedem Blickwinkel.</h2>
+        </div>
+        <div class="product-studio-media">
+          <div class="studio-tabs" role="tablist" aria-labelledby="studio-title" hidden>
+            <button id="studio-tab-product" type="button" role="tab" aria-selected="true" aria-controls="studio-product" data-studio-tab="product" data-i18n="studio.product">Produkt</button>
+            <button id="studio-tab-set" type="button" role="tab" aria-selected="false" aria-controls="studio-set" tabindex="-1" data-studio-tab="set" data-i18n="studio.set">Das Set</button>
+            <button id="studio-tab-connect" type="button" role="tab" aria-selected="false" aria-controls="studio-connect" tabindex="-1" data-studio-tab="connect" data-i18n="studio.connect">Anschluss</button>
+          </div>
+          <div id="studio-product" class="studio-panel" data-studio-panel="product">
+            <a class="product-studio-visual" href="erlebnis/" aria-labelledby="studio-link-product">
+              <img src="assets/ecobum-product-studio.webp" width="1000" height="650" loading="lazy" decoding="async" alt="EcoBum Home" />
+              <span class="product-studio-invite"><span id="studio-link-product" data-i18n="supplier.route_product">Das Produkt entdecken</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+          <div id="studio-set" class="studio-panel" data-studio-panel="set" hidden>
+            <a class="product-studio-visual" href="erlebnis/?view=set" aria-labelledby="studio-link-set">
+              <img src="assets/ecobum-set-studio.webp" width="1000" height="650" loading="lazy" decoding="async" alt="EcoBum Home Set" />
+              <span class="product-studio-invite"><span id="studio-link-set" data-i18n="supplier.route_set">Das Set erkunden</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+          <div id="studio-connect" class="studio-panel" data-studio-panel="connect" hidden>
+            <a class="product-studio-visual" href="erlebnis/?view=connect" aria-labelledby="studio-link-connect">
+              <img src="assets/ecobum-connection-studio.webp" width="1000" height="650" loading="lazy" decoding="async" alt="EcoBum Home" />
+              <span class="product-studio-invite"><span id="studio-link-connect" data-i18n="supplier.route_connect">Den Anschluss verstehen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+            </a>
+          </div>
+        </div>
         <div class="product-story">
-          <h2 data-i18n="supplier.explore_title">EcoBum. Aus jedem Blickwinkel.</h2>
-          <p class="section-text" data-i18n="supplier.explore_text">Drehe den Prototyp, erkunde die Bauteile und entdecke das geplante Anschlussprinzip – direkt in 3D.</p>
-          <nav class="product-routes" aria-label="EcoBum 3D">
-            <a href="erlebnis/"><span aria-hidden="true">01</span><span data-i18n="supplier.route_product">Das Produkt entdecken</span><span aria-hidden="true">↗</span></a>
-            <a href="erlebnis/?view=set"><span aria-hidden="true">02</span><span data-i18n="supplier.route_set">Das Set erkunden</span><span aria-hidden="true">↗</span></a>
-            <a href="erlebnis/?view=connect"><span aria-hidden="true">03</span><span data-i18n="supplier.route_connect">Den Anschluss verstehen</span><span aria-hidden="true">↗</span></a>
+          <div class="studio-detail" hidden aria-live="polite" aria-atomic="true">
+            <h3 data-studio-title data-i18n="studio.product_title">Die Form. Die Bedienung.</h3>
+            <p data-studio-description data-i18n="studio.product_text">Entdecke den Kopf, den Griff und den Druckknopf am aktuellen Gestaltungsprototyp.</p>
+            <a class="studio-open" data-studio-link href="erlebnis/"><span data-i18n="studio.open">Diese Ansicht in 3D öffnen</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+          </div>
+          <nav class="product-routes" data-studio-fallback aria-label="EcoBum 3D">
+            <a href="erlebnis/" data-i18n="supplier.route_product">Das Produkt entdecken</a>
+            <a href="erlebnis/?view=set" data-i18n="supplier.route_set">Das Set erkunden</a>
+            <a href="erlebnis/?view=connect" data-i18n="supplier.route_connect">Den Anschluss verstehen</a>
           </nav>
           <p class="media-note" data-i18n="experience.note">Interaktive Präsentation auf Deutsch. Gestaltungsprototyp – Ausführung und Anschlüsse in Entwicklung.</p>
         </div>
@@ -676,10 +700,10 @@
     </div>
   </div>
 
-  <script src="translations.js?v=6841b531"></script>
-  <script src="script.js?v=9da48914"></script>
+  <script src="translations.js?v=f83b228d"></script>
+  <script src="script.js?v=2ac19e08"></script>
   <script src="assets/vendor/gsap.min.js?v=8e52f4ac"></script>
   <script src="assets/vendor/ScrollTrigger.min.js?v=34923d8a"></script>
-  <script src="motion.js?v=983b03b3"></script>
+  <script src="motion.js?v=ae047ca9"></script>
 </body>
 </html>

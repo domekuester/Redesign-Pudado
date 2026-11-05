@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // initI18n zuerst, damit alle Texte in der richtigen Sprache stehen.
   [initI18n, initNav, initYear, initCalculator,
    initContactForm, initNewsletterForm, initStickyCta, initCookieConsent,
-   initScrollSpy, initReveal, initBrandVideos, initHeaderState,
+   initScrollSpy, initReveal, initBrandVideos, initHeaderState, initProductStudio,
    initMobileDisclosures, initFaqAccordion, initDisclosureAnchors]
     .forEach(fn => { try { fn(); } catch (err) { console.error('Init-Fehler:', err); } });
 });
@@ -886,8 +886,8 @@ function initBrandVideos() {
       video.removeAttribute('autoplay');
       video.pause();
     });
-    return;
   }
+  // Explicit playback still needs offscreen and preference-change handling.
   if (!('IntersectionObserver' in window)) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
@@ -946,4 +946,77 @@ function initHeaderState() {
   };
   window.addEventListener('scroll', update, { passive: true });
   update();
+}
+
+
+/* Progressive product preview: the actual 3D scene stays an explicit destination. */
+function initProductStudio() {
+  const root = document.querySelector('[data-product-studio]');
+  if (!root) return;
+  const tabs = Array.from(root.querySelectorAll('[data-studio-tab]'));
+  const panels = Array.from(root.querySelectorAll('[data-studio-panel]'));
+  const tablist = root.querySelector('.studio-tabs');
+  const title = root.querySelector('[data-studio-title]');
+  const description = root.querySelector('[data-studio-description]');
+  const destination = root.querySelector('[data-studio-link]');
+  const fallback = root.querySelector('[data-studio-fallback]');
+  if (tabs.length !== 3 || panels.length !== 3 || !title || !description || !destination) return;
+  let active = 'product';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let transition = null;
+  const syncCopy = () => {
+    title.dataset.i18n = 'studio.' + active + '_title';
+    description.dataset.i18n = 'studio.' + active + '_text';
+    title.textContent = t(title.dataset.i18n);
+    description.textContent = t(description.dataset.i18n);
+    panels.forEach(panel => {
+      panel.querySelector('img').alt = t('studio.alt_' + panel.dataset.studioPanel);
+    });
+  };
+  const select = (tab, focus = false) => {
+    const next = tab.dataset.studioTab;
+    const panel = panels.find(item => item.dataset.studioPanel === next);
+    if (!panel) return;
+    transition?.cancel();
+    const changed = next !== active;
+    active = next;
+    tabs.forEach(item => {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach(item => { item.hidden = item !== panel; });
+    destination.href = panel.querySelector('a').getAttribute('href');
+    syncCopy();
+    if (focus) tab.focus();
+    // Small, finite transition: the preview remains legible throughout.
+    if (changed && !reduced.matches && panel.animate) {
+      transition = panel.animate([{opacity: .55, transform: 'translateY(5px)'}, {opacity: 1, transform: 'translateY(0)'}],
+        {duration: 360, easing: 'cubic-bezier(.16,.84,.44,1)'});
+    }
+  };
+  tabs.forEach((tab, index) => {
+    const panel = panels.find(item => item.dataset.studioPanel === tab.dataset.studioTab);
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', tab.id);
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', event => {
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = tabs.length - 1;
+      else return;
+      event.preventDefault(); select(tabs[next], true);
+    });
+  });
+  tablist.hidden = false;
+  root.querySelector('.studio-detail').hidden = false;
+  fallback.hidden = true;
+  syncCopy();
+  document.addEventListener('pudado:lang', syncCopy);
+  const stopTransition = () => { transition?.cancel(); transition = null; };
+  reduced.addEventListener('change', stopTransition);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopTransition(); });
+  window.addEventListener('pagehide', stopTransition);
 }

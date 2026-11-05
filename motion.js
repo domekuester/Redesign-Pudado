@@ -24,6 +24,7 @@
     triggers: [],
     calculatorObserver: null,
     brandContext: null,
+    heroCleanup: null,
     brandCleanup: null,
     destroyed: false
   };
@@ -46,34 +47,26 @@
   // synthetic inertia or animation ticker controlling the scroll position.
 
   function initHero() {
-    const header = document.querySelector('.site-header');
-    const copy = document.querySelector('.hero-copy');
-    const headingLines = document.querySelectorAll('.hero h1 > span');
-    const lead = document.querySelector('.hero .lead');
-    const trust = document.querySelector('.hero .trust-line');
-    const actions = document.querySelector('.hero-actions');
-    const visual = document.querySelector('.hero-visual');
-    const badges = document.querySelector('.hero .product-badges');
-    if (!copy || !visual) return;
-
-    gsap.timeline({ defaults: { ease: MOTION.easeEnter } })
-      .from(header, { y: -MOTION.distanceSmall, opacity: 0, duration: 0.42, clearProps: 'transform,opacity' }, 0)
-      .from(copy.querySelector('.hero-wordmark'), { y: MOTION.distanceSmall, opacity: 0, duration: 0.42, clearProps: 'transform,opacity' }, 0.05)
-      .from(headingLines, { y: MOTION.distanceMedium, opacity: 0, duration: 0.56, stagger: 0.08, clearProps: 'transform,opacity' }, 0.12)
-      .from([lead, trust], { y: MOTION.distanceSmall, opacity: 0, duration: 0.48, stagger: 0.07, clearProps: 'transform,opacity' }, 0.28)
-      .from(actions, { y: MOTION.distanceSmall, opacity: 0, duration: 0.46, clearProps: 'transform,opacity' }, 0.42)
-      .from(visual, { y: MOTION.distanceMedium, scale: 0.985, opacity: 0, duration: 0.72, clearProps: 'transform,opacity' }, 0.18)
-      .from(badges, { y: 8, opacity: 0, duration: 0.34, clearProps: 'transform,opacity' }, 0.75);
-
-    if (window.innerWidth > 980) {
-      state.triggers.push(ScrollTrigger.create({
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.8,
-        animation: gsap.to(visual, { yPercent: 2.5, ease: 'none' })
-      }));
-    }
+    const hero = document.querySelector('.home-supplier .hero');
+    const visual = hero && hero.querySelector('.supplier-product-link');
+    if (!visual) return;
+    // One visible-to-visible arrival, with no scroll-linked displacement.
+    const context = gsap.context(() => {
+      gsap.from(visual, {
+        y: 10, opacity: .7, duration: .7, ease: MOTION.easeEnter,
+        clearProps: 'transform,opacity'
+      });
+    }, hero);
+    const restore = () => context.revert();
+    const preferenceChanged = () => { if (reducedMotion.matches) restore(); };
+    const visibilityChanged = () => { if (document.hidden) restore(); };
+    reducedMotion.addEventListener('change', preferenceChanged);
+    document.addEventListener('visibilitychange', visibilityChanged);
+    state.heroCleanup = () => {
+      restore();
+      reducedMotion.removeEventListener('change', preferenceChanged);
+      document.removeEventListener('visibilitychange', visibilityChanged);
+    };
   }
 
   function revealOnce(trigger, targets, vars = {}) {
@@ -259,6 +252,8 @@
     if (state.destroyed) return;
     state.destroyed = true;
     stopBrandMotion();
+    if (state.heroCleanup) state.heroCleanup();
+    state.heroCleanup = null;
     if (state.calculatorObserver) state.calculatorObserver.disconnect();
     state.triggers.forEach((trigger) => trigger.kill());
     state.triggers.length = 0;

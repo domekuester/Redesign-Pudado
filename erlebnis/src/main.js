@@ -75,6 +75,10 @@ let stage = null;
 let playbackTimer = 0;
 let playbackActive = false;
 let playbackFinished = false;
+let playbackElapsed = 0;
+let playbackStartedAt = 0;
+let playbackHasStarted = false;
+let playbackProgress = null;
 let opening = { active: () => false, end: () => {} };
 
 /* ------------------------------------------------------------------ Panels */
@@ -393,7 +397,7 @@ function endSetTour({ connect = false } = {}) {
   }
 }
 
-// Drei bewusst selbst gewählte Perspektiven. Bestehende 3D-Szene, keine zweite Render-Schleife.
+// Vier bewusst selbst gewählte Perspektiven. Bestehende 3D-Szene, keine zweite Render-Schleife.
 const CHAPTERS = [
   { label: 'Form', title: 'Wasser. In deiner Hand.', text: 'Entdecke EcoBum Home: eine klare Form, zwei Strahlarten und ein Druckknopf für Ein und Aus.', view: 'discover', detail: 'overview', next: 'Wasser erleben' },
   { label: 'Wasser', title: 'Ein Dreh. Zwei Strahlarten.', text: 'Einzelne Strahlen oder ein gebündelter Wasserstrahl. Starte die Demo und entdecke den Unterschied.', view: 'discover', detail: 'spray', next: 'Zum Druckknopf', water: true },
@@ -403,18 +407,39 @@ const CHAPTERS = [
 
 // One finite, opt-in sequence. Existing cameras do the work; no extra animation loop.
 const PRESENTATION_CHAPTER_MS = 4000;
+function chapterElapsed() {
+  return Math.min(PRESENTATION_CHAPTER_MS, playbackElapsed + (playbackActive ? performance.now() - playbackStartedAt : 0));
+}
+function updatePresentationProgress() {
+  playbackProgress?.cancel();
+  playbackProgress = null;
+  const elapsed = chapterElapsed();
+  $$('[data-chapter-progress]').forEach(track => {
+    const index = Number(track.dataset.chapterProgress);
+    const progress = playbackFinished || index < state.chapter ? 1 : index === state.chapter ? elapsed / PRESENTATION_CHAPTER_MS : 0;
+    track.style.transform = `scaleX(${progress})`;
+    if (index === state.chapter && playbackActive && !reducedQuery.matches && !document.hidden && state.presentation && track.animate) {
+      playbackProgress = track.animate([
+        { transform: `scaleX(${progress})` }, { transform: 'scaleX(1)' },
+      ], { duration: Math.max(0, PRESENTATION_CHAPTER_MS - elapsed), easing: 'linear', fill: 'forwards' });
+    }
+  });
+}
 function updatePresentationPlayback() {
   const button = $('#presentationPlay');
   if (!button) return;
-  const label = playbackActive ? 'Pause' : playbackFinished ? 'Erneut abspielen' : 'Einspieler starten';
+  const label = playbackActive ? 'Pause' : playbackFinished ? 'Erneut abspielen' : playbackHasStarted ? 'Weiterlaufen' : 'Einspieler starten';
   button.replaceChildren(directionIcon(playbackActive ? 'pause' : playbackFinished ? 'replay' : 'play'), h('span', {}, label));
   button.setAttribute('aria-label', label);
   button.setAttribute('aria-pressed', String(playbackActive));
   button.disabled = reducedQuery.matches;
-  $('#presentationTempo').textContent = reducedQuery.matches ? 'Reduzierte Bewegung · Kapitel einzeln wählen' : playbackActive ? '4 Kapitel · ca. 16 Sekunden' : 'In deinem Tempo oder als kurzer Einspieler';
+  $('#presentationPosition').textContent = `${String(state.chapter + 1).padStart(2, '0')} / ${String(CHAPTERS.length).padStart(2, '0')} · ${CHAPTERS[state.chapter].label}`;
+  $('#presentationTempo').textContent = reducedQuery.matches ? 'Reduzierte Bewegung · Kapitel einzeln wählen' : playbackFinished ? 'Alle vier Perspektiven entdeckt. Erkunde jetzt das Set.' : playbackActive ? '4 Perspektiven · ca. 16 Sekunden' : playbackHasStarted ? 'Pausiert. Weiterlaufen setzt genau hier fort.' : 'In deinem Tempo oder als kurzer Einspieler';
   $('#presentation').classList.toggle('is-playing', playbackActive);
+  updatePresentationProgress();
 }
 function pausePresentationPlayback() {
+  if (playbackActive) playbackElapsed = chapterElapsed();
   clearTimeout(playbackTimer);
   playbackTimer = 0;
   playbackActive = false;
@@ -434,18 +459,27 @@ function schedulePresentationChapter() {
     if (state.chapter >= CHAPTERS.length - 1) {
       playbackFinished = true; pausePresentationPlayback(); return;
     }
+    playbackElapsed = 0;
+    playbackStartedAt = performance.now();
     setChapter(state.chapter + 1, { playback: true });
+    updatePresentationPlayback();
     schedulePresentationChapter();
-  }, PRESENTATION_CHAPTER_MS);
+  }, Math.max(0, PRESENTATION_CHAPTER_MS - playbackElapsed));
 }
 function togglePresentationPlayback() {
   if (playbackActive) { pausePresentationPlayback(); return; }
   if (reducedQuery.matches || document.hidden || !state.presentation) return;
-  state.guided = true;
-  const chapter = playbackFinished ? 0 : state.chapter;
-  playbackFinished = false;
-  setChapter(chapter, { playback: true });
+  // Resuming must preserve the visitor's current camera and the remaining chapter time.
+  if (!playbackHasStarted || playbackFinished) {
+    state.guided = true;
+    const chapter = playbackFinished ? 0 : state.chapter;
+    playbackElapsed = 0;
+    playbackFinished = false;
+    setChapter(chapter, { playback: true });
+  }
+  playbackHasStarted = true;
   playbackActive = true;
+  playbackStartedAt = performance.now();
   updatePresentationPlayback();
   schedulePresentationChapter();
 }
@@ -454,7 +488,9 @@ function renderPresentation() {
   $('#stage').append(h('section.presentation', { id: 'presentation', hidden: true, 'aria-label': 'Produktpräsentation' },
     h('div.presentation__playback', {},
       h('button.btn.btn--light', { id: 'presentationPlay', type: 'button', 'aria-pressed': 'false', 'aria-describedby': 'presentationTempo', onclick: togglePresentationPlayback }, 'Einspieler starten'),
-      h('p', { id: 'presentationTempo' })),
+      h('div.presentation__playback-info', {},
+        h('p.presentation__position', { id: 'presentationPosition', 'aria-live': 'off' }),
+        h('p', { id: 'presentationTempo' }))),
     h('button.btn.btn--light.presentation__exit', { type: 'button', onclick: () => endPresentation() }, 'Frei erkunden'),
     h('div.presentation__copy', { id: 'presentationCopy', 'aria-live': 'polite', 'aria-atomic': 'true' },
       h('h2', { id: 'presentationTitle', tabindex: '-1' }), h('p', { id: 'presentationText' }),
@@ -470,7 +506,8 @@ function renderPresentation() {
         h('button.btn.btn--quiet', { type: 'button', onclick: () => enterExperience('connect') }, 'Anschlussmöglichkeiten ansehen')),
       h('div.presentation__chapters', {}, CHAPTERS.map((c, i) => h('button.presentation__chapter', {
         type: 'button', 'data-chapter': i, 'aria-label': `Kapitel ${i + 1}: ${c.label}`, onclick: () => setChapter(i),
-      }, h('span', { 'aria-hidden': 'true', text: String(i + 1).padStart(2, '0') }), c.label))),
+      }, h('span.presentation__chapter-number', { 'aria-hidden': 'true', text: String(i + 1).padStart(2, '0') }), c.label,
+        h('span.presentation__chapter-track', { 'aria-hidden': 'true' }, h('span.presentation__chapter-progress', { 'data-chapter-progress': i }))))),
       h('div.presentation__actions', {},
         h('button.btn.btn--quiet', { id: 'presentationPrev', type: 'button', onclick: () => setChapter(state.chapter - 1) }, 'Zurück'),
         h('button.btn.btn--primary', { id: 'presentationNext', type: 'button', onclick: () => state.chapter === CHAPTERS.length - 1 ? endPresentation({ tour: true }) : setChapter(state.chapter + 1) }))),
@@ -487,6 +524,8 @@ function renderPresentation() {
 function startPresentation({ fromOpening = false, guided = false } = {}) {
   pausePresentationPlayback();
   playbackFinished = false;
+  playbackElapsed = 0;
+  playbackHasStarted = false;
   if (document.body.classList.contains('no-3d') || $('#stageState')?.dataset.kind === 'error') return;
   if (state.tour) endSetTour();
   state.slowWater = false;
@@ -509,11 +548,15 @@ function startPresentation({ fromOpening = false, guided = false } = {}) {
 }
 
 function setChapter(index, { sync = true, playback = false } = {}) {
-  if (!playback) { playbackFinished = false; pausePresentationPlayback(); }
+  if (!playback) {
+    pausePresentationPlayback();
+    playbackFinished = false; playbackHasStarted = false; playbackElapsed = 0;
+  }
   const returnToTop = window.scrollY > 0;
   const focusReading = !!document.activeElement?.closest('.presentation__nav');
   state.chapter = Math.max(0, Math.min(CHAPTERS.length - 1, index));
   const c = CHAPTERS[state.chapter];
+  updatePresentationPlayback();
   stage?.stopWater();
   $('#presentationWater').hidden = !c.water;
   $('#presentationConnection').hidden = c.view !== 'set';
@@ -925,13 +968,15 @@ function updateInsets() {
     const copy = $('#presentationCopy').getBoundingClientRect();
     $('#stage').style.setProperty('--presentation-cut-bottom', `${Math.max(0, st.bottom - copy.top + 12)}px`);
     const nav = $('#presentation .presentation__nav').getBoundingClientRect();
+    const transport = $('.presentation__playback').getBoundingClientRect();
+    const transportInset = Math.max(64, transport.bottom - st.top + 12);
     if (window.matchMedia('(min-width: 760px)').matches) {
       ins.left = copy.right - st.left + 32;
       ins.bottom = st.bottom - nav.top + 24;
-      ins.top = 64; ins.right = 32;
+      ins.top = transportInset; ins.right = 32;
     } else {
       ins.bottom = st.bottom - copy.top + 24;
-      ins.top = 64; ins.left = ins.right = 24;
+      ins.top = transportInset; ins.left = ins.right = 24;
     }
     stage.setInsets(ins);
     return;
